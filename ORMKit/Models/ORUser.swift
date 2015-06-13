@@ -13,9 +13,14 @@ public class ORUser: ORModel, ModelSubclassing {
     
     static public var recordType: String { return RecordType.ORUser.rawValue }
     
-    public override required init() {
-        super.init()
+    required public init(context: NSManagedObjectContext) {
+        super.init(entity: NSEntityDescription.entityForName(ORUser.recordType, inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
         self.record = CKRecord(recordType: ORUser.recordType)
+    }
+    
+    convenience required public init(reference: CKReference, context: NSManagedObjectContext) {
+        self.init(context: context)
+        self.record = CKRecord(recordType: ORUser.recordType, recordID: reference.recordID)
     }
     
     public static func query(predicate: NSPredicate?) -> CKQuery {
@@ -26,6 +31,12 @@ public class ORUser: ORModel, ModelSubclassing {
         }
     }
     
+    public func saveToRecord() {
+
+    }
     
+    public func readFromRecord() {
+        
+    }
     
 }

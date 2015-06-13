@@ -12,45 +12,23 @@ import CloudKit
 public class ORLiftTemplate: ORModel, ModelSubclassing {
     
     public static var recordType: String { return RecordType.ORLiftTemplate.rawValue }
+    public var liftName: String!
+    public var liftDescription: String!
+    public var isDefault: Bool!
+    public var liftEntries: [ORLiftEntry]!
+    public var creator: ORUser!
+    public var owner: ORUser!
+    public var solo: Bool!
     
-    public var liftName: String { get { return record.valueForKey("liftName") as! String }
-        set { record.setValue(newValue, forKey: "liftName") }
-    }
-    public var liftDescription: String {
-        get { return record.valueForKey("liftDescription") as! String }
-        set { record.setValue(newValue, forKey: "liftDescription") }
-    }
-    public var isDefault: Bool {
-        get { return record.valueForKey("isDefault") as! Bool }
-        set { record.setValue(newValue, forKey: "isDefault") }
-    }
-    public var liftEntries: [ORLiftEntry] {
-        get { return record.valueForKey("liftDescription") as! [ORLiftEntry] }
-        set {
-            var refs = newValue.map { x in x.reference }
-            record.setValue(refs, forKey: "liftDescription")
-        }
-    }
-    public var creator: ORUser {
-        get {
-            let ref = record.valueForKey("creator") as! CKReference
-            let rec = CKRecord(recordType: ORLiftTemplate.recordType, recordID: ref.recordID)
-            return ORUser(record: rec)
-        }
-        set { record.setValue(newValue.reference, forKey: "creator") }
-    }
-    public var owner: ORUser {
-        get { return record.valueForKey("owner") as! ORUser }
-        set { record.setValue(newValue.reference, forKey: "owner") }
-    }
-    public var solo: Bool {
-        get { return record.valueForKey("solo") as! Bool }
-        set { record.setValue(newValue, forKey: "solo") }
-    }
-    
-    public override required init() {
-        super.init()
+    required public init(context: NSManagedObjectContext) {
+        super.init(entity: NSEntityDescription.entityForName(ORLiftTemplate.recordType, inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
+        
         self.record = CKRecord(recordType: ORLiftTemplate.recordType)
+    }
+    
+    convenience required public init(reference: CKReference, context: NSManagedObjectContext) {
+        self.init(context: context)
+        self.record = CKRecord(recordType: ORLiftTemplate.recordType, recordID: reference.recordID)
     }
     
     public static func query(predicate: NSPredicate?) -> CKQuery {
@@ -59,6 +37,24 @@ public class ORLiftTemplate: ORModel, ModelSubclassing {
         } else {
             return CKQuery(recordType: ORLiftTemplate.recordType, predicate: NSPredicate(value: true))
         }
+    }
+    
+    public func saveToRecord() {
+        self.record.setValue(self.liftName, forKey: "liftName")
+        self.record.setValue(self.liftDescription, forKey: "liftDescription")
+        self.record.setValue(self.isDefault, forKey: "isDefault")
+        self.record.setValue(self.creator.reference, forKey: "creator")
+        self.record.setValue(self.owner.reference, forKey: "owner")
+        self.record.setValue(self.solo, forKey: "solo")
+    }
+    
+    public func readFromRecord() {
+        self.liftName = self.record.valueForKey("liftName") as! String
+        self.liftDescription = self.record.valueForKey("liftDescription") as! String
+        self.isDefault = self.record.valueForKey("isDefault") as! Bool
+        self.creator = ORUser(reference: self.record.valueForKey("creator") as! CKReference, context: ORSession.managedObjectContext)
+        self.owner = ORUser(reference: self.record.valueForKey("owner") as! CKReference, context: ORSession.managedObjectContext)
+        self.solo = self.record.valueForKey("solo") as! Bool
     }
     
 }

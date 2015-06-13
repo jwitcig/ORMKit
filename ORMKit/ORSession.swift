@@ -15,7 +15,18 @@ public class ORSession {
     
     public var currentUserId: CKRecordID?
     public var currentUser: ORUser? {
-        return ORUser(record: CKRecord(recordType: ORUser.recordType, recordID: self.currentUserId))
+        if let userId = self.currentUserId {
+            var user = ORUser(context: ORSession.managedObjectContext)
+            user.record = CKRecord(recordType: ORUser.recordType, recordID: userId)
+            return user
+        }
+        return nil
     }
+    
+    public static let managedObjectModel = NSManagedObjectModel.mergedModelFromBundles(NSBundle.allBundles())
+    public static let persistentStoreCooridnator = NSPersistentStoreCoordinator(managedObjectModel: ORSession.managedObjectModel!)
+
+    public static let managedObjectContext = NSManagedObjectContext()
+    
     
 }

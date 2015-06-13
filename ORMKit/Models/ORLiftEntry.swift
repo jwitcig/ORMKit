@@ -12,37 +12,21 @@ import CloudKit
 public class ORLiftEntry: ORModel, ModelSubclassing {
     
     public static var recordType: String { return RecordType.ORLiftEntry.rawValue }
+    public var date: NSDate!
+    public var liftTemplate: ORLiftTemplate!
+    public var maxOut: Bool!
+    public var owner: ORUser!
+    public var weightLifted: Int!
+    public var reps: Int!
     
-    public var date: NSDate { get { return record.valueForKey("date") as! NSDate }
-        set { record.setValue(newValue, forKey: "date") }
-    }
-    public var liftTemplate: ORLiftTemplate { get {
-            let ref = record.valueForKey("ORLiftTemplate") as! CKReference
-            let rec = CKRecord(recordType: "ORLiftTemplate", recordID: ref.recordID)
-            return ORLiftTemplate(record: rec)
-        }
-        set { record.setValue(newValue.reference, forKey: "ORLiftTemplate") }
-    }
-    public var maxOut: Bool { get { return record.valueForKey("maxOut") as! Bool }
-        set { record.setValue(newValue, forKey: "maxOut") }
-    }
-    public var owner: ORUser { get {
-            let ref = record.valueForKey("user") as! CKReference
-            let rec = CKRecord(recordType: ORUser.recordType, recordID: ref.recordID)
-            return ORUser(record: rec)
-        }
-        set { record.setValue(newValue.reference, forKey: "user") }
-    }
-    public var weightLifted: Int { get { return record.valueForKey("weightLifted") as! Int }
-        set { record.setValue(newValue, forKey: "weightLifted") }
-    }
-    public var reps: Int { get { return record.valueForKey("reps") as! Int }
-        set { record.setValue(newValue, forKey: "reps") }
-    }
-    
-    override required public init() {
-        super.init()
+    required public init(context: NSManagedObjectContext) {
+        super.init(entity: NSEntityDescription.entityForName(ORLiftEntry.recordType, inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
         self.record = CKRecord(recordType: ORLiftEntry.recordType)
+    }
+    
+    convenience required public init(reference: CKReference, context: NSManagedObjectContext) {
+        self.init(context: context)
+        self.record = CKRecord(recordType: ORLiftEntry.recordType, recordID: reference.recordID)
     }
     
     public static func query(predicate: NSPredicate?) -> CKQuery {
@@ -54,15 +38,20 @@ public class ORLiftEntry: ORModel, ModelSubclassing {
     }
     
     public func saveToRecord() {
-        var record = CKRecord(recordType: ORLiftEntry.recordType)
-        record.setValue(self.date, forKey: "date")
-        record.setValue(self.liftTemplate.reference, forKey: "liftTemplate")
-        record.setValue(self.maxOut, forKey: "maxOut")
-        record.setValue(self.owner.reference, forKey: "date")
-        record.setValue(self.weightLifted, forKey: "weightLifted")
-        record.setValue(self.reps, forKey: "reps")
-
-    
+        self.record.setValue(self.date, forKey: "date")
+        self.record.setValue(self.liftTemplate.reference, forKey: "liftTemplate")
+        self.record.setValue(self.maxOut, forKey: "maxOut")
+        self.record.setValue(self.owner.reference, forKey: "date")
+        self.record.setValue(self.weightLifted, forKey: "weightLifted")
+        self.record.setValue(self.reps, forKey: "reps")
     }
     
+    public func readFromRecord() {
+        self.date = self.record.valueForKey("date") as! NSDate
+        self.liftTemplate = ORLiftTemplate(reference: self.record.valueForKey("liftTemplate") as! CKReference, context: ORSession.managedObjectContext)
+        self.maxOut = self.record.valueForKey("maxOut") as! Bool
+        self.owner = ORUser(reference: self.record.valueForKey("owner") as! CKReference, context: ORSession.managedObjectContext)
+        self.weightLifted = self.record.valueForKey("weightLifted") as! Int
+        self.reps = self.record.valueForKey("reps") as! Int
+    }
 }

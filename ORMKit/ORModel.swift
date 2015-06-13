@@ -10,9 +10,12 @@ import Cocoa
 import CloudKit
 
 protocol ModelSubclassing {
-    init()
+    init(context: NSManagedObjectContext)
+    init(reference: CKReference, context: NSManagedObjectContext)
     static var recordType: String { get }
     static func query(predicate: NSPredicate?) -> CKQuery
+    func saveToRecord()
+    func readFromRecord()
 }
 
 enum RecordType: String {
@@ -22,7 +25,7 @@ enum RecordType: String {
     case ORUser = "User"
 }
 
-public class ORModel {
+public class ORModel: NSManagedObject {
     var record: CKRecord!
     
     var reference: CKReference { get { return CKReference(record: self.record, action: CKReferenceAction.None) } }
