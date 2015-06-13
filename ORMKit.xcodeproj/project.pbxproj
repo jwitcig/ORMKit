@@ -7,9 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8B3039631B2BFED000E5C95A /* ORSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3039621B2BFED000E5C95A /* ORSession.swift */; };
 		8B650CA31B2BA75400F0EA52 /* ORMKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B650CA21B2BA75400F0EA52 /* ORMKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8B650CA91B2BA75400F0EA52 /* ORMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B650C9D1B2BA75400F0EA52 /* ORMKit.framework */; };
 		8B650CB01B2BA75400F0EA52 /* ORMKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CAF1B2BA75400F0EA52 /* ORMKitTests.swift */; };
+		8B650CBE1B2BA77100F0EA52 /* ORModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CB91B2BA77100F0EA52 /* ORModel.swift */; };
+		8B650CBF1B2BA77100F0EA52 /* ORLiftEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */; };
+		8B650CC01B2BA77100F0EA52 /* ORLiftTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CBC1B2BA77100F0EA52 /* ORLiftTemplate.swift */; };
+		8B650CC31B2BA8DD00F0EA52 /* ORUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CC21B2BA8DD00F0EA52 /* ORUser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,12 +28,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8B3039621B2BFED000E5C95A /* ORSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORSession.swift; sourceTree = "<group>"; };
 		8B650C9D1B2BA75400F0EA52 /* ORMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ORMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B650CA11B2BA75400F0EA52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B650CA21B2BA75400F0EA52 /* ORMKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORMKit.h; sourceTree = "<group>"; };
 		8B650CA81B2BA75400F0EA52 /* ORMKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ORMKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B650CAE1B2BA75400F0EA52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B650CAF1B2BA75400F0EA52 /* ORMKitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ORMKitTests.swift; sourceTree = "<group>"; };
+		8B650CB91B2BA77100F0EA52 /* ORModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORModel.swift; sourceTree = "<group>"; };
+		8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLiftEntry.swift; sourceTree = "<group>"; };
+		8B650CBC1B2BA77100F0EA52 /* ORLiftTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLiftTemplate.swift; sourceTree = "<group>"; };
+		8B650CC21B2BA8DD00F0EA52 /* ORUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +82,9 @@
 			isa = PBXGroup;
 			children = (
 				8B650CA21B2BA75400F0EA52 /* ORMKit.h */,
+				8B650CB91B2BA77100F0EA52 /* ORModel.swift */,
+				8B3039621B2BFED000E5C95A /* ORSession.swift */,
+				8B650CBA1B2BA77100F0EA52 /* Models */,
 				8B650CA01B2BA75400F0EA52 /* Supporting Files */,
 			);
 			path = ORMKit;
@@ -100,6 +113,16 @@
 				8B650CAE1B2BA75400F0EA52 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8B650CBA1B2BA77100F0EA52 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */,
+				8B650CBC1B2BA77100F0EA52 /* ORLiftTemplate.swift */,
+				8B650CC21B2BA8DD00F0EA52 /* ORUser.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -209,6 +232,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B650CC31B2BA8DD00F0EA52 /* ORUser.swift in Sources */,
+				8B650CBE1B2BA77100F0EA52 /* ORModel.swift in Sources */,
+				8B3039631B2BFED000E5C95A /* ORSession.swift in Sources */,
+				8B650CC01B2BA77100F0EA52 /* ORLiftTemplate.swift in Sources */,
+				8B650CBF1B2BA77100F0EA52 /* ORLiftEntry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +428,7 @@
 				8B650CB51B2BA75400F0EA52 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8B650CB61B2BA75400F0EA52 /* Build configuration list for PBXNativeTarget "ORMKitTests" */ = {
 			isa = XCConfigurationList;
@@ -408,6 +437,7 @@
 				8B650CB81B2BA75400F0EA52 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

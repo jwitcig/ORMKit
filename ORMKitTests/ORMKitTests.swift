@@ -8,6 +8,7 @@
 
 import Cocoa
 import XCTest
+import ORMKit
 
 class ORMKitTests: XCTestCase {
     
@@ -22,7 +23,8 @@ class ORMKitTests: XCTestCase {
     }
     
     func testExample() {
-        // This is an example of a functional test case.
+
+        
         XCTAssert(true, "Pass")
     }
     
