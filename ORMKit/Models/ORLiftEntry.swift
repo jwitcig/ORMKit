@@ -12,21 +12,24 @@ import CloudKit
 public class ORLiftEntry: ORModel, ModelSubclassing {
     
     public static var recordType: String { return RecordType.ORLiftEntry.rawValue }
-    public var date: NSDate!
-    public var liftTemplate: ORLiftTemplate!
-    public var maxOut: Bool!
-    public var owner: ORUser!
-    public var weightLifted: Int!
-    public var reps: Int!
     
-    required public init(context: NSManagedObjectContext) {
-        super.init(entity: NSEntityDescription.entityForName(ORLiftEntry.recordType, inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
-        self.record = CKRecord(recordType: ORLiftEntry.recordType)
+    public var date: NSDate!
+    public var maxOut: Bool!
+    public var reps: Int!
+    public var weightLifted: Int!
+    public var liftTemplate: ORLiftTemplate!
+    public var owner: ORUser!
+    
+    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
-    convenience required public init(reference: CKReference, context: NSManagedObjectContext) {
-        self.init(context: context)
-        self.record = CKRecord(recordType: ORLiftEntry.recordType, recordID: reference.recordID)
+    public init(context: NSManagedObjectContext) {
+        let record = CKRecord(recordType: ORLiftEntry.recordType)
+        
+        let entity = NSEntityDescription.entityForName(ORLiftEntry.recordType, inManagedObjectContext: context)
+        
+        super.init(record: record, entity: entity!, context: context)
     }
     
     public static func query(predicate: NSPredicate?) -> CKQuery {
@@ -48,9 +51,9 @@ public class ORLiftEntry: ORModel, ModelSubclassing {
     
     public func readFromRecord() {
         self.date = self.record.valueForKey("date") as! NSDate
-        self.liftTemplate = ORLiftTemplate(reference: self.record.valueForKey("liftTemplate") as! CKReference, context: ORSession.managedObjectContext)
+//        self.liftTemplate = ORLiftTemplate(reference: self.record.valueForKey("liftTemplate") as! CKReference, context: ORSession.managedObjectContext)
         self.maxOut = self.record.valueForKey("maxOut") as! Bool
-        self.owner = ORUser(reference: self.record.valueForKey("owner") as! CKReference, context: ORSession.managedObjectContext)
+//        self.owner = ORUser(reference: self.record.valueForKey("owner") as! CKReference, context: ORSession.managedObjectContext)
         self.weightLifted = self.record.valueForKey("weightLifted") as! Int
         self.reps = self.record.valueForKey("reps") as! Int
     }

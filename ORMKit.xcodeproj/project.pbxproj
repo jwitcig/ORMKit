@@ -15,6 +15,7 @@
 		8B650CBF1B2BA77100F0EA52 /* ORLiftEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */; };
 		8B650CC01B2BA77100F0EA52 /* ORLiftTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CBC1B2BA77100F0EA52 /* ORLiftTemplate.swift */; };
 		8B650CC31B2BA8DD00F0EA52 /* ORUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CC21B2BA8DD00F0EA52 /* ORUser.swift */; };
+		8BE077281B2D4EF20070D128 /* ORTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE077271B2D4EF20070D128 /* ORTransformer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +40,7 @@
 		8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLiftEntry.swift; sourceTree = "<group>"; };
 		8B650CBC1B2BA77100F0EA52 /* ORLiftTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLiftTemplate.swift; sourceTree = "<group>"; };
 		8B650CC21B2BA8DD00F0EA52 /* ORUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORUser.swift; sourceTree = "<group>"; };
+		8BE077271B2D4EF20070D128 /* ORTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORTransformer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 			children = (
 				8B650CA21B2BA75400F0EA52 /* ORMKit.h */,
 				8B650CB91B2BA77100F0EA52 /* ORModel.swift */,
+				8BE077271B2D4EF20070D128 /* ORTransformer.swift */,
 				8B3039621B2BFED000E5C95A /* ORSession.swift */,
 				8B650CBA1B2BA77100F0EA52 /* Models */,
 				8B650CA01B2BA75400F0EA52 /* Supporting Files */,
@@ -236,6 +239,7 @@
 				8B650CBE1B2BA77100F0EA52 /* ORModel.swift in Sources */,
 				8B3039631B2BFED000E5C95A /* ORSession.swift in Sources */,
 				8B650CC01B2BA77100F0EA52 /* ORLiftTemplate.swift in Sources */,
+				8BE077281B2D4EF20070D128 /* ORTransformer.swift in Sources */,
 				8B650CBF1B2BA77100F0EA52 /* ORLiftEntry.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

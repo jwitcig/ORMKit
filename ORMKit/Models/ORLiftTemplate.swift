@@ -12,23 +12,24 @@ import CloudKit
 public class ORLiftTemplate: ORModel, ModelSubclassing {
     
     public static var recordType: String { return RecordType.ORLiftTemplate.rawValue }
-    public var liftName: String!
+    
+    public var defaultLift: Bool!
     public var liftDescription: String!
-    public var isDefault: Bool!
-    public var liftEntries: [ORLiftEntry]!
+    public var liftName: String!
+    public var solo: Bool!
     public var creator: ORUser!
     public var owner: ORUser!
-    public var solo: Bool!
     
-    required public init(context: NSManagedObjectContext) {
-        super.init(entity: NSEntityDescription.entityForName(ORLiftTemplate.recordType, inManagedObjectContext: context)!, insertIntoManagedObjectContext: context)
-        
-        self.record = CKRecord(recordType: ORLiftTemplate.recordType)
+    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
     
-    convenience required public init(reference: CKReference, context: NSManagedObjectContext) {
-        self.init(context: context)
-        self.record = CKRecord(recordType: ORLiftTemplate.recordType, recordID: reference.recordID)
+    public init(context: NSManagedObjectContext) {
+        let record = CKRecord(recordType: ORLiftTemplate.recordType)
+        
+        let entity = NSEntityDescription.entityForName(ORLiftTemplate.recordType, inManagedObjectContext: context)
+        
+        super.init(record: record, entity: entity!, context: context)
     }
     
     public static func query(predicate: NSPredicate?) -> CKQuery {
@@ -42,7 +43,7 @@ public class ORLiftTemplate: ORModel, ModelSubclassing {
     public func saveToRecord() {
         self.record.setValue(self.liftName, forKey: "liftName")
         self.record.setValue(self.liftDescription, forKey: "liftDescription")
-        self.record.setValue(self.isDefault, forKey: "isDefault")
+        self.record.setValue(self.defaultLift, forKey: "isDefault")
         self.record.setValue(self.creator.reference, forKey: "creator")
         self.record.setValue(self.owner.reference, forKey: "owner")
         self.record.setValue(self.solo, forKey: "solo")
@@ -51,9 +52,9 @@ public class ORLiftTemplate: ORModel, ModelSubclassing {
     public func readFromRecord() {
         self.liftName = self.record.valueForKey("liftName") as! String
         self.liftDescription = self.record.valueForKey("liftDescription") as! String
-        self.isDefault = self.record.valueForKey("isDefault") as! Bool
-        self.creator = ORUser(reference: self.record.valueForKey("creator") as! CKReference, context: ORSession.managedObjectContext)
-        self.owner = ORUser(reference: self.record.valueForKey("owner") as! CKReference, context: ORSession.managedObjectContext)
+        self.defaultLift = self.record.valueForKey("isDefault") as! Bool
+//        self.creator = ORUser(reference: self.record.valueForKey("creator") as! CKReference, context: ORSession.managedObjectContext)
+//        self.owner = ORUser(reference: self.record.valueForKey("owner") as! CKReference, context: ORSession.managedObjectContext)
         self.solo = self.record.valueForKey("solo") as! Bool
     }
     
