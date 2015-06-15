@@ -22,15 +22,12 @@ enum RecordType: String {
     case ORLiftTemplate = "LiftTemplate"
     case ORLiftEntry = "LiftEntry"
     
-    case ORUser = "User"
+    case ORUser = "Users"
 }
 
 public class ORModel: NSManagedObject {
     var record: CKRecord!
-    var recordId: CKRecordID? {
-        return CKRecordID(recordName: self.cloudId)
-    }
-    @NSManaged var cloudId: String
+    @NSManaged public var recordName: String
     
     var reference: CKReference { get { return CKReference(record: self.record, action: CKReferenceAction.None) } }
     
