@@ -13,8 +13,8 @@ public class ORSession {
     
     public static let currentSession = ORSession()
     
-    public var currentUserId: CKRecordID?
-    public var currentUser: ORUser?
+    public var currentAthleteId: CKRecordID?
+    public var currentAthlete: ORAthlete?
     
 //    public var setCurrentUser(recordId: C)
     
