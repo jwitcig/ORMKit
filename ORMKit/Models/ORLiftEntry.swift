@@ -11,7 +11,7 @@ import CloudKit
 
 public class ORLiftEntry: ORModel, ModelSubclassing {
     
-    public static var recordType: String { return RecordType.ORLiftEntry.rawValue }
+    override public class var recordType: String { return RecordType.ORLiftEntry.rawValue }
     
     public var date: NSDate!
     public var maxOut: Bool!
@@ -39,21 +39,14 @@ public class ORLiftEntry: ORModel, ModelSubclassing {
     }
     
     override func saveToRecord() -> CKRecord {
-        self.record.setValue(self.date, forKey: "date")
-        self.record.setValue(self.liftTemplate.reference, forKey: "liftTemplate")
-        self.record.setValue(self.maxOut, forKey: "maxOut")
-        self.record.setValue(self.owner.reference, forKey: "date")
-        self.record.setValue(self.weightLifted, forKey: "weightLifted")
-        self.record.setValue(self.reps, forKey: "reps")
-        return self.record
+        var record = CKRecord(recordType: ORLiftTemplate.recordType, recordID: CKRecordID(recordName: self.recordName))
+        record.setValue(self.date, forKey: "date")
+        record.setValue(self.liftTemplate.reference, forKey: "liftTemplate")
+        record.setValue(self.maxOut, forKey: "maxOut")
+        record.setValue(self.owner.reference, forKey: "date")
+        record.setValue(self.weightLifted, forKey: "weightLifted")
+        record.setValue(self.reps, forKey: "reps")
+        return record
     }
     
-    func readFromRecord() {
-        self.date = self.record.valueForKey("date") as! NSDate
-//        self.liftTemplate = ORLiftTemplate(reference: self.record.valueForKey("liftTemplate") as! CKReference, context: ORSession.managedObjectContext)
-        self.maxOut = self.record.valueForKey("maxOut") as! Bool
-//        self.owner = ORAthlete(reference: self.record.valueForKey("owner") as! CKReference, context: ORSession.managedObjectContext)
-        self.weightLifted = self.record.valueForKey("weightLifted") as! Int
-        self.reps = self.record.valueForKey("reps") as! Int
-    }
 }

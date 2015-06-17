@@ -15,6 +15,12 @@
 		8B650CBF1B2BA77100F0EA52 /* ORLiftEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */; };
 		8B650CC01B2BA77100F0EA52 /* ORLiftTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CBC1B2BA77100F0EA52 /* ORLiftTemplate.swift */; };
 		8B650CC31B2BA8DD00F0EA52 /* ORAthlete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CC21B2BA8DD00F0EA52 /* ORAthlete.swift */; };
+		8BD0F1AB1B308E5400F96C96 /* ORCloudData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1AA1B308E5400F96C96 /* ORCloudData.swift */; };
+		8BD0F1AD1B3091B300F96C96 /* ORDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1AC1B3091B300F96C96 /* ORDataResponse.swift */; };
+		8BD0F1AF1B30978000F96C96 /* OROrganization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1AE1B30978000F96C96 /* OROrganization.swift */; };
+		8BD0F1B31B310CF600F96C96 /* ORLocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1B21B310CF600F96C96 /* ORLocalData.swift */; };
+		8BD0F1B51B31208700F96C96 /* ORCloudDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1B41B31208700F96C96 /* ORCloudDataResponse.swift */; };
+		8BD0F1B71B3120D900F96C96 /* ORLocalDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1B61B3120D900F96C96 /* ORLocalDataResponse.swift */; };
 		8BE077281B2D4EF20070D128 /* ORTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE077271B2D4EF20070D128 /* ORTransformer.swift */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +46,12 @@
 		8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLiftEntry.swift; sourceTree = "<group>"; };
 		8B650CBC1B2BA77100F0EA52 /* ORLiftTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLiftTemplate.swift; sourceTree = "<group>"; };
 		8B650CC21B2BA8DD00F0EA52 /* ORAthlete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORAthlete.swift; sourceTree = "<group>"; };
+		8BD0F1AA1B308E5400F96C96 /* ORCloudData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudData.swift; sourceTree = "<group>"; };
+		8BD0F1AC1B3091B300F96C96 /* ORDataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataResponse.swift; sourceTree = "<group>"; };
+		8BD0F1AE1B30978000F96C96 /* OROrganization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OROrganization.swift; path = ../OROrganization.swift; sourceTree = "<group>"; };
+		8BD0F1B21B310CF600F96C96 /* ORLocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLocalData.swift; sourceTree = "<group>"; };
+		8BD0F1B41B31208700F96C96 /* ORCloudDataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudDataResponse.swift; sourceTree = "<group>"; };
+		8BD0F1B61B3120D900F96C96 /* ORLocalDataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLocalDataResponse.swift; sourceTree = "<group>"; };
 		8BE077271B2D4EF20070D128 /* ORTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORTransformer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -87,6 +99,11 @@
 				8B650CB91B2BA77100F0EA52 /* ORModel.swift */,
 				8BE077271B2D4EF20070D128 /* ORTransformer.swift */,
 				8B3039621B2BFED000E5C95A /* ORSession.swift */,
+				8BD0F1AC1B3091B300F96C96 /* ORDataResponse.swift */,
+				8BD0F1B21B310CF600F96C96 /* ORLocalData.swift */,
+				8BD0F1AA1B308E5400F96C96 /* ORCloudData.swift */,
+				8BD0F1B41B31208700F96C96 /* ORCloudDataResponse.swift */,
+				8BD0F1B61B3120D900F96C96 /* ORLocalDataResponse.swift */,
 				8B650CBA1B2BA77100F0EA52 /* Models */,
 				8B650CA01B2BA75400F0EA52 /* Supporting Files */,
 			);
@@ -121,6 +138,7 @@
 		8B650CBA1B2BA77100F0EA52 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				8BD0F1AE1B30978000F96C96 /* OROrganization.swift */,
 				8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */,
 				8B650CBC1B2BA77100F0EA52 /* ORLiftTemplate.swift */,
 				8B650CC21B2BA8DD00F0EA52 /* ORAthlete.swift */,
@@ -236,11 +254,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B650CC31B2BA8DD00F0EA52 /* ORAthlete.swift in Sources */,
+				8BD0F1AF1B30978000F96C96 /* OROrganization.swift in Sources */,
+				8BD0F1B31B310CF600F96C96 /* ORLocalData.swift in Sources */,
 				8B650CBE1B2BA77100F0EA52 /* ORModel.swift in Sources */,
+				8BD0F1AB1B308E5400F96C96 /* ORCloudData.swift in Sources */,
 				8B3039631B2BFED000E5C95A /* ORSession.swift in Sources */,
 				8B650CC01B2BA77100F0EA52 /* ORLiftTemplate.swift in Sources */,
 				8BE077281B2D4EF20070D128 /* ORTransformer.swift in Sources */,
 				8B650CBF1B2BA77100F0EA52 /* ORLiftEntry.swift in Sources */,
+				8BD0F1B71B3120D900F96C96 /* ORLocalDataResponse.swift in Sources */,
+				8BD0F1B51B31208700F96C96 /* ORCloudDataResponse.swift in Sources */,
+				8BD0F1AD1B3091B300F96C96 /* ORDataResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,12 +11,33 @@ import CloudKit
 
 public class ORAthlete: ORModel, ModelSubclassing {
     
-    static public var recordType: String { return RecordType.ORAthlete.rawValue }
+    override public class var recordType: String { return RecordType.ORAthlete.rawValue }
     @NSManaged public var userRecordName: String
 
     static public func obj(#context: NSManagedObjectContext) -> ORAthlete {
                 
         return NSEntityDescription.insertNewObjectForEntityForName(ORAthlete.recordType, inManagedObjectContext: context) as! ORAthlete
+    }
+    
+    public func fetchAssociatedOrganizations(completionHandler: ((ORCloudDataResponse)->())?) {
+        
+        let predicate = NSPredicate(format: "athletes contains %@", self.reference)
+        
+        ORCloudData.fetch(model: ORAthlete.self, predicate: predicate, options: nil) { (response) in
+            
+            var compoundResults = response.results as! [CKRecord]
+            
+            let predicate = NSPredicate(format: "admins contains %@", self.reference)
+            ORCloudData.fetch(model: OROrganization.self, predicate: predicate, options: nil) { (response) -> () in
+                var recordNames: [String] = compoundResults.map { $0.recordID.recordName }
+                compoundResults += (response.results as! [CKRecord]).filter {
+                    !contains(recordNames, $0.recordID.recordName)
+                }
+                
+                response.results = compoundResults
+                completionHandler?(response)
+            }
+        }
     }
     
     public static func query(predicate: NSPredicate?) -> CKQuery {
@@ -25,6 +46,18 @@ public class ORAthlete: ORModel, ModelSubclassing {
         } else {
             return CKQuery(recordType: ORAthlete.recordType, predicate: NSPredicate(value: true))
         }
+    }
+    
+    public static func deleteAllLocalAthletes() {
+        let context = ORSession.currentSession.managedObjectContext
+        
+        var request = NSFetchRequest(entityName: ORAthlete.recordType)
+        request.predicate = NSPredicate(value: true)
+        let results = context.executeFetchRequest(request, error: nil) as! [ORAthlete]
+        for athlete in results {
+            context.deleteObject(athlete)
+        }
+        context.save(nil)
     }
     
     public static func signUp(#context: NSManagedObjectContext, completionHandler: ((Bool, ORAthlete?, NSError)->())?) {
@@ -41,10 +74,8 @@ public class ORAthlete: ORModel, ModelSubclassing {
                     
                     if error == nil {
                         
-                        var athlete: ORAthlete?
                         if error == nil {
-                            athlete = ORAthlete.obj(context: context)
-                            athlete!.recordName = recordId.recordName
+                            athlete.recordName = recordId.recordName
                             
                             context.save(nil)
                             
@@ -54,7 +85,11 @@ public class ORAthlete: ORModel, ModelSubclassing {
                         }
                         
                         if let handler = completionHandler {
-                            handler(athlete != nil, athlete, error)
+                            if error == nil {
+                                handler(true, athlete, error)
+                            } else {
+                                handler(false, nil, error)
+                            }
                         }
                         
                     } else {
@@ -107,12 +142,14 @@ public class ORAthlete: ORModel, ModelSubclassing {
         })
     }
     
-    public static func signInLocally(context: NSManagedObjectContext) -> (Bool, ORAthlete?) {
+    public static func signInLocally() -> (Bool, ORAthlete?) {
+        let context = ORSession.currentSession.managedObjectContext
+        
         let currentUserRecordName = NSUserDefaults.standardUserDefaults().objectForKey("currentUserRecordName") as? String
         if let recordName = currentUserRecordName {
             
             var request = NSFetchRequest(entityName: ORAthlete.recordType)
-            request.predicate = NSPredicate(format: "recordName == \(recordName)")
+            request.predicate = NSPredicate(format: "%K == %@", "recordName", recordName)
             let results = context.executeFetchRequest(request, error: nil)
             
             if let athlete = results?.first as? ORAthlete {

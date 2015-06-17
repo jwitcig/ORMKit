@@ -11,7 +11,7 @@ import CloudKit
 
 public class ORLiftTemplate: ORModel, ModelSubclassing {
     
-    public static var recordType: String { return RecordType.ORLiftTemplate.rawValue }
+    override public class var recordType: String { return RecordType.ORLiftTemplate.rawValue }
     
     public var defaultLift: Bool!
     public var liftDescription: String!
@@ -28,14 +28,6 @@ public class ORLiftTemplate: ORModel, ModelSubclassing {
         
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
-
-//    public convenience init(entity: NSEntityDescription, context: NSManagedObjectContext) {
-//        self.init(entity: entity, insertIntoManagedObjectContext: context)
-//    }
-//
-//    required public init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext) {
-//        super.init(entity: entity, insertIntoManagedObjectContext: context)
-//    }
     
     public static func query(predicate: NSPredicate?) -> CKQuery {
         if let filter = predicate {
@@ -50,22 +42,14 @@ public class ORLiftTemplate: ORModel, ModelSubclassing {
     }
     
     override func saveToRecord() -> CKRecord {
-        self.record.setValue(self.liftName, forKey: "liftName")
-        self.record.setValue(self.liftDescription, forKey: "liftDescription")
-        self.record.setValue(self.defaultLift, forKey: "isDefault")
-        self.record.setValue(self.creator.reference, forKey: "creator")
-        self.record.setValue(self.owner.reference, forKey: "owner")
-        self.record.setValue(self.solo, forKey: "solo")
-        return self.record
-    }
-    
-    func readFromRecord() {
-        self.liftName = self.record.valueForKey("liftName") as! String
-        self.liftDescription = self.record.valueForKey("liftDescription") as! String
-        self.defaultLift = self.record.valueForKey("isDefault") as! Bool
-//        self.creator = ORAthlete(reference: self.record.valueForKey("creator") as! CKReference, context: ORSession.managedObjectContext)
-//        self.owner = ORAthlete(reference: self.record.valueForKey("owner") as! CKReference, context: ORSession.managedObjectContext)
-        self.solo = self.record.valueForKey("solo") as! Bool
+        var record = CKRecord(recordType: ORLiftTemplate.recordType, recordID: CKRecordID(recordName: self.recordName))
+        record.setValue(self.liftName, forKey: "liftName")
+        record.setValue(self.liftDescription, forKey: "liftDescription")
+        record.setValue(self.defaultLift, forKey: "isDefault")
+        record.setValue(self.creator.reference, forKey: "creator")
+        record.setValue(self.owner.reference, forKey: "owner")
+        record.setValue(self.solo, forKey: "solo")
+        return record
     }
     
 }
