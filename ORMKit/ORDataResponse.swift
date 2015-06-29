@@ -8,6 +8,7 @@
 
 import Foundation
 
-public class ORDataResponse {        
-    public var results: [AnyObject]!
+public class ORDataResponse {
+    public var results: [AnyObject]?
+    public var error: NSError?
 }

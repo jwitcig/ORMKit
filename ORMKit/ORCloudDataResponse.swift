@@ -7,7 +7,8 @@
 //
 
 import Foundation
+import CloudKit
 
 public class ORCloudDataResponse: ORDataResponse {
-    public var error: NSError?
+
 }

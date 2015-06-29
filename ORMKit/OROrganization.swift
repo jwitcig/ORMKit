@@ -11,53 +11,48 @@ import CloudKit
 
 public class OROrganization: ORModel, ModelSubclassing {
     
-    @NSManaged public var orgName: String
-    
-    @NSManaged public var athletes: NSSet
-    @NSManaged public var admins: NSSet
-    
-    var athleteRefs: [CKReference] {
-        get { return (self.athletes.allObjects as! [ORAthlete]).map {x in x.reference} }
+    public enum Fields: String {
+        case orgName = "orgName"
+        case athletes = "athletes"
+        case admins = "admins"
+    }
+    public var orgName: String {
+        get { return self.record.valueForKey(Fields.orgName.rawValue) as! String }
+        set { self.record.setValue(newValue, forKey: Fields.orgName.rawValue) }
     }
     
-    var adminRefs: [CKReference] {
-        get { return (self.admins.allObjects as! [ORAthlete]).map {x in x.reference} }
+    public var athletes: [CKReference] {
+        get {
+            if let refs = self.record.valueForKey(Fields.athletes.rawValue) as? [CKReference] {
+                return refs
+            }
+            return [CKReference]()
+        }
+        set { self.record.setValue(newValue, forKey: Fields.athletes.rawValue) }
+    }
+    public var admins: [CKReference] {
+        get {
+            if let refs = self.record.valueForKey(Fields.admins.rawValue) as? [CKReference] {
+                return refs
+            }
+            return [CKReference]()
+        }
+        set { self.record.setValue(newValue, forKey: Fields.admins.rawValue) }
     }
     
     override public class var recordType: String { return RecordType.OROrganization.rawValue }
     
-    static public func organization(#context: NSManagedObjectContext) -> OROrganization {
-        return NSEntityDescription.insertNewObjectForEntityForName(OROrganization.recordType, inManagedObjectContext: context) as! OROrganization
+    required public init() {
+        super.init(record: CKRecord(recordType: OROrganization.recordType))
+    }
+
+    required public init(record: CKRecord) {
+        super.init(record: record)
     }
     
     public class func query(predicate: NSPredicate?) -> CKQuery {
         return super.query(OROrganization.recordType, predicate: predicate)
     }
     
-    func prepareForSave() {
-    }
-    
-    override func saveToRecord() -> CKRecord {
-        var record = CKRecord(recordType: OROrganization.recordType)
-        record.setValue(self.orgName, forKey: "orgName")
-//        record.setValue(self.athleteRefs, forKey: "athletes")
-//        record.setValue(self.adminRefs, forKey: "admins")
-        return record
-    }
-}
-
-
-public extension OROrganization {
-    func addAthlete(value: ORAthlete) {
-        var mutableSet = NSMutableSet(set: self.athletes)
-        mutableSet.addObject(value)
-        self.athletes = NSSet(set: mutableSet)
-    }
-    
-    func removeAthlete(value: ORAthlete) {
-        var mutableSet = NSMutableSet(set: self.athletes)
-        mutableSet.removeObject(value)
-        self.athletes = NSSet(set: mutableSet)
-    }
 }
 

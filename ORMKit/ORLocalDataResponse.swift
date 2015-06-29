@@ -9,5 +9,5 @@
 import Foundation
 
 public class ORLocalDataResponse: ORDataResponse {
-    public var errorPointer: NSErrorPointer?
+
 }
