@@ -53,7 +53,7 @@ public class ORCloudData: DataConvenience {
         }
     }
     
-    public func fetchLiftTemplates(session: ORSession, completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchLiftTemplates(#session: ORSession, completionHandler: ((ORCloudDataResponse)->())?) {
         
         if session.soloSession {
             
@@ -71,6 +71,11 @@ public class ORCloudData: DataConvenience {
                 completionHandler?(response)
             }
         }
+    }
+    
+    public func fetchLiftEntries(#template: ORLiftTemplate, completionHandler: ((ORCloudDataResponse)->())?) {
+        let predicate = ORDataTools.predicateWithKey("liftTemplate", comparator: "==", value: template.reference)
+        self.dataManager.fetchCloud(model: ORLiftEntry.self, predicate: predicate, completionHandler: completionHandler)
     }
     
     public func save(#model: ORModel, completionHandler: ((ORCloudDataResponse)->())?) {

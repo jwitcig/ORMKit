@@ -38,6 +38,9 @@ public class ORLiftEntry: ORModel, ModelSubclassing {
         get { return self.record.valueForKey(Fields.weightLifted.rawValue) as! Int }
         set { self.record.setValue(newValue, forKey: Fields.weightLifted.rawValue) }
     }
+    public var max: Int {
+        return weightLifted + Int(CGFloat(weightLifted * reps) * 0.033)
+    }
     public var liftTemplate: ORLiftTemplate {
         get {
             let reference = self.record.valueForKey(Fields.liftTemplate.rawValue) as! CKReference
