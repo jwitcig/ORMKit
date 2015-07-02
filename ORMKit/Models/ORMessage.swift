@@ -12,6 +12,7 @@ import CloudKit
 public class ORMessage: ORModel, ModelSubclassing {
 
     enum Fields: String {
+        case title = "title"
         case body = "body"
         case owner = "owner"
         case poster = "poster"
@@ -19,6 +20,10 @@ public class ORMessage: ORModel, ModelSubclassing {
     
     override public class var recordType: String { return RecordType.ORMessage.rawValue }
     
+    public var title: String {
+        get { return self.record.valueForKey(Fields.title.rawValue) as! String }
+        set { self.record.setValue(newValue, forKey: Fields.title.rawValue) }
+    }
     public var body: String {
         get { return self.record.valueForKey(Fields.body.rawValue) as! String }
         set { self.record.setValue(newValue, forKey: Fields.body.rawValue) }

@@ -78,6 +78,11 @@ public class ORCloudData: DataConvenience {
         self.dataManager.fetchCloud(model: ORLiftEntry.self, predicate: predicate, completionHandler: completionHandler)
     }
     
+    public func fetchMessages(#organization: OROrganization, completionHandler: ((ORCloudDataResponse)->())?) {
+        let predicate = ORDataTools.predicateWithKey("owner", comparator: "==", value: organization.reference)
+        self.dataManager.fetchCloud(model: ORMessage.self, predicate: predicate, completionHandler: completionHandler)
+    }
+    
     public func save(#model: ORModel, completionHandler: ((ORCloudDataResponse)->())?) {
         self.dataManager.saveCloud(record: model.record, completionHandler: completionHandler)
     }

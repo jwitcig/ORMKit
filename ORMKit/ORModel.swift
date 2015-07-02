@@ -32,6 +32,10 @@ public class ORModel {
         return CKReference(record: self.record, action: CKReferenceAction.None)
     }
     
+    public var createdDate: NSDate {
+        return self.record.creationDate
+    }
+    
     class var recordType: String { return "" }
     
     required public init(record: CKRecord) {
