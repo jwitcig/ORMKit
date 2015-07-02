@@ -20,6 +20,8 @@ enum RecordType: String {
     case ORLiftTemplate = "ORLiftTemplate"
     case ORLiftEntry = "ORLiftEntry"
     
+    case ORMessage = "ORMessage"
+    
     case ORAthlete = "ORAthlete"
 }
 
