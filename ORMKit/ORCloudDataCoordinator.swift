@@ -32,10 +32,16 @@ public class ORCloudDataCoordinator: ORDataCoordinator {
     }
     
     internal func save(#record: CKRecord, completionHandler: ((ORCloudDataResponse)->())?) {
+        println(completionHandler)
+
+        
         self.database.saveRecord(record) { (record, error) -> Void in
             var response = ORCloudDataResponse()
             response.error = error
+            println("hey")
             completionHandler?(response)
+            println("bye")
+            
         }
     }
     

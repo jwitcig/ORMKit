@@ -50,6 +50,8 @@ public class ORDataManager {
     
     public func saveCloud(#record: CKRecord, completionHandler: ((ORCloudDataResponse)->())?) {
         self.cloudDataCoordinator.save(record: record, completionHandler: completionHandler)
+        
+        println(completionHandler)
     }
     
 }
