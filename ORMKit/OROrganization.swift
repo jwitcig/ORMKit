@@ -13,9 +13,15 @@ public class OROrganization: ORModel, ModelSubclassing {
     
     public enum Fields: String {
         case orgName = "orgName"
+        case description = "description"
         case athletes = "athletes"
         case admins = "admins"
     }
+    public var description: String {
+        get { return self.record.valueForKey(Fields.description.rawValue) as! String }
+        set { self.record.setValue(newValue, forKey: Fields.description.rawValue) }
+    }
+    
     public var orgName: String {
         get { return self.record.valueForKey(Fields.orgName.rawValue) as! String }
         set { self.record.setValue(newValue, forKey: Fields.orgName.rawValue) }
