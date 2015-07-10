@@ -9,6 +9,17 @@
 import Foundation
 
 public class ORDataResponse {
-    public var results: [AnyObject]?
-    public var error: NSError?
+    
+    public var results = [AnyObject]()
+    public var error: NSError? {
+        didSet {
+            if let err = self.error {
+                println(err)
+            }
+        }
+    }
+    
+    public var success: Bool {
+        return self.error == nil
+    }
 }

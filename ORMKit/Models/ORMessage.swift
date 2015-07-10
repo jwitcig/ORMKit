@@ -10,46 +10,58 @@ import Cocoa
 import CloudKit
 
 public class ORMessage: ORModel, ModelSubclassing {
-
-    enum Fields: String {
+    public typealias SelfClass = ORMessage
+    
+    enum CloudFields: String {
         case title = "title"
         case body = "body"
-        case owner = "owner"
-        case poster = "poster"
+        case createdDate = "createdDate"
+        case organization = "organization"
+        case creator = "creator"
+    }
+    enum LocalFields: String {
+        case title = "title"
+        case body = "body"
+        case createdDate = "createdDate"
+        case organization = "organization"
+        case creator = "creator"
+    }
+    
+    override public var record: CKRecord {
+        get {
+            let record = CKRecord(recordType: RecordType.ORMessage.rawValue, recordID: CKRecordID(recordName: recordName))
+            return record
+        }
+        set {
+            self.recordName = newValue.recordID.recordName
+            self.title = newValue.propertyForName(CloudFields.title.rawValue, defaultValue: "") as! String
+            self.body = newValue.propertyForName(CloudFields.body.rawValue, defaultValue: "") as! String
+            self.createdDate = newValue.propertyForName(CloudFields.createdDate.rawValue, defaultValue: NSDate()) as! NSDate
+            if let value = newValue.modelForName(CloudFields.organization.rawValue) as? OROrganization {
+                self.organization = value
+            }
+            if let value = newValue.modelForName(CloudFields.creator.rawValue) as? ORAthlete {
+                self.creator = value
+            }
+
+        }
     }
     
     override public class var recordType: String { return RecordType.ORMessage.rawValue }
     
-    public var title: String {
-        get { return self.record.valueForKey(Fields.title.rawValue) as! String }
-        set { self.record.setValue(newValue, forKey: Fields.title.rawValue) }
-    }
-    public var body: String {
-        get { return self.record.valueForKey(Fields.body.rawValue) as! String }
-        set { self.record.setValue(newValue, forKey: Fields.body.rawValue) }
-    }
-    public var owner: ORModel {
-        get {
-            let reference = self.record.valueForKey(Fields.owner.rawValue) as! CKReference
-            return ORModel(record: CKRecord(recordType: "", recordID: reference.recordID))
-        }
-        set { self.record.setValue(newValue.reference, forKey: Fields.owner.rawValue) }
-    }
-    public var poster: ORAthlete {
-        get {
-            let reference = self.record.valueForKey(Fields.poster.rawValue) as! CKReference
-            return ORAthlete(record: CKRecord(recordType: ORAthlete.recordType, recordID: reference.recordID))
-        }
-        set { self.record.setValue(newValue.reference, forKey: Fields.poster.rawValue) }
+    public class func message(record: CKRecord? = nil) -> SelfClass {
+        return super.model(type: SelfClass.self, record: record) as! SelfClass
     }
     
-    required public init() {
-        super.init(record: CKRecord(recordType: ORMessage.recordType))
+    public class func messages(#records: [CKRecord]) -> [SelfClass] {
+        return super.models(type: SelfClass.self, records: records) as! [SelfClass]
     }
     
-    required public init(record: CKRecord) {
-        super.init(record: record)
-    }
+    @NSManaged public var title: String
+    @NSManaged public var body: String
+    @NSManaged public var organization: OROrganization?
+    @NSManaged public var creator: ORAthlete
+    @NSManaged public var createdDate: NSDate
     
     public static func query(predicate: NSPredicate?) -> CKQuery {
         if let filter = predicate {

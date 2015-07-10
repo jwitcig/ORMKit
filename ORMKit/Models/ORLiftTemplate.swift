@@ -10,50 +10,62 @@ import Cocoa
 import CloudKit
 
 public class ORLiftTemplate: ORModel, ModelSubclassing {
+    public typealias SelfClass = ORLiftTemplate
     
-    enum Fields: String {
+    enum CloudFields: String {
         case defaultLift = "default"
         case liftDescription = "liftDescription"
         case liftName = "liftName"
         case solo = "solo"
         case creator = "creator"
-        case owner = "owner"
+        case organization = "organization"
+    }
+    enum LocalFields: String {
+        case defaultLift = "defaultLift"
+        case liftDescription = "liftDescription"
+        case liftName = "liftName"
+        case solo = "solo"
+        case creator = "creator"
+        case organization = "organization"
     }
     
     override public class var recordType: String { return RecordType.ORLiftTemplate.rawValue }
     
-    public var defaultLift: Bool {
-        get { return self.record.valueForKey(Fields.defaultLift.rawValue) as! Bool }
-        set { self.record.setValue(newValue, forKey: Fields.defaultLift.rawValue) }
-    }
-    public var liftDescription: String {
-        get { return self.record.valueForKey(Fields.liftDescription.rawValue) as! String }
-        set { self.record.setValue(newValue, forKey: Fields.liftDescription.rawValue) }
-    }
-    public var liftName: String {
-        get { return self.record.valueForKey(Fields.liftName.rawValue) as! String }
-        set { self.record.setValue(newValue, forKey: Fields.liftName.rawValue) }
-    }
-    
-    public var solo: Bool {
-        get { return self.record.valueForKey(Fields.solo.rawValue) as! Bool }
-        set { self.record.setValue(newValue, forKey: Fields.solo.rawValue) }
-    }
-    public var owner: ORModel {
+    override public var record: CKRecord {
         get {
-            let reference = self.record.valueForKey(Fields.owner.rawValue) as! CKReference
-            return ORModel(record: CKRecord(recordType: "", recordID: reference.recordID))
+            let record = CKRecord(recordType: RecordType.ORLiftTemplate.rawValue, recordID: CKRecordID(recordName: recordName))
+            return record
         }
-        set { self.record.setValue(newValue.reference, forKey: Fields.owner.rawValue) }
+        set {
+            self.recordName = newValue.recordID.recordName
+            self.liftName = newValue.propertyForName(CloudFields.liftName.rawValue, defaultValue: "") as! String
+            self.defaultLift = newValue.propertyForName(CloudFields.defaultLift.rawValue, defaultValue: true) as! Bool
+            self.liftDescription = newValue.propertyForName(CloudFields.liftDescription.rawValue, defaultValue: "") as! String
+            self.solo = newValue.propertyForName(CloudFields.solo.rawValue, defaultValue: "") as! Bool
+            
+            self.organization = newValue.modelForName(CloudFields.organization.rawValue) as? OROrganization
+            if let value = newValue.modelForName(CloudFields.creator.rawValue) as? ORAthlete {
+                self.creator = value
+            }
+        }
     }
     
-    required public init() {
-        super.init(record: CKRecord(recordType: ORLiftTemplate.recordType))
+    public class func template(record: CKRecord? = nil) -> SelfClass {
+        return super.model(type: SelfClass.self, record: record) as! SelfClass
     }
     
-    required public init(record: CKRecord) {
-        super.init(record: record)
+    public class func templates(#records: [CKRecord]) -> [SelfClass] {
+        return super.models(type: SelfClass.self, records: records) as! [SelfClass]
     }
+    @NSManaged public var defaultLift: Bool
+    @NSManaged public var liftDescription: String
+    @NSManaged public var liftName: String
+    
+    @NSManaged public var solo: Bool
+    
+    @NSManaged public var organization: OROrganization?
+    
+    @NSManaged public var creator: ORAthlete
     
     public static func query(predicate: NSPredicate?) -> CKQuery {
         if let filter = predicate {

@@ -10,5 +10,9 @@ import Foundation
 import CloudKit
 
 public class ORCloudDataResponse: ORDataResponse {
-
+    
+    public var cloudResults: [CKRecord] {
+        return self.results as! [CKRecord]
+    }
+    
 }

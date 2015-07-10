@@ -58,7 +58,14 @@ public class ORSession {
                     if error == nil {
                         if results.count == 1 {
                             
-                            var athlete = ORAthlete(record: results.first! as! CKRecord)
+                            let record = results.first! as! CKRecord
+                        
+                            var athlete: ORAthlete!
+                            if let fetchedAthlete = self.localData.fetchObject(id: record.recordID.recordName, model: ORAthlete.self) as? ORAthlete {
+                                athlete = fetchedAthlete
+                            } else {
+                                athlete = ORAthlete.athlete(record: results.first! as! CKRecord)
+                            }
                             
                             ORAthlete.setCurrentAthlete(athlete)
                             success = true                            

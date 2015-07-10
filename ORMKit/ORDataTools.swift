@@ -14,8 +14,25 @@ internal class ORDataTools {
         return NSPredicate(value: true)
     }
     
-    internal static func predicateWithKey(key: String, comparator: String, value: AnyObject) -> NSPredicate {
+    internal class var currentOrganizationMissingError: NSError {
+        return NSError(domain: "com.jwitapps.ORMKit", code: 500, userInfo: [NSLocalizedDescriptionKey: "Current organization not specified. [Missing current organization]"])
+    }
+    
+    internal class func sortChronological(#key: String) -> NSSortDescriptor {
+        return NSSortDescriptor(key: key, ascending: true)
+    }
+    
+    internal class func sortReverseChronological(#key: String) -> NSSortDescriptor {
+        return NSSortDescriptor(key: key, ascending: false)
+    }
+    
+    internal class func predicateWithKey(key: String, comparator: String, value: AnyObject) -> NSPredicate {
         return NSPredicate(format: "\(key) \(comparator) %@", value as! NSObject)
     }
     
+}
+
+public enum Sort {
+    case Chronological
+    case ReverseChronological
 }

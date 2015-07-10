@@ -10,25 +10,43 @@ import Cocoa
 import CloudKit
 
 public class ORAthlete: ORModel, ModelSubclassing {
-    
-    enum Fields: String {
+    public typealias SelfClass = ORAthlete
+  
+    enum CloudFields: String {
         case userRecordName = "userRecordName"
+    }
+    enum LocalFields: String {
+        case userRecordName = "userRecordName"
+        case athleteOrganizations = "athleteOrganizations"
+        case adminOrganizations = "adminOrganizations"
+    }
+    
+    override public var record: CKRecord {
+        get {
+            let record = CKRecord(recordType: RecordType.ORAthlete.rawValue, recordID: CKRecordID(recordName: recordName))
+            return record
+        }
+        set {
+            self.recordName = newValue.recordID.recordName
+            self.userRecordName = newValue.valueForKey(CloudFields.userRecordName.rawValue) as! String
+        }
+    }
+    
+    public class func athlete(record: CKRecord? = nil) -> SelfClass {
+        return super.model(type: SelfClass.self, record: record) as! SelfClass
+    }
+    
+    public class func athletes(#records: [CKRecord]) -> [SelfClass] {
+        return super.models(type: SelfClass.self, records: records) as! [SelfClass]
     }
     
     override public class var recordType: String { return RecordType.ORAthlete.rawValue }
     
-    public var userRecordName: String {
-        get { return self.record.valueForKey(Fields.userRecordName.rawValue) as! String }
-    }
+    @NSManaged public var userRecordName: String
     
-    required public init() {
-        super.init(record: CKRecord(recordType: ORAthlete.recordType))
-    }
-    
-    required public init(record: CKRecord) {
-        super.init(record: record)
-    }
-    
+    @NSManaged public var athleteOrganizations: Set<OROrganization>
+    @NSManaged public var adminOrganizations: Set<OROrganization>
+
     public static func query(predicate: NSPredicate?) -> CKQuery {
         if let filter = predicate {
             return CKQuery(recordType: ORAthlete.recordType, predicate: filter)
@@ -43,7 +61,7 @@ public class ORAthlete: ORModel, ModelSubclassing {
         CKContainer.defaultContainer().fetchUserRecordIDWithCompletionHandler { (recordID, error) -> Void in
             if error == nil {
                 
-                var athlete = ORAthlete(record: CKRecord(recordType: ORAthlete.recordType, recordID: recordID))
+                var athlete = ORAthlete.athlete(record: CKRecord(recordType: ORAthlete.recordType, recordID: recordID))
                 
                 CKContainer.defaultContainer().publicCloudDatabase.saveRecord(athlete.record, completionHandler: { (record, error) -> Void in
                     
@@ -84,6 +102,10 @@ public class ORAthlete: ORModel, ModelSubclassing {
         if result {
             ORSession.currentSession.currentAthlete = athlete
         }
+    }
+    
+    private func readFromLocalRecord(localRecord: NSManagedObject) {
+        if let value = localRecord.valueForKey(LocalFields.userRecordName.rawValue) as? String { self.userRecordName = value }
     }
     
 }

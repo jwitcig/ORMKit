@@ -23,35 +23,31 @@ public class ORDataManager {
         self.cloudDataCoordinator = ORCloudDataCoordinator(container: cloudContainer, database: cloudDatabase)
     }
     
-    public func fetchLocal(#model: ORModel.Type, queryFilters: [(String, String, AnyObject)]?) -> ORLocalDataResponse {
-        
+    public func fetchLocal(#model: ORModel.Type, predicates: [NSPredicate]? = nil, sortDescriptors: [NSSortDescriptor]? = nil) -> ORLocalDataResponse {
         var predicate: NSPredicate!
-        if let filters = queryFilters {
-            
-            var predicateString = ""
-            for (key, comparator, value) in filters {
-                predicateString += "\(key) \(comparator) \(value)"
-            }
-            
-            predicate = NSPredicate(format: predicateString)
+        if let filters = predicates {
+            predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: filters)
             
         } else {
             predicate = NSPredicate(value: true)
         }
-        
-        return self.localDataCoordinator.fetch(model: model, predicate: predicate)
+        return self.localDataCoordinator.fetch(model: model, predicate: predicate, sortDescriptors: sortDescriptors)
     }
     
     public func fetchCloud(#model: ORModel.Type, predicate: NSPredicate, completionHandler: ((ORCloudDataResponse)->())?) {
-        self.cloudDataCoordinator.fetch(model: model, predicate: predicate) { (response) -> () in
-            completionHandler?(response)
-        }
+        self.cloudDataCoordinator.fetch(model: model, predicate: predicate, completionHandler: completionHandler)
     }
     
     public func saveCloud(#record: CKRecord, completionHandler: ((ORCloudDataResponse)->())?) {
         self.cloudDataCoordinator.save(record: record, completionHandler: completionHandler)
-        
-        println(completionHandler)
+    }
+    
+    public func saveLocal() -> ORLocalDataResponse {
+        return self.localDataCoordinator.save()
+    }
+    
+    public func delete(#objects: [ORModel]) -> ORLocalDataResponse {
+        return self.localDataCoordinator.delete(objects: objects)
     }
     
 }

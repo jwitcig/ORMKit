@@ -11,6 +11,9 @@
 		8B2AD4CB1B334128003B917F /* ORLocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2AD4CA1B334128003B917F /* ORLocalData.swift */; };
 		8B2AD4CD1B334F00003B917F /* ORDataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2AD4CC1B334F00003B917F /* ORDataCoordinator.swift */; };
 		8B3039631B2BFED000E5C95A /* ORSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3039621B2BFED000E5C95A /* ORSession.swift */; };
+		8B6047741B4A193C001A2A68 /* ORSoloStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6047731B4A193C001A2A68 /* ORSoloStats.swift */; };
+		8B6047761B4A194B001A2A68 /* ORGroupStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6047751B4A194B001A2A68 /* ORGroupStats.swift */; };
+		8B6047781B4A195F001A2A68 /* ORStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6047771B4A195F001A2A68 /* ORStats.swift */; };
 		8B650CA31B2BA75400F0EA52 /* ORMKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B650CA21B2BA75400F0EA52 /* ORMKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8B650CA91B2BA75400F0EA52 /* ORMKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B650C9D1B2BA75400F0EA52 /* ORMKit.framework */; };
 		8B650CB01B2BA75400F0EA52 /* ORMKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CAF1B2BA75400F0EA52 /* ORMKitTests.swift */; };
@@ -48,6 +51,9 @@
 		8B2AD4CA1B334128003B917F /* ORLocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLocalData.swift; sourceTree = "<group>"; };
 		8B2AD4CC1B334F00003B917F /* ORDataCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataCoordinator.swift; sourceTree = "<group>"; };
 		8B3039621B2BFED000E5C95A /* ORSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORSession.swift; sourceTree = "<group>"; };
+		8B6047731B4A193C001A2A68 /* ORSoloStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORSoloStats.swift; sourceTree = "<group>"; };
+		8B6047751B4A194B001A2A68 /* ORGroupStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORGroupStats.swift; sourceTree = "<group>"; };
+		8B6047771B4A195F001A2A68 /* ORStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORStats.swift; sourceTree = "<group>"; };
 		8B650C9D1B2BA75400F0EA52 /* ORMKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ORMKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B650CA11B2BA75400F0EA52 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B650CA21B2BA75400F0EA52 /* ORMKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORMKit.h; sourceTree = "<group>"; };
@@ -92,6 +98,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8B6047791B4A1984001A2A68 /* Stats */ = {
+			isa = PBXGroup;
+			children = (
+				8B6047731B4A193C001A2A68 /* ORSoloStats.swift */,
+				8B6047751B4A194B001A2A68 /* ORGroupStats.swift */,
+				8B6047771B4A195F001A2A68 /* ORStats.swift */,
+			);
+			name = Stats;
+			sourceTree = "<group>";
+		};
 		8B650C931B2BA75400F0EA52 = {
 			isa = PBXGroup;
 			children = (
@@ -117,6 +133,7 @@
 				8B76DF5B1B3446F300DB95ED /* Misc */,
 				8B76DF5C1B34470900DB95ED /* Data Stack */,
 				8B650CBA1B2BA77100F0EA52 /* Models */,
+				8B6047791B4A1984001A2A68 /* Stats */,
 				8B650CA01B2BA75400F0EA52 /* Supporting Files */,
 			);
 			path = ORMKit;
@@ -152,8 +169,8 @@
 			children = (
 				8B650CB91B2BA77100F0EA52 /* ORModel.swift */,
 				8BD0F1AE1B30978000F96C96 /* OROrganization.swift */,
-				8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */,
 				8B650CBC1B2BA77100F0EA52 /* ORLiftTemplate.swift */,
+				8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */,
 				8BA520991B44CE9E005E0FF0 /* ORMessage.swift */,
 				8B650CC21B2BA8DD00F0EA52 /* ORAthlete.swift */,
 			);
@@ -193,8 +210,8 @@
 		8B76DF5A1B3446E300DB95ED /* Data Stores */ = {
 			isa = PBXGroup;
 			children = (
-				8B2AD4C81B33411E003B917F /* ORCloudData.swift */,
 				8B2AD4CA1B334128003B917F /* ORLocalData.swift */,
+				8B2AD4C81B33411E003B917F /* ORCloudData.swift */,
 			);
 			name = "Data Stores";
 			sourceTree = "<group>";
@@ -329,6 +346,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B76DF5E1B3447DF00DB95ED /* ORDataTools.swift in Sources */,
+				8B6047761B4A194B001A2A68 /* ORGroupStats.swift in Sources */,
 				8B650CC31B2BA8DD00F0EA52 /* ORAthlete.swift in Sources */,
 				8B2AD4CD1B334F00003B917F /* ORDataCoordinator.swift in Sources */,
 				8BD0F1AF1B30978000F96C96 /* OROrganization.swift in Sources */,
@@ -343,6 +361,8 @@
 				8BE077281B2D4EF20070D128 /* ORTransformer.swift in Sources */,
 				8B650CBF1B2BA77100F0EA52 /* ORLiftEntry.swift in Sources */,
 				8B9E271B1B323890008AE331 /* ORDataManager.swift in Sources */,
+				8B6047781B4A195F001A2A68 /* ORStats.swift in Sources */,
+				8B6047741B4A193C001A2A68 /* ORSoloStats.swift in Sources */,
 				8BD0F1B71B3120D900F96C96 /* ORLocalDataResponse.swift in Sources */,
 				8B76DF521B34464600DB95ED /* ORDataRequest.swift in Sources */,
 				8BD0F1B51B31208700F96C96 /* ORCloudDataResponse.swift in Sources */,
