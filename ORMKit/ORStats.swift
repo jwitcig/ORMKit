@@ -8,14 +8,8 @@
 
 import Foundation
 
-class ORStats {
+public class ORStats {
     
-    var session: ORSession
-    var athlete: ORAthlete
-    
-    init(session: ORSession, currentAthlete athlete: ORAthlete) {
-        self.session = session
-        self.athlete = athlete
-    }
+    public init() { }
     
 }

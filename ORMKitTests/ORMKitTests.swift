@@ -8,13 +8,56 @@
 
 import Cocoa
 import XCTest
+import CloudKit
+
 import ORMKit
 
 class ORMKitTests: XCTestCase {
     
+    var soloStats = ORSoloStats()
+    var entries = [ORLiftEntry]()
+    
+    var moc: NSManagedObjectContext!
+    
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        
+        let bundle = NSBundle.mainBundle()
+        let path = bundle.pathForResource("TestSettings", ofType: "plist")
+
+        
+        var mom = NSManagedObjectModel.mergedModelFromBundles([bundle])!
+        
+        println(NSBundle.allBundles())
+        let modelURL = NSBundle.mainBundle().URLForResource("TheOneRepMax", withExtension: "momd")!
+        mom = NSManagedObjectModel(contentsOfURL: modelURL)!
+        
+        let psc = NSPersistentStoreCoordinator(managedObjectModel: mom)
+        
+        XCTAssertTrue(psc.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil, error: nil) != nil)
+        self.moc = NSManagedObjectContext()
+        self.moc.persistentStoreCoordinator = psc
+
+        let session = ORSession.currentSession
+        let container = CKContainer.defaultContainer()
+        let publicDatabase = container.publicCloudDatabase
+        
+        let dataManager = ORDataManager(localDataContext: self.moc, cloudContainer: container, cloudDatabase: publicDatabase)
+        
+        ORSession.currentSession.localData = ORLocalData(session: session, dataManager: dataManager)
+        ORSession.currentSession.cloudData = ORCloudData(session: session, dataManager: dataManager)
+        let gregorian = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
+
+        for i in 0..<10 {
+            let entry = ORLiftEntry.entry()
+            entry.weightLifted = 300
+            entry.reps = 3
+            entry.date = gregorian.dateByAddingUnit(NSCalendarUnit.CalendarUnitDay, value: -2*i, toDate: NSDate(), options: NSCalendarOptions.allZeros)!
+
+            self.entries.append(entry)
+        }
+        println(self.entries)
+        
     }
     
     override func tearDown() {
@@ -23,7 +66,7 @@ class ORMKitTests: XCTestCase {
     }
     
     func testExample() {
-
+//        self.soloStats.estimatedMax(targetDate: <#NSDate#>, rawEntries: <#[ORLiftEntry]#>)
         
         XCTAssert(true, "Pass")
     }

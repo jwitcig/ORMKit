@@ -8,27 +8,27 @@
 
 import Cocoa
 
-class ORGroupStats: ORStats {
+public class ORGroupStats: ORStats {
     
-    var organization: OROrganization
-    var cloudData: ORCloudData {
-        return self.session.cloudData
-    }
-    
-    init(session: ORSession, organization: OROrganization, currentAthlete athlete: ORAthlete) {
-        self.organization = organization
-        super.init(session: session, currentAthlete: athlete)
-    }
-    
-    func averageMax(liftTemplate template: ORLiftTemplate) {
-        self.cloudData.fetchLiftEntries(template: template) { (response) -> () in
-            
-            
-            
-            
-            
-        }
-        
-    }
+//    var organization: OROrganization
+//    var cloudData: ORCloudData {
+//        return self.session.cloudData
+//    }
+//    
+//    init(session: ORSession, organization: OROrganization, currentAthlete athlete: ORAthlete) {
+//        self.organization = organization
+//        super.init(session: session, currentAthlete: athlete)
+//    }
+//    
+//    func averageMax(liftTemplate template: ORLiftTemplate) {
+//        self.cloudData.fetchLiftEntries(template: template) { (response) -> () in
+//            
+//            
+//            
+//            
+//            
+//        }
+//        
+//    }
     
 }

@@ -25,6 +25,7 @@
 		8B76DF541B34465700DB95ED /* ORLocalDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B76DF531B34465700DB95ED /* ORLocalDataRequest.swift */; };
 		8B76DF561B34466C00DB95ED /* ORCloudDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B76DF551B34466C00DB95ED /* ORCloudDataRequest.swift */; };
 		8B76DF5E1B3447DF00DB95ED /* ORDataTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B76DF5D1B3447DF00DB95ED /* ORDataTools.swift */; };
+		8B8D6E4F1B50CB9A0046C1D2 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D6E4E1B50CB9A0046C1D2 /* Extensions.swift */; };
 		8B9E271B1B323890008AE331 /* ORDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9E271A1B323890008AE331 /* ORDataManager.swift */; };
 		8BA5209A1B44CE9E005E0FF0 /* ORMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA520991B44CE9E005E0FF0 /* ORMessage.swift */; };
 		8BD0F1AB1B308E5400F96C96 /* ORCloudDataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1AA1B308E5400F96C96 /* ORCloudDataCoordinator.swift */; };
@@ -68,6 +69,7 @@
 		8B76DF531B34465700DB95ED /* ORLocalDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLocalDataRequest.swift; sourceTree = "<group>"; };
 		8B76DF551B34466C00DB95ED /* ORCloudDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudDataRequest.swift; sourceTree = "<group>"; };
 		8B76DF5D1B3447DF00DB95ED /* ORDataTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataTools.swift; sourceTree = "<group>"; };
+		8B8D6E4E1B50CB9A0046C1D2 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8B9E271A1B323890008AE331 /* ORDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataManager.swift; sourceTree = "<group>"; };
 		8BA520991B44CE9E005E0FF0 /* ORMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORMessage.swift; sourceTree = "<group>"; };
 		8BD0F1AA1B308E5400F96C96 /* ORCloudDataCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudDataCoordinator.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				8B6047731B4A193C001A2A68 /* ORSoloStats.swift */,
 				8B6047751B4A194B001A2A68 /* ORGroupStats.swift */,
 				8B6047771B4A195F001A2A68 /* ORStats.swift */,
+				8B8D6E4E1B50CB9A0046C1D2 /* Extensions.swift */,
 			);
 			name = Stats;
 			sourceTree = "<group>";
@@ -365,6 +368,7 @@
 				8B6047741B4A193C001A2A68 /* ORSoloStats.swift in Sources */,
 				8BD0F1B71B3120D900F96C96 /* ORLocalDataResponse.swift in Sources */,
 				8B76DF521B34464600DB95ED /* ORDataRequest.swift in Sources */,
+				8B8D6E4F1B50CB9A0046C1D2 /* Extensions.swift in Sources */,
 				8BD0F1B51B31208700F96C96 /* ORCloudDataResponse.swift in Sources */,
 				8B76DF561B34466C00DB95ED /* ORCloudDataRequest.swift in Sources */,
 				8B2AD4C91B33411E003B917F /* ORCloudData.swift in Sources */,
