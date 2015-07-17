@@ -36,6 +36,15 @@ public class ORSession {
         }
     }
     
+    private var _soloStats: ORSoloStats!
+    public var soloStats: ORSoloStats {
+        get { return _soloStats }
+        set {
+            _soloStats = newValue
+            _soloStats.session = self
+        }
+    }
+    
     public static let managedObjectModel = NSManagedObjectModel.mergedModelFromBundles(NSBundle.allBundles())
     public static let persistentStoreCooridnator = NSPersistentStoreCoordinator(managedObjectModel: ORSession.managedObjectModel!)
 
@@ -47,42 +56,44 @@ public class ORSession {
     
     public func signInWithCloud(#completionHandler: ((Bool, NSError?)->())?) {
         var context = self.localData.context
-        self.cloudData.container.fetchUserRecordIDWithCompletionHandler({ (recordId, error) -> Void in
+        self.cloudData.container.fetchUserRecordIDWithCompletionHandler { (recordID, error) -> Void in
             
             if error == nil {
-                let query: CKQuery = ORAthlete.query(NSPredicate(format: "%K == %@", "userRecordName", recordId.recordName))
+                let query: CKQuery = ORAthlete.query(NSPredicate(format: "%K == %@", "userRecordName", recordID.recordName))
                 
-                CKContainer.defaultContainer().publicCloudDatabase.performQuery(query, inZoneWithID: nil, completionHandler: { (results, error) -> Void in
+                CKContainer.defaultContainer().publicCloudDatabase.performQuery(query, inZoneWithID: nil) { (results, error) -> Void in
                     
                     var success = false
                     if error == nil {
                         if results.count == 1 {
-                            
                             let record = results.first! as! CKRecord
-                        
+                            
                             var athlete: ORAthlete!
                             if let fetchedAthlete = self.localData.fetchObject(id: record.recordID.recordName, model: ORAthlete.self) as? ORAthlete {
                                 athlete = fetchedAthlete
                             } else {
-                                athlete = ORAthlete.athlete(record: results.first! as! CKRecord)
+                                athlete = ORAthlete.athlete(record: record)
                             }
                             
                             ORAthlete.setCurrentAthlete(athlete)
                             success = true                            
+                        } else if results.count == 0 {
+                            var record = CKRecord(recordType: ORAthlete.recordType, recordID: recordID)
+                            
+                            var athlete = ORAthlete.athlete(record: record)
+                            ORAthlete.setCurrentAthlete(athlete)
+                            success = true
                         }
                     } else {
                         println(error)
                     }
                     
-                    if let handler = completionHandler {
-                        handler(success, error)
-                    }
-                    
-                })
+                    completionHandler?(success, error)
+                }
             } else {
                 println(error)
             }
-        })
+        }
     }
     
     public func signInLocally() -> (Bool, ORAthlete?) {

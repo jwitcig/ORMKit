@@ -77,7 +77,8 @@ public class ORLiftEntry: ORModel, ModelSubclassing {
     @NSManaged public var reps: NSNumber
     @NSManaged public var weightLifted: NSNumber
     public var max: NSNumber {
-        return NSNumber(float: weightLifted.floatValue + (weightLifted.floatValue * reps.floatValue * 0.033) )
+        let rounded = round( weightLifted.floatValue + (weightLifted.floatValue * reps.floatValue * 0.033 ) )
+        return NSNumber(float: rounded)
     }
     @NSManaged public var organization: OROrganization?
     @NSManaged public var liftTemplate: ORLiftTemplate

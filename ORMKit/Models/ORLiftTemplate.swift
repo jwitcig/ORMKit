@@ -41,7 +41,7 @@ public class ORLiftTemplate: ORModel, ModelSubclassing {
             self.liftName = newValue.propertyForName(CloudFields.liftName.rawValue, defaultValue: "") as! String
             self.defaultLift = newValue.propertyForName(CloudFields.defaultLift.rawValue, defaultValue: true) as! Bool
             self.liftDescription = newValue.propertyForName(CloudFields.liftDescription.rawValue, defaultValue: "") as! String
-            self.solo = newValue.propertyForName(CloudFields.solo.rawValue, defaultValue: "") as! Bool
+            self.solo = newValue.propertyForName(CloudFields.solo.rawValue, defaultValue: true) as! Bool
             
             self.organization = newValue.modelForName(CloudFields.organization.rawValue) as? OROrganization
             if let value = newValue.modelForName(CloudFields.creator.rawValue) as? ORAthlete {

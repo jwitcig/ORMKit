@@ -56,22 +56,29 @@ public class ORLocalData: DataConvenience {
         }
     }
     
-    public func fetchLiftEntries(#athlete: ORAthlete, template: ORLiftTemplate, organization: OROrganization, order: Sort? = nil) -> ORLocalDataResponse {
-        let athletePredicate = ORDataTools.predicateWithKey("athlete", comparator: "==", value: athlete)
-        let templatePredicate = ORDataTools.predicateWithKey("liftTemplate", comparator: "==", value: template)
-        let organizationPredicate = ORDataTools.predicateWithKey("organization", comparator: "==", value: organization)
-        let predicates = [athletePredicate, templatePredicate, organizationPredicate]
+    public func fetchLiftEntries(#athlete: ORAthlete, organization: OROrganization, template liftTemplate: ORLiftTemplate? = nil, order: Sort? = nil) -> ORLocalDataResponse {
         
+        var predicates = [NSPredicate]()
+        
+        predicates.append(
+            ORDataTools.predicateWithKey("athlete", comparator: "==", value: athlete)
+        )
+        if let template = liftTemplate {
+            predicates.append(
+                ORDataTools.predicateWithKey("liftTemplate", comparator: "==", value: template)
+            )
+        }
+        predicates.append(
+            ORDataTools.predicateWithKey("organization", comparator: "==", value: organization)
+        )        
         var sortDescriptors: [NSSortDescriptor]?
         let key = "date"
         
         if let orderDescriptor = order {
-            switch orderDescriptor {
-            case .Chronological:
-                sortDescriptors = [ORDataTools.sortChronological(key: key)]
-            case .ReverseChronological:
-                sortDescriptors = [ORDataTools.sortReverseChronological(key: key)]
-            }
+            sortDescriptors = [
+                NSSortDescriptor(key: key, order: .Chronological)
+            ]
+            
         }
         
         return self.dataManager.fetchLocal(model: ORLiftEntry.self, predicates: predicates, sortDescriptors: sortDescriptors)

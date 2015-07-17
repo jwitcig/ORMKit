@@ -28,13 +28,13 @@ extension NSDate {
     }
     
     func isSameDay(#date: NSDate) -> Bool {
-        return NSDate.daysBetween(startDate: self, endDate: date) == 0
+        return self.compare(date) == .OrderedSame
     }
 
-    class func daysBetween(#startDate: NSDate, endDate: NSDate) -> Int {
+    public class func daysBetween(#startDate: NSDate, endDate: NSDate) -> Int {
         let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
         let dateComponents = calendar.components(.CalendarUnitDay, fromDate: startDate, toDate: endDate, options: NSCalendarOptions.allZeros)
-        return dateComponents.day + 1
+        return dateComponents.day
     }
     
     class func sorted(#dates: [NSDate]) -> [NSDate] {
@@ -47,6 +47,19 @@ extension NSDate {
             else { return false }
         }
         return firstDate.isBefore(date: self) && self.isBefore(date: secondDate)
+    }
+    
+}
+
+extension NSSortDescriptor {
+    
+    convenience init(key: String, order: Sort) {
+        switch order {
+        case .Chronological:
+            self.init(key: key, ascending: true)
+        case .ReverseChronological:
+            self.init(key: key, ascending: false)
+        }
     }
     
 }

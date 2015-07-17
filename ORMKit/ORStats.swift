@@ -10,6 +10,8 @@ import Foundation
 
 public class ORStats {
     
+    public var session: ORSession!
+    
     public init() { }
     
 }

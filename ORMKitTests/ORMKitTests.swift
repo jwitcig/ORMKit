@@ -17,19 +17,22 @@ class ORMKitTests: XCTestCase {
     var soloStats = ORSoloStats()
     var entries = [ORLiftEntry]()
     
+    
+    let dateFormatter = NSDateFormatter()
+    
     var moc: NSManagedObjectContext!
+    
+    let testBundle = NSBundle(forClass: ORModel.self)
     
     override func setUp() {
         super.setUp()
         
-        let bundle = NSBundle.mainBundle()
-        let path = bundle.pathForResource("TestSettings", ofType: "plist")
-
+        self.dateFormatter.dateFormat = "MM/dd/yy"
         
-        var mom = NSManagedObjectModel.mergedModelFromBundles([bundle])!
         
-        println(NSBundle.allBundles())
-        let modelURL = NSBundle.mainBundle().URLForResource("TheOneRepMax", withExtension: "momd")!
+        var mom = NSManagedObjectModel.mergedModelFromBundles([self.testBundle])!
+        
+        let modelURL = self.testBundle.URLForResource("TheOneRepMax", withExtension: "momd")!
         mom = NSManagedObjectModel(contentsOfURL: modelURL)!
         
         let psc = NSPersistentStoreCoordinator(managedObjectModel: mom)
@@ -37,7 +40,7 @@ class ORMKitTests: XCTestCase {
         XCTAssertTrue(psc.addPersistentStoreWithType(NSInMemoryStoreType, configuration: nil, URL: nil, options: nil, error: nil) != nil)
         self.moc = NSManagedObjectContext()
         self.moc.persistentStoreCoordinator = psc
-
+        
         let session = ORSession.currentSession
         let container = CKContainer.defaultContainer()
         let publicDatabase = container.publicCloudDatabase
@@ -47,17 +50,24 @@ class ORMKitTests: XCTestCase {
         ORSession.currentSession.localData = ORLocalData(session: session, dataManager: dataManager)
         ORSession.currentSession.cloudData = ORCloudData(session: session, dataManager: dataManager)
         let gregorian = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
-
-        for i in 0..<10 {
+        
+        let liftEntryData = [
+            (300, 3, self.dateFormatter.dateFromString("7/2/15")),
+            (300, 4, self.dateFormatter.dateFromString("7/6/15")),
+            (315, 2, self.dateFormatter.dateFromString("7/12/15")),
+            (320, 2, self.dateFormatter.dateFromString("7/18/15")),
+            (325, 3, self.dateFormatter.dateFromString("7/22/15")),
+            (340, 6, self.dateFormatter.dateFromString("7/30/15")),
+        ]
+        
+        for (i, (weight, reps, date)) in enumerate(liftEntryData) {
             let entry = ORLiftEntry.entry()
-            entry.weightLifted = 300
-            entry.reps = 3
-            entry.date = gregorian.dateByAddingUnit(NSCalendarUnit.CalendarUnitDay, value: -2*i, toDate: NSDate(), options: NSCalendarOptions.allZeros)!
-
+            entry.weightLifted = weight
+            entry.reps = reps
+            entry.date = date!
+            
             self.entries.append(entry)
         }
-        println(self.entries)
-        
     }
     
     override func tearDown() {
@@ -65,17 +75,41 @@ class ORMKitTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-//        self.soloStats.estimatedMax(targetDate: <#NSDate#>, rawEntries: <#[ORLiftEntry]#>)
+    func testEstimateMax() {
         
-        XCTAssert(true, "Pass")
+        
+        var date = self.dateFormatter.dateFromString("7/14/15")!
+        var estimate = self.soloStats.estimatedMax(targetDate: date, rawEntries: self.entries)!
+        XCTAssertEqual(estimate, 338)
+        
+        date = self.dateFormatter.dateFromString("7/27/15")!
+        estimate = self.soloStats.estimatedMax(targetDate: date, rawEntries: self.entries)!
+        XCTAssertEqual(estimate, 388)
+        
+        date = self.dateFormatter.dateFromString("7/6/15")!
+        estimate = self.soloStats.estimatedMax(targetDate: date, rawEntries: self.entries)!
+        XCTAssertEqual(estimate, 340)
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
-        }
+    func testAverageProgress() {
+        let dateRange = (
+            self.dateFormatter.dateFromString("7/2/15")!,
+            self.dateFormatter.dateFromString("7/29/15")!
+        )
+        let average = self.soloStats.averageProgress(entries: self.entries, dateRange: dateRange, dayInterval: 14)!
+        
+        let date = self.dateFormatter.dateFromString("7/2/15")!
+        let estimate = Float(self.soloStats.estimatedMax(targetDate: date, rawEntries: self.entries)!)
+        
+        let calculatedAnswer = Float(36.8148)
+        let accuracy = average - calculatedAnswer
+        XCTAssertTrue(accuracy < 0.01)
+    }
+    
+    func testDaysBetween() {
+        let date1 = self.dateFormatter.dateFromString("7/14/15")!
+        let date2 = self.dateFormatter.dateFromString("7/15/15")!
+        XCTAssertEqual(NSDate.daysBetween(startDate: date1, endDate: date2), 1)
     }
     
 }

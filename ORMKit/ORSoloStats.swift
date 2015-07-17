@@ -9,25 +9,55 @@
 import Cocoa
 
 public class ORSoloStats: ORStats {
-    
-    override public init() {
         
+    public init(athlete: ORAthlete) {
+        self.athlete = athlete
+        super.init()
     }
     
-    public func averageProgress(entries rawEntries: [ORLiftEntry], dayInterval: Int) -> Float? {
-        let entries = rawEntries.sorted { $0.0.date.isBefore(date: $0.1.date) }
+    var athlete: ORAthlete
+    
+    private var _entries: [ORLiftEntry]!
+    var entries: [ORLiftEntry] {
+        if let objects = self._entries {
+            return objects
+        }
+        let response = self.session.localData.fetchLiftEntries(athlete: self.athlete, organization: self.session.currentOrganization!)
+        self._entries = response.localResults as! [ORLiftEntry]
+        return self._entries
+    }
+    
+    private func entries(template liftTemplate: ORLiftTemplate? = nil, order: Sort? = nil) -> [ORLiftEntry] {
         
-        if let firstEntry = entries.first, lastEntry = entries.last {
-            let daysApart = NSDate.daysBetween(startDate: firstEntry.date, endDate: lastEntry.date)
-            let totalProgress = lastEntry.max.integerValue - firstEntry.max.integerValue
-            let averageDailyProgress = Float(totalProgress) / Float(daysApart)
-            return averageDailyProgress * Float(dayInterval)
+        var desiredEntries = self.entries
+        if let template = liftTemplate {
+            desiredEntries = desiredEntries.filter { $0.liftTemplate == template }
+        }
+        
+        if let sort = order {
+            let descriptor = NSSortDescriptor(key: "date", order: .Chronological)
+            desiredEntries = NSArray(array: desiredEntries).sortedArrayUsingDescriptors([descriptor]) as! [ORLiftEntry]
+        }
+        return desiredEntries
+    }
+    
+    public func averageProgress(#template: ORLiftTemplate, dateRange: (NSDate, NSDate), dayInterval: Int) -> Float? {
+        let entries = self.entries(template: template, order: .Chronological)
+        
+        let initial = self.estimatedMax(targetDate: dateRange.0, template: template)
+        let final = self.estimatedMax(targetDate: dateRange.1, template: template)
+        
+        if let initialMax = initial, finalMax = final {
+            let totalProgress = finalMax - initialMax
+            let dateRangeSpread = NSDate.daysBetween(startDate: dateRange.0, endDate: dateRange.1)
+            let dailyProgress = Float(totalProgress) / Float(dateRangeSpread)
+            return dailyProgress * Float(dayInterval)
         }
         return nil
     }
     
-    public func estimatedMax(#targetDate: NSDate, rawEntries: [ORLiftEntry]) -> Int? {
-        let entries = rawEntries.sorted { $0.0.date.isBefore(date: $0.1.date) }
+    public func estimatedMax(#targetDate: NSDate, template: ORLiftTemplate) -> Int? {
+        let entries = self.entries(template: template, order: .Chronological)
         
         for (index, entry) in enumerate(entries) {
             let previousEntry = entry
@@ -52,7 +82,9 @@ public class ORSoloStats: ORStats {
                     
                     let dateProportion = Float(dateInset) / Float(dateRange)
                     
-                    return Int(dateProportion * maxDifference + previousEntry.max.floatValue)
+                    return Int(
+                        round(dateProportion * maxDifference + previousEntry.max.floatValue)
+                    )
                 }
             }
         }

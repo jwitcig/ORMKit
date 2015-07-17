@@ -28,7 +28,7 @@ public class ORAthlete: ORModel, ModelSubclassing {
         }
         set {
             self.recordName = newValue.recordID.recordName
-            self.userRecordName = newValue.valueForKey(CloudFields.userRecordName.rawValue) as! String
+            self.userRecordName = newValue.propertyForName(CloudFields.userRecordName.rawValue, defaultValue: "") as! String
         }
     }
     
@@ -97,7 +97,7 @@ public class ORAthlete: ORModel, ModelSubclassing {
     }
     
     public static func setCurrentAthlete(athlete: ORAthlete) {
-        NSUserDefaults.standardUserDefaults().setObject(athlete.userRecordName, forKey: "currentUserRecordName")
+        NSUserDefaults.standardUserDefaults().setObject(athlete.recordName, forKey: "currentUserRecordName")
         let result = NSUserDefaults.standardUserDefaults().synchronize()
         if result {
             ORSession.currentSession.currentAthlete = athlete

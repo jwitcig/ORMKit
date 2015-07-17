@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14D2134" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Athlete" syncable="YES">
+        <attribute name="userRecordName" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="LiftEntry" representedClassName="ORLiftEntry" syncable="YES">
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="maxOut" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="recordID" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="reps" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="weightLifted" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="liftTemplate" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="LiftTemplate" syncable="YES"/>
+        <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Athlete" syncable="YES"/>
+    </entity>
+    <entity name="LiftTemplate" representedClassName="ORMKit.ORLiftTemplate" syncable="YES">
+        <attribute name="defaultLift" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="liftDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="liftName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="recordId" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="solo" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <relationship name="creator" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Athlete" syncable="YES"/>
+        <relationship name="owner" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Athlete" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="LiftEntry" positionX="414" positionY="129" width="128" height="150"/>
+        <element name="LiftTemplate" positionX="-27" positionY="144" width="128" height="150"/>
+        <element name="Athlete" positionX="189" positionY="198" width="128" height="60"/>
+    </elements>
+</model>

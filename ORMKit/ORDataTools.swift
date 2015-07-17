@@ -17,10 +17,7 @@ internal class ORDataTools {
     internal class var currentOrganizationMissingError: NSError {
         return NSError(domain: "com.jwitapps.ORMKit", code: 500, userInfo: [NSLocalizedDescriptionKey: "Current organization not specified. [Missing current organization]"])
     }
-    
-    internal class func sortChronological(#key: String) -> NSSortDescriptor {
-        return NSSortDescriptor(key: key, ascending: true)
-    }
+
     
     internal class func sortReverseChronological(#key: String) -> NSSortDescriptor {
         return NSSortDescriptor(key: key, ascending: false)
