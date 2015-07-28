@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CloudKit
 
 public class ORLocalData: DataConvenience {
     
@@ -15,7 +16,7 @@ public class ORLocalData: DataConvenience {
     var session: ORSession
     
     public var context: NSManagedObjectContext {
-        get { return self.dataManager.localDataCoordinator.context }
+        get { return self.dataManager.localDataCoordinator.managedObjectContext }
     }
     
     public required init(session: ORSession, dataManager: ORDataManager) {
@@ -23,29 +24,41 @@ public class ORLocalData: DataConvenience {
         self.dataManager = dataManager
     }
     
-    public func fetchObject(#id: String, model: ORModel.Type) -> ORModel? {
-        let predicate = ORDataTools.predicateWithKey("recordName", comparator: "==", value: id)
-        let response = self.dataManager.fetchLocal(model: model, predicates: [predicate])
+    public func fetchObject(id id: String, model: ORModel.Type, context: NSManagedObjectContext? = nil) -> ORModel? {
+        let predicate = ORDataTools.predicateWithKey("cloudRecord.recordName", comparator: "==", value: id)
+        let response = self.dataManager.fetchLocal(model: model, predicates: [predicate], context: context)
         
         return response.results.first as? ORModel
     }
     
-    public func fetchObjects(#ids: [String], model: ORModel.Type) -> [ORModel]? {
-        let predicate = ORDataTools.predicateWithKey("recordName", comparator: "IN", value: ids)
-        let response = self.dataManager.fetchLocal(model: model, predicates: [predicate])
+    public func fetchDirtyObjects(model model: ORModel.Type) -> ORLocalDataResponse {
+        return self.dataManager.fetchLocal(model: model, predicates: [ORDataTools.predicateWithKey("cloudRecordDirty", comparator: "==", value: true)])
+    }
+    
+    public func fetchObject(record record: CKRecord, model: ORModel.Type, context: NSManagedObjectContext? = nil) -> ORModel? {
+        return self.fetchObject(id: record.recordID.recordName, model: model, context: context)
+    }
+    
+    public func fetchObjects(ids ids: [String], model: ORModel.Type, context: NSManagedObjectContext? = nil) -> [ORModel]? {
+        let predicate = ORDataTools.predicateWithKey("cloudRecord.recordName", comparator: "IN", value: ids)
+        let response = self.dataManager.fetchLocal(model: model, predicates: [predicate], context: context)
         
         return response.results as? [ORModel]
     }
     
-    public func fetchAll(#model: ORModel.Type) -> ORLocalDataResponse {
-        return self.dataManager.fetchLocal(model: model, predicates: [ORDataTools.allRows])
-    }
-        
-    public func save() -> ORLocalDataResponse {
-        return self.dataManager.saveLocal()
+    public func fetchObjects(records records: [CKRecord], model: ORModel.Type, context: NSManagedObjectContext? = nil) -> [ORModel]? {
+        return self.fetchObjects(ids: records.map{$0.recordID.recordName}, model: model, context: context)
     }
     
-    public func deleteAll(#model: ORModel.Type) -> ORLocalDataResponse {
+    public func fetchAll(model model: ORModel.Type, context: NSManagedObjectContext? = nil) -> ORLocalDataResponse {
+        return self.dataManager.fetchLocal(model: model, predicates: [ORDataTools.allRows], context: context)
+    }
+    
+    public func save(context context: NSManagedObjectContext? = nil) -> ORLocalDataResponse {
+        return self.dataManager.saveLocal(context: context)
+    }
+    
+    public func deleteAll(model model: ORModel.Type) -> ORLocalDataResponse {
         let response = self.fetchAll(model: model)
         
         if response.success {
@@ -56,7 +69,7 @@ public class ORLocalData: DataConvenience {
         }
     }
     
-    public func fetchLiftEntries(#athlete: ORAthlete, organization: OROrganization, template liftTemplate: ORLiftTemplate? = nil, order: Sort? = nil) -> ORLocalDataResponse {
+    public func fetchLiftEntries(athlete athlete: ORAthlete, organization: OROrganization, template liftTemplate: ORLiftTemplate? = nil, order: Sort? = nil) -> ORLocalDataResponse {
         
         var predicates = [NSPredicate]()
         

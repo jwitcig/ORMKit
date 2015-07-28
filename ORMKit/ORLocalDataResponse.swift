@@ -10,7 +10,7 @@ import Foundation
 
 public class ORLocalDataResponse: ORDataResponse {
 
-    public var localResults: [ORModel] {
+    public var objects: [ORModel] {
         return self.results as! [ORModel]
     }
     

@@ -30,7 +30,7 @@ extension CKRecord {
     func modelListForName(name: String) -> [ORModel]? {
         let localData = ORSession.currentSession.localData
         
-        let recordNames = (self.valueForKey(name) as? [CKReference])?.map { $0.recordID.recordName! }
+        let recordNames = (self.valueForKey(name) as? [CKReference])?.map { $0.recordID.recordName }
         if let IDs = recordNames {
             return localData.fetchObjects(ids: IDs, model: ORModel.self)
         }
@@ -40,7 +40,6 @@ extension CKRecord {
 }
 
 public class OROrganization: ORModel, ModelSubclassing {
-    public typealias SelfClass = OROrganization
 
     public enum CloudFields: String {
         case orgName = "orgName"
@@ -55,35 +54,12 @@ public class OROrganization: ORModel, ModelSubclassing {
         case admins = "admins"
     }
     
-    override public var record: CKRecord {
-        get {
-            let record = CKRecord(recordType: RecordType.OROrganization.rawValue, recordID: CKRecordID(recordName: recordName))
-            return record
-        }
-        set {
-            self.recordName = newValue.recordID.recordName
-            self.orgName = newValue.propertyForName(LocalFields.orgName.rawValue, defaultValue: "") as! String
-            self.orgDescription = newValue.propertyForName(LocalFields.orgDescription.rawValue, defaultValue: "") as! String
-            
-            if let value = newValue.modelListForName(LocalFields.orgName.rawValue) as? [ORLiftTemplate] {
-                self.liftTemplates = Set(value)
-            }
-            if let value = newValue.modelListForName(LocalFields.athletes.rawValue) as? [ORAthlete] {
-                self.athletes = Set(value)
-            }
-            if let value = newValue.modelListForName(LocalFields.admins.rawValue) as? [ORAthlete] {
-                self.admins = Set(value)
-            }
-            
-        }
+    public class func organization(record record: CKRecord? = nil, context: NSManagedObjectContext? = nil) -> OROrganization {
+        return super.model(type: OROrganization.self, record: record, context: context) as! OROrganization
     }
     
-    public class func organization(record: CKRecord? = nil) -> SelfClass {
-        return super.model(type: SelfClass.self, record: record) as! SelfClass
-    }
-    
-    public class func organizations(#records: [CKRecord]) -> [SelfClass] {
-        return super.models(type: SelfClass.self, records: records) as! [SelfClass]
+    public class func organizations(records records: [CKRecord], context: NSManagedObjectContext? = nil) -> [OROrganization] {
+        return super.models(type: OROrganization.self, records: records, context: context) as! [OROrganization]
     }
 
     @NSManaged public var messages: Set<ORMessage>
@@ -99,6 +75,22 @@ public class OROrganization: ORModel, ModelSubclassing {
     
     public class func query(predicate: NSPredicate?) -> CKQuery {
         return super.query(OROrganization.recordType, predicate: predicate)
+    }
+    
+    override func writeValuesFromRecord(record: CKRecord) {
+        super.writeValuesFromRecord(record)
+        
+        guard let context = self.managedObjectContext else { return }
+        
+        self.orgName = record.propertyForName(LocalFields.orgName.rawValue, defaultValue: "") as! String
+        self.orgDescription = record.propertyForName(LocalFields.orgDescription.rawValue, defaultValue: "") as! String
+        
+        if let value = record.modelListForName(LocalFields.athletes.rawValue) as? [ORAthlete] {
+            self.athletes = Set(context.crossContextEquivalents(objects: value) as! [ORAthlete])
+        }
+        if let value = record.modelListForName(LocalFields.admins.rawValue) as? [ORAthlete] {
+            self.admins = Set(context.crossContextEquivalents(objects: value) as! [ORAthlete])
+        }
     }
     
 }

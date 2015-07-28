@@ -11,7 +11,7 @@ import CloudKit
 
 public class ORCloudDataResponse: ORDataResponse {
     
-    public var cloudResults: [CKRecord] {
+    public var objects: [CKRecord] {
         return self.results as! [CKRecord]
     }
     

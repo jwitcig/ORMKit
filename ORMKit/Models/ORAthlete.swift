@@ -10,39 +10,38 @@ import Cocoa
 import CloudKit
 
 public class ORAthlete: ORModel, ModelSubclassing {
-    public typealias SelfClass = ORAthlete
   
     enum CloudFields: String {
         case userRecordName = "userRecordName"
+        case firstName = "firstName"
+        case lastName = "lastName"
     }
     enum LocalFields: String {
         case userRecordName = "userRecordName"
         case athleteOrganizations = "athleteOrganizations"
         case adminOrganizations = "adminOrganizations"
+        case firstName = "firstName"
+        case lastName = "lastName"
+    }
+
+    public class func athlete(record record: CKRecord? = nil, context: NSManagedObjectContext? = nil) -> ORAthlete {
+        return super.model(type: ORAthlete.self, record: record, context: context) as! ORAthlete
     }
     
-    override public var record: CKRecord {
-        get {
-            let record = CKRecord(recordType: RecordType.ORAthlete.rawValue, recordID: CKRecordID(recordName: recordName))
-            return record
-        }
-        set {
-            self.recordName = newValue.recordID.recordName
-            self.userRecordName = newValue.propertyForName(CloudFields.userRecordName.rawValue, defaultValue: "") as! String
-        }
-    }
-    
-    public class func athlete(record: CKRecord? = nil) -> SelfClass {
-        return super.model(type: SelfClass.self, record: record) as! SelfClass
-    }
-    
-    public class func athletes(#records: [CKRecord]) -> [SelfClass] {
-        return super.models(type: SelfClass.self, records: records) as! [SelfClass]
+    public class func athletes(records records: [CKRecord], context: NSManagedObjectContext? = nil) -> [ORAthlete] {
+        return super.models(type: ORAthlete.self, records: records, context: context) as! [ORAthlete]
     }
     
     override public class var recordType: String { return RecordType.ORAthlete.rawValue }
     
     @NSManaged public var userRecordName: String
+    
+    @NSManaged public var firstName: String
+    @NSManaged public var lastName: String
+    
+    public var fullName: String {
+        return "\(self.firstName) \(self.lastName)"
+    }
     
     @NSManaged public var athleteOrganizations: Set<OROrganization>
     @NSManaged public var adminOrganizations: Set<OROrganization>
@@ -55,13 +54,12 @@ public class ORAthlete: ORModel, ModelSubclassing {
         }
     }
    
-    public static func signUp(#context: NSManagedObjectContext, completionHandler: ((Bool, ORAthlete?, NSError)->())?) {
-        var recordId = CKRecordID(recordName: "Athlete")
+    public static func signUp(context context: NSManagedObjectContext, completionHandler: ((Bool, ORAthlete?, NSError)->())?) {
         
         CKContainer.defaultContainer().fetchUserRecordIDWithCompletionHandler { (recordID, error) -> Void in
             if error == nil {
                 
-                var athlete = ORAthlete.athlete(record: CKRecord(recordType: ORAthlete.recordType, recordID: recordID))
+                let athlete = ORAthlete.athlete(record: CKRecord(recordType: ORAthlete.recordType, recordID: recordID!))
                 
                 CKContainer.defaultContainer().publicCloudDatabase.saveRecord(athlete.record, completionHandler: { (record, error) -> Void in
                     
@@ -69,34 +67,40 @@ public class ORAthlete: ORModel, ModelSubclassing {
                         
                         if error == nil {
                             
-                            context.save(nil)
+                            do {
+                                try context.save()
+                            } catch _ {
+                            }
                             
                             
                         } else {
-                            println(error)
+                            print(error)
                         }
                         
                         if let handler = completionHandler {
                             if error == nil {
-                                handler(true, athlete, error)
+                                handler(true, athlete, error!)
                             } else {
-                                handler(false, nil, error)
+                                handler(false, nil,
+                                    error!)
                             }
                         }
                         
                     } else {
-                        println(error)
+                        print(error)
                     }
                     
                 })
                 
             } else {
-                println(error)
+                print(error)
             }
         }
     }
     
     public static func setCurrentAthlete(athlete: ORAthlete) {
+
+        
         NSUserDefaults.standardUserDefaults().setObject(athlete.recordName, forKey: "currentUserRecordName")
         let result = NSUserDefaults.standardUserDefaults().synchronize()
         if result {
@@ -104,8 +108,11 @@ public class ORAthlete: ORModel, ModelSubclassing {
         }
     }
     
-    private func readFromLocalRecord(localRecord: NSManagedObject) {
-        if let value = localRecord.valueForKey(LocalFields.userRecordName.rawValue) as? String { self.userRecordName = value }
+    override func writeValuesFromRecord(record: CKRecord) {
+        super.writeValuesFromRecord(record)
+        self.userRecordName = record.propertyForName(CloudFields.userRecordName.rawValue, defaultValue: "") as! String
+        self.firstName = record.propertyForName(CloudFields.firstName.rawValue, defaultValue: "") as! String
+        self.lastName = record.propertyForName(CloudFields.lastName.rawValue, defaultValue: "") as! String
     }
     
 }

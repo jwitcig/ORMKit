@@ -10,7 +10,6 @@ import Cocoa
 import CloudKit
 
 public class ORMessage: ORModel, ModelSubclassing {
-    public typealias SelfClass = ORMessage
     
     enum CloudFields: String {
         case title = "title"
@@ -27,41 +26,21 @@ public class ORMessage: ORModel, ModelSubclassing {
         case creator = "creator"
     }
     
-    override public var record: CKRecord {
-        get {
-            let record = CKRecord(recordType: RecordType.ORMessage.rawValue, recordID: CKRecordID(recordName: recordName))
-            return record
-        }
-        set {
-            self.recordName = newValue.recordID.recordName
-            self.title = newValue.propertyForName(CloudFields.title.rawValue, defaultValue: "") as! String
-            self.body = newValue.propertyForName(CloudFields.body.rawValue, defaultValue: "") as! String
-            self.createdDate = newValue.propertyForName(CloudFields.createdDate.rawValue, defaultValue: NSDate()) as! NSDate
-            if let value = newValue.modelForName(CloudFields.organization.rawValue) as? OROrganization {
-                self.organization = value
-            }
-            if let value = newValue.modelForName(CloudFields.creator.rawValue) as? ORAthlete {
-                self.creator = value
-            }
-
-        }
-    }
-    
     override public class var recordType: String { return RecordType.ORMessage.rawValue }
     
-    public class func message(record: CKRecord? = nil) -> SelfClass {
-        return super.model(type: SelfClass.self, record: record) as! SelfClass
+    public class func message(record: CKRecord? = nil, context: NSManagedObjectContext? = nil) -> ORMessage {
+        return super.model(type: ORMessage.self, record: record, context: context) as! ORMessage
     }
     
-    public class func messages(#records: [CKRecord]) -> [SelfClass] {
-        return super.models(type: SelfClass.self, records: records) as! [SelfClass]
+    public class func messages(records records: [CKRecord], context: NSManagedObjectContext? = nil) -> [ORMessage] {
+        return super.models(type: ORMessage.self, records: records, context: context) as! [ORMessage]
     }
     
     @NSManaged public var title: String
     @NSManaged public var body: String
+    @NSManaged public var createdDate: NSDate
     @NSManaged public var organization: OROrganization?
     @NSManaged public var creator: ORAthlete
-    @NSManaged public var createdDate: NSDate
     
     public static func query(predicate: NSPredicate?) -> CKQuery {
         if let filter = predicate {
@@ -69,6 +48,20 @@ public class ORMessage: ORModel, ModelSubclassing {
         } else {
             return CKQuery(recordType: ORMessage.recordType, predicate: NSPredicate(value: true))
         }
+    }
+    
+    override func writeValuesFromRecord(record: CKRecord) {
+        super.writeValuesFromRecord(record)
+        self.title = record.propertyForName(CloudFields.title.rawValue, defaultValue: "") as! String
+        self.body = record.propertyForName(CloudFields.body.rawValue, defaultValue: "") as! String
+        self.createdDate = record.propertyForName(CloudFields.createdDate.rawValue, defaultValue: NSDate()) as! NSDate
+        if let value = record.modelForName(CloudFields.organization.rawValue) as? OROrganization {
+            self.organization = value
+        }
+        if let value = record.modelForName(CloudFields.creator.rawValue) as? ORAthlete {
+            self.creator = value
+        }
+        
     }
     
 }

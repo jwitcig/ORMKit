@@ -19,7 +19,7 @@ internal class ORDataTools {
     }
 
     
-    internal class func sortReverseChronological(#key: String) -> NSSortDescriptor {
+    internal class func sortReverseChronological(key key: String) -> NSSortDescriptor {
         return NSSortDescriptor(key: key, ascending: false)
     }
     

@@ -14,7 +14,7 @@ public class ORDataResponse {
     public var error: NSError? {
         didSet {
             if let err = self.error {
-                println(err)
+                print(err)
             }
         }
     }

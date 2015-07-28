@@ -10,7 +10,6 @@ import Cocoa
 import CloudKit
 
 public class ORLiftEntry: ORModel, ModelSubclassing {
-    public typealias SelfClass = ORLiftEntry
 
     public enum CloudFields: String {
         case date = "date"
@@ -31,45 +30,14 @@ public class ORLiftEntry: ORModel, ModelSubclassing {
         case athlete = "athlete"
     }
     
-    override public var record: CKRecord {
-        get {
-            let record = CKRecord(recordType: RecordType.ORLiftEntry.rawValue, recordID: CKRecordID(recordName: recordName))
-                
-            record.setValue(self.date, forKey: CloudFields.date.rawValue)
-            record.setValue(self.maxOut, forKey: CloudFields.maxOut.rawValue)
-            record.setValue(self.reps, forKey: CloudFields.reps.rawValue)
-            record.setValue(self.weightLifted, forKey: CloudFields.weightLifted.rawValue)
-            record.setValue(self.liftTemplate.reference, forKey: CloudFields.liftTemplate.rawValue)
-            record.setValue(self.organization?.reference, forKey: CloudFields.organization.rawValue)
-            record.setValue(self.athlete.reference, forKey: CloudFields.athlete.rawValue)
-            return record
-        }
-        set {
-            self.recordName = newValue.recordID.recordName
-            self.date = newValue.propertyForName(CloudFields.date.rawValue, defaultValue: NSDate()) as! NSDate
-            self.maxOut = newValue.propertyForName(CloudFields.maxOut.rawValue, defaultValue: true) as! Bool
-            self.reps = newValue.propertyForName(CloudFields.reps.rawValue, defaultValue: 0) as! NSNumber
-            self.weightLifted = newValue.propertyForName(CloudFields.weightLifted.rawValue, defaultValue: 0) as! NSNumber
-            if let value = newValue.modelForName(CloudFields.liftTemplate.rawValue) as? ORLiftTemplate {
-                self.liftTemplate = value
-            }
-            if let value = newValue.modelForName(CloudFields.organization.rawValue) as? OROrganization {
-                self.organization = value
-            }
-            if let value = newValue.modelForName(CloudFields.athlete.rawValue) as? ORAthlete {
-                self.athlete = value
-            }
-        }
-    }
-    
     override public class var recordType: String { return RecordType.ORLiftEntry.rawValue }
     
-    public class func entry(record: CKRecord? = nil) -> SelfClass {
-        return super.model(type: SelfClass.self, record: record) as! SelfClass
+    public class func entry(record: CKRecord? = nil, context: NSManagedObjectContext? = nil) -> ORLiftEntry {
+        return super.model(type: ORLiftEntry.self, record: record, context: context) as! ORLiftEntry
     }
     
-    public class func entries(#records: [CKRecord]) -> [SelfClass] {
-        return super.models(type: SelfClass.self, records: records) as! [SelfClass]
+    public class func entries(records records: [CKRecord], context: NSManagedObjectContext? = nil) -> [ORLiftEntry] {
+        return super.models(type: ORLiftEntry.self, records: records, context: context) as! [ORLiftEntry]
     }
     
     @NSManaged public var date: NSDate
@@ -89,6 +57,26 @@ public class ORLiftEntry: ORModel, ModelSubclassing {
             return CKQuery(recordType: ORLiftEntry.recordType, predicate: filter)
         } else {
             return CKQuery(recordType: ORLiftEntry.recordType, predicate: NSPredicate(value: true))
+        }
+    }
+    
+    override func writeValuesFromRecord(record: CKRecord) {
+        super.writeValuesFromRecord(record)
+        
+        guard let context = self.managedObjectContext else { return }
+        
+        self.date = record.propertyForName(CloudFields.date.rawValue, defaultValue: NSDate()) as! NSDate
+        self.maxOut = record.propertyForName(CloudFields.maxOut.rawValue, defaultValue: true) as! Bool
+        self.reps = record.propertyForName(CloudFields.reps.rawValue, defaultValue: 0) as! NSNumber
+        self.weightLifted = record.propertyForName(CloudFields.weightLifted.rawValue, defaultValue: 0) as! NSNumber
+        if let value = record.modelForName(CloudFields.liftTemplate.rawValue) as? ORLiftTemplate {
+            self.liftTemplate = context.crossContextEquivalent(object: value) as! ORLiftTemplate
+        }
+        if let value = record.modelForName(CloudFields.organization.rawValue) as? OROrganization {
+            self.organization = context.crossContextEquivalent(object: value) as? OROrganization
+        }
+        if let value = record.modelForName(CloudFields.athlete.rawValue) as? ORAthlete {
+            self.athlete = context.crossContextEquivalent(object: value) as! ORAthlete
         }
     }
     

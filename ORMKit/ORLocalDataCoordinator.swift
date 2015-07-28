@@ -11,41 +11,66 @@ import CloudKit
 
 public class ORLocalDataCoordinator: ORDataCoordinator {
     
-    internal var context: NSManagedObjectContext
+    internal var managedObjectContext: NSManagedObjectContext
     
     internal init(context: NSManagedObjectContext) {
-        self.context = context
+        self.managedObjectContext = context
     }
     
-    public func fetch(#model: ORModel.Type, predicate: NSPredicate, sortDescriptors: [NSSortDescriptor]? = nil) -> ORLocalDataResponse  {
+    public func fetch(model model: ORModel.Type, predicate: NSPredicate, sortDescriptors: [NSSortDescriptor]? = nil, context localContext: NSManagedObjectContext? = nil) -> ORLocalDataResponse  {
+        
+        var context: NSManagedObjectContext!
+        if localContext != nil {
+            context = localContext!
+        } else {
+            context = self.managedObjectContext
+        }
+        
         let request = NSFetchRequest(entityName: model.recordType)
         request.predicate = predicate
         request.sortDescriptors = sortDescriptors
         request.includesSubentities = true
         
         var error: NSError?
-        var response = ORLocalDataResponse()
-        if let results = context.executeFetchRequest(request, error: &error) {
+        let response = ORLocalDataResponse()
+        do {
+            let results = try context.executeFetchRequest(request)
             response.results = results
+        } catch let error1 as NSError {
+            error = error1
         }
-        
         
         response.error = error
         return response
     }
     
-    public func save() -> ORLocalDataResponse {
-        var response = ORLocalDataResponse()
-        self.context.save(&response.error)
+    public func save(context localContext: NSManagedObjectContext? = nil) -> ORLocalDataResponse {
+        var context: NSManagedObjectContext!
+        if localContext != nil {
+            context = localContext!
+        } else {
+            context = self.managedObjectContext
+        }
+        
+        let response = ORLocalDataResponse()
+        do {
+            try context.save()
+        } catch let error1 as NSError {
+            response.error = error1
+        }
         return response
     }
     
-    public func delete(#objects: [ORModel]) -> ORLocalDataResponse {
+    public func delete(objects objects: [ORModel]) -> ORLocalDataResponse {
         for object in objects {
-            self.context.deleteObject(object)
+            self.managedObjectContext.deleteObject(object)
         }
-        var response = ORLocalDataResponse()
-        self.context.save(&response.error)
+        let response = ORLocalDataResponse()
+        do {
+            try self.managedObjectContext.save()
+        } catch let error1 as NSError {
+            response.error = error1
+        }
         return response
     }
         

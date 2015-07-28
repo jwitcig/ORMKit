@@ -54,44 +54,46 @@ public class ORSession {
         
     }
     
-    public func signInWithCloud(#completionHandler: ((Bool, NSError?)->())?) {
-        var context = self.localData.context
+    public func signInWithCloud(completionHandler completionHandler: ((Bool, NSError?)->())?) {
         self.cloudData.container.fetchUserRecordIDWithCompletionHandler { (recordID, error) -> Void in
             
             if error == nil {
-                let query: CKQuery = ORAthlete.query(NSPredicate(format: "%K == %@", "userRecordName", recordID.recordName))
+                let query: CKQuery = ORAthlete.query(NSPredicate(format: "%K == %@", "userRecordName", recordID!.recordName))
                 
                 CKContainer.defaultContainer().publicCloudDatabase.performQuery(query, inZoneWithID: nil) { (results, error) -> Void in
                     
                     var success = false
-                    if error == nil {
-                        if results.count == 1 {
-                            let record = results.first! as! CKRecord
-                            
-                            var athlete: ORAthlete!
-                            if let fetchedAthlete = self.localData.fetchObject(id: record.recordID.recordName, model: ORAthlete.self) as? ORAthlete {
-                                athlete = fetchedAthlete
-                            } else {
-                                athlete = ORAthlete.athlete(record: record)
-                            }
-                            
-                            ORAthlete.setCurrentAthlete(athlete)
-                            success = true                            
-                        } else if results.count == 0 {
-                            var record = CKRecord(recordType: ORAthlete.recordType, recordID: recordID)
-                            
-                            var athlete = ORAthlete.athlete(record: record)
-                            ORAthlete.setCurrentAthlete(athlete)
-                            success = true
-                        }
-                    } else {
-                        println(error)
+                    defer { completionHandler?(success, error) }
+                    
+                    guard error == nil else { return }
+                    
+                    guard let userRecords = results
+                        where userRecords.count > 0 else {
+                           
+                        let record = CKRecord(recordType: ORAthlete.recordType)
+                        let athlete = ORAthlete.athlete(record: record)
+                        ORAthlete.setCurrentAthlete(athlete)
+                        success = true
+                        return
                     }
                     
-                    completionHandler?(success, error)
+                    let record = userRecords.first!
+                    var athlete: ORAthlete!
+                    
+                    let context = NSManagedObjectContext(concurrencyType: .ConfinementConcurrencyType)
+                    context.parentContext = ORSession.currentSession.localData.context
+                    if let fetchedAthlete = self.localData.fetchObject(id: record.recordID.recordName, model: ORAthlete.self, context: context) as? ORAthlete {
+                        athlete = fetchedAthlete
+                    } else {
+                        athlete = ORAthlete.athlete(record: record, context: context)
+                    }
+                    
+                    ORAthlete.setCurrentAthlete(athlete)
+                    self.localData.save(context: context)
+                    success = true
                 }
             } else {
-                println(error)
+                print(error)
             }
         }
     }
@@ -102,9 +104,14 @@ public class ORSession {
         let currentUserRecordName = NSUserDefaults.standardUserDefaults().objectForKey("currentUserRecordName") as? String
         if let recordName = currentUserRecordName {
             
-            var request = NSFetchRequest(entityName: ORAthlete.recordType)
+            let request = NSFetchRequest(entityName: ORAthlete.recordType)
             request.predicate = NSPredicate(format: "%K == %@", "recordName", recordName)
-            let results = context.executeFetchRequest(request, error: nil)
+            let results: [AnyObject]?
+            do {
+                results = try context.executeFetchRequest(request)
+            } catch _ {
+                results = nil
+            }
             
             if let athlete = results?.first as? ORAthlete {
                 ORAthlete.setCurrentAthlete(athlete)

@@ -23,7 +23,7 @@ public class ORSoloStats: ORStats {
             return objects
         }
         let response = self.session.localData.fetchLiftEntries(athlete: self.athlete, organization: self.session.currentOrganization!)
-        self._entries = response.localResults as! [ORLiftEntry]
+        self._entries = response.objects as! [ORLiftEntry]
         return self._entries
     }
     
@@ -41,7 +41,7 @@ public class ORSoloStats: ORStats {
         return desiredEntries
     }
     
-    public func averageProgress(#template: ORLiftTemplate, dateRange: (NSDate, NSDate), dayInterval: Int) -> Float? {
+    public func averageProgress(template template: ORLiftTemplate, dateRange: (NSDate, NSDate), dayInterval: Int) -> Float? {
         let entries = self.entries(template: template, order: .Chronological)
         
         let initial = self.estimatedMax(targetDate: dateRange.0, template: template)
@@ -56,14 +56,14 @@ public class ORSoloStats: ORStats {
         return nil
     }
     
-    public func estimatedMax(#targetDate: NSDate, template: ORLiftTemplate) -> Int? {
+    public func estimatedMax(targetDate targetDate: NSDate, template: ORLiftTemplate) -> Int? {
         let entries = self.entries(template: template, order: .Chronological)
         
-        for (index, entry) in enumerate(entries) {
+        for (index, entry) in entries.enumerate() {
             let previousEntry = entry
             let nextEntryIndex = index + 1
             
-            if nextEntryIndex < count(entries) {
+            if nextEntryIndex < entries.count {
                 let nextEntry = entries[nextEntryIndex]
                 
                 if targetDate.isBetween(firstDate: previousEntry.date, secondDate: nextEntry.date, inclusive: true) {

@@ -32,7 +32,7 @@
         <relationship name="organization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OROrganization" inverseName="messages" inverseEntity="OROrganization" syncable="YES"/>
     </entity>
     <entity name="ORModel" representedClassName="ORMKit.ORModel" isAbstract="YES" syncable="YES">
-        <attribute name="recordName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="recordID" optional="YES" attributeType="Binary" syncable="YES"/>
     </entity>
     <entity name="OROrganization" representedClassName="ORMKit.OROrganization" parentEntity="ORModel" syncable="YES">
         <attribute name="orgDescription" optional="YES" attributeType="String" syncable="YES"/>

@@ -29,6 +29,7 @@
 		8B8D6ED21B51961D0046C1D2 /* TheOneRepMax.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D6EB31B51961D0046C1D2 /* TheOneRepMax.xcdatamodeld */; };
 		8B9E271B1B323890008AE331 /* ORDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9E271A1B323890008AE331 /* ORDataManager.swift */; };
 		8BA5209A1B44CE9E005E0FF0 /* ORMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA520991B44CE9E005E0FF0 /* ORMessage.swift */; };
+		8BB24B0D1B5F791800B17119 /* CloudRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB24B0C1B5F791800B17119 /* CloudRecord.swift */; };
 		8BD0F1AB1B308E5400F96C96 /* ORCloudDataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1AA1B308E5400F96C96 /* ORCloudDataCoordinator.swift */; };
 		8BD0F1AD1B3091B300F96C96 /* ORDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1AC1B3091B300F96C96 /* ORDataResponse.swift */; };
 		8BD0F1AF1B30978000F96C96 /* OROrganization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1AE1B30978000F96C96 /* OROrganization.swift */; };
@@ -104,6 +105,9 @@
 		8B8D6ED11B51961D0046C1D2 /* TheOneRepMax_v9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v9.xcdatamodel; sourceTree = "<group>"; };
 		8B9E271A1B323890008AE331 /* ORDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataManager.swift; sourceTree = "<group>"; };
 		8BA520991B44CE9E005E0FF0 /* ORMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORMessage.swift; sourceTree = "<group>"; };
+		8BB24B0A1B5D929E00B17119 /* TheOneRepMax_v34.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v34.xcdatamodel; sourceTree = "<group>"; };
+		8BB24B0B1B5F728600B17119 /* TheOneRepMax_v35.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v35.xcdatamodel; sourceTree = "<group>"; };
+		8BB24B0C1B5F791800B17119 /* CloudRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudRecord.swift; sourceTree = "<group>"; };
 		8BD0F1AA1B308E5400F96C96 /* ORCloudDataCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudDataCoordinator.swift; sourceTree = "<group>"; };
 		8BD0F1AC1B3091B300F96C96 /* ORDataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataResponse.swift; sourceTree = "<group>"; };
 		8BD0F1AE1B30978000F96C96 /* OROrganization.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OROrganization.swift; path = ../OROrganization.swift; sourceTree = "<group>"; };
@@ -111,6 +115,10 @@
 		8BD0F1B41B31208700F96C96 /* ORCloudDataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudDataResponse.swift; sourceTree = "<group>"; };
 		8BD0F1B61B3120D900F96C96 /* ORLocalDataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLocalDataResponse.swift; sourceTree = "<group>"; };
 		8BE077271B2D4EF20070D128 /* ORTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORTransformer.swift; sourceTree = "<group>"; };
+		8BFFF1FF1B62B0C500E23033 /* TheOneRepMax_v36.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v36.xcdatamodel; sourceTree = "<group>"; };
+		8BFFF2001B62B7E900E23033 /* TheOneRepMax_v37.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v37.xcdatamodel; sourceTree = "<group>"; };
+		8BFFF2011B63718B00E23033 /* TheOneRepMax_v38.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v38.xcdatamodel; sourceTree = "<group>"; };
+		8BFFF2021B6380D500E23033 /* TheOneRepMax_v39.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v39.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,6 +217,7 @@
 				8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */,
 				8BA520991B44CE9E005E0FF0 /* ORMessage.swift */,
 				8B650CC21B2BA8DD00F0EA52 /* ORAthlete.swift */,
+				8BB24B0C1B5F791800B17119 /* CloudRecord.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -330,7 +339,9 @@
 		8B650C941B2BA75400F0EA52 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0630;
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = JwitApps;
 				TargetAttributes = {
 					8B650C9C1B2BA75400F0EA52 = {
@@ -389,6 +400,7 @@
 				8BD0F1B31B310CF600F96C96 /* ORLocalDataCoordinator.swift in Sources */,
 				8B650CBE1B2BA77100F0EA52 /* ORModel.swift in Sources */,
 				8BA5209A1B44CE9E005E0FF0 /* ORMessage.swift in Sources */,
+				8BB24B0D1B5F791800B17119 /* CloudRecord.swift in Sources */,
 				8BD0F1AB1B308E5400F96C96 /* ORCloudDataCoordinator.swift in Sources */,
 				8B76DF541B34465700DB95ED /* ORLocalDataRequest.swift in Sources */,
 				8B3039631B2BFED000E5C95A /* ORSession.swift in Sources */,
@@ -450,6 +462,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -525,6 +538,7 @@
 				INFOPLIST_FILE = ORMKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jwitapps.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -542,6 +556,7 @@
 				INFOPLIST_FILE = ORMKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jwitapps.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 			};
@@ -561,6 +576,7 @@
 				);
 				INFOPLIST_FILE = ORMKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jwitapps.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -575,6 +591,7 @@
 				);
 				INFOPLIST_FILE = ORMKitTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jwitapps.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -615,6 +632,12 @@
 		8B8D6EB31B51961D0046C1D2 /* TheOneRepMax.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				8BFFF2021B6380D500E23033 /* TheOneRepMax_v39.xcdatamodel */,
+				8BFFF2011B63718B00E23033 /* TheOneRepMax_v38.xcdatamodel */,
+				8BFFF2001B62B7E900E23033 /* TheOneRepMax_v37.xcdatamodel */,
+				8BFFF1FF1B62B0C500E23033 /* TheOneRepMax_v36.xcdatamodel */,
+				8BB24B0B1B5F728600B17119 /* TheOneRepMax_v35.xcdatamodel */,
+				8BB24B0A1B5D929E00B17119 /* TheOneRepMax_v34.xcdatamodel */,
 				8B7405971B56EE09007F3258 /* TheOneRepMax_v33.xcdatamodel */,
 				8B8D6EB41B51961D0046C1D2 /* TheOneRepMax.xcdatamodel */,
 				8B8D6EB51B51961D0046C1D2 /* TheOneRepMax_v 3.xcdatamodel */,
@@ -647,7 +670,7 @@
 				8B8D6ED01B51961D0046C1D2 /* TheOneRepMax_v8.xcdatamodel */,
 				8B8D6ED11B51961D0046C1D2 /* TheOneRepMax_v9.xcdatamodel */,
 			);
-			currentVersion = 8B8D6ECB1B51961D0046C1D2 /* TheOneRepMax_v32.xcdatamodel */;
+			currentVersion = 8BFFF2021B6380D500E23033 /* TheOneRepMax_v39.xcdatamodel */;
 			path = TheOneRepMax.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

@@ -28,32 +28,38 @@ public class ORCloudData: DataConvenience {
     }
     
     public func fetchAllOrganizations(completionHandler: ((ORCloudDataResponse)->())?) {
-        self.dataManager.fetchCloud(model: OROrganization.self, predicate: ORDataTools.allRows) { (response) in
-            completionHandler?(response)
-        }
+        self.dataManager.fetchCloud(model: OROrganization.self, predicate: ORDataTools.allRows, completionHandler: completionHandler)
     }
     
-    public func fetchAssociatedOrganizations(athlete: ORAthlete, completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchAssociatedOrganizations(athlete unsafeAthlete: ORAthlete, completionHandler: ((ORCloudDataResponse)->())?) {
+        let context = NSManagedObjectContext.contextForCurrentThread()
+        
+        let athlete = context.objectWithID(unsafeAthlete.objectID) as! ORAthlete
+        
         let predicate = ORDataTools.predicateWithKey("athletes", comparator: "CONTAINS", value: athlete.reference)
         
-        self.dataManager.fetchCloud(model: OROrganization.self, predicate: predicate) { (response) in
+        self.dataManager.fetchCloud(model: OROrganization.self, predicate: predicate) {
             
-            var compoundResults = response.results as! [CKRecord]
-            
+            let context = NSManagedObjectContext(concurrencyType: .ConfinementConcurrencyType)
+            context.parentContext = ORSession.currentSession.localData.context
+            let athlete = context.objectWithID(unsafeAthlete.objectID) as! ORAthlete
+
+            var compoundResults = $0.objects
+        
             let predicate = ORDataTools.predicateWithKey("admins", comparator: "CONTAINS", value: athlete.reference)
-            self.dataManager.fetchCloud(model: OROrganization.self, predicate: predicate) { (response) -> () in
-                var recordNames: [String] = compoundResults.map { $0.recordID.recordName }
-                compoundResults += (response.results as! [CKRecord]).filter {
-                    !contains(recordNames, $0.recordID.recordName)
+            self.dataManager.fetchCloud(model: OROrganization.self, predicate: predicate) {
+                let recordNames: [String] = compoundResults.map { $0.recordID.recordName }
+                compoundResults += $0.objects.filter {
+                    !recordNames.contains($0.recordID.recordName)
                 }
                 
-                response.results = compoundResults
-                completionHandler?(response)
+                $0.results = compoundResults
+                completionHandler?($0)
             }
         }
     }
     
-    public func fetchLiftTemplates(#session: ORSession, completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchLiftTemplates(session session: ORSession, completionHandler: ((ORCloudDataResponse)->())?) {
 
         if session.soloSession {
 
@@ -61,80 +67,96 @@ public class ORCloudData: DataConvenience {
             if let organization = session.currentOrganization {
                 self.fetchLiftTemplates(organizations: [organization], completionHandler: completionHandler)
             } else {
-                var response = ORCloudDataResponse()
+                let response = ORCloudDataResponse()
                 response.error = ORDataTools.currentOrganizationMissingError
                 completionHandler?(response)
             }
         }
     }
     
-    public func fetchLiftTemplates(#organizations: [OROrganization], completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchLiftTemplates(organizations organizations: [OROrganization], completionHandler: ((ORCloudDataResponse)->())?) {
         let references = organizations.map { $0.reference }
         let predicate = ORDataTools.predicateWithKey("organization", comparator: "IN", value: references)
         
         self.dataManager.fetchCloud(model: ORLiftTemplate.self, predicate: predicate, completionHandler: completionHandler)
     }
 
-    public func fetchLiftEntries(#template: ORLiftTemplate, completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchLiftEntries(template template: ORLiftTemplate, completionHandler: ((ORCloudDataResponse)->())?) {
         let predicate = ORDataTools.predicateWithKey("liftTemplate", comparator: "==", value: template.reference)
         self.dataManager.fetchCloud(model: ORLiftEntry.self, predicate: predicate, completionHandler: completionHandler)
     }
     
-    public func fetchLiftEntries(#templates: [ORLiftTemplate], completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchLiftEntries(templates templates: [ORLiftTemplate], completionHandler: ((ORCloudDataResponse)->())?) {
         
         let predicate = ORDataTools.predicateWithKey("liftTemplate", comparator: "IN", value: ORLiftTemplate.references(models: templates))
         self.dataManager.fetchCloud(model: ORLiftEntry.self, predicate: predicate, completionHandler: completionHandler)
     }
     
-    public func fetchMessages(#organization: OROrganization, completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchMessages(organization organization: OROrganization, completionHandler: ((ORCloudDataResponse)->())?) {
         let predicate = ORDataTools.predicateWithKey("organization", comparator: "==", value: organization.reference)
         self.dataManager.fetchCloud(model: ORMessage.self, predicate: predicate, completionHandler: completionHandler)
     }
     
-    public func save(#model: ORModel, completionHandler: ((ORCloudDataResponse)->())?) {
+    public func save(model model: ORModel, completionHandler: ((ORCloudDataResponse)->())?) {
         self.dataManager.saveCloud(record: model.record, completionHandler: completionHandler)
     }
     
-    public func fetchAthletes(#organization: OROrganization, completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchAthletes(organization organization: OROrganization, completionHandler: ((ORCloudDataResponse)->())?) {
         self.dataManager.fetchCloud(model: ORAthlete.self, predicate: ORDataTools.allRows, completionHandler: completionHandler)
     }
     
     public func syncronizeDataToLocalStore(completionHandler: ((ORCloudDataResponse)->())? = nil) {
-        self.fetchAssociatedOrganizations(self.session.currentAthlete!) { (response) -> () in
-            if response.success {
+        var childContext: NSManagedObjectContext!
+        
+        self.fetchAssociatedOrganizations(athlete: self.session.currentAthlete!) {
+            childContext = NSManagedObjectContext.contextForCurrentThread()
+            
+            if $0.success {
+                let organizations = OROrganization.organizations(records: $0.objects, context: childContext)
+                self.session.localData.save(context: childContext)
                 
-                var organizations = OROrganization.organizations(records: response.cloudResults)
+                self.fetchLiftTemplates(organizations: organizations) {                    childContext = NSManagedObjectContext.contextForCurrentThread()
+                    
+                    if $0.success {
                 
-                self.session.localData.save()
-                
-                self.fetchLiftTemplates(organizations: organizations) { (response) -> () in
-                    if response.success {
+                        let templates = ORLiftTemplate.templates(records: $0.objects, context: childContext)
+                        self.session.localData.save(context: childContext)
                         
-                        var templates = ORLiftTemplate.templates(records: response.results as! [CKRecord])
-                        self.session.localData.save()
+                        completionHandler?($0)
                         
-                        self.fetchLiftEntries(templates: templates) { (response) -> () in
-                            if response.success {
-                                var entries = ORLiftEntry.entries(records: response.results as! [CKRecord])
-                                self.session.localData.save()
-                            
-                            
-                                completionHandler?(response)
-                            
-                            } else {
-                                completionHandler?(response)
+                        self.fetchLiftEntries(templates: templates) {
+                            childContext = NSManagedObjectContext.contextForCurrentThread()
+
+                            if $0.success {
+                                ORLiftEntry.entries(records: $0.objects, context: childContext)
+                                self.session.localData.save(context: childContext)
                             }
                         }
-                        
-                    } else  {
-                        completionHandler?(response)
                     }
                 }
-                
-            } else {
-                completionHandler?(response)
             }
         }
+    }
+    
+    public func syncronizeDataToCloudStore(completionHandler: ((ORDataResponse)->())? = nil) {
+        var response: ORLocalDataResponse!
+        defer { completionHandler?(response) }
+        
+        response = self.session.localData.fetchDirtyObjects(model: ORModel.self)
+        guard response.success else { return }
+        
+        let dirtyModels = response.objects
+        let recordsToSave = dirtyModels.map { $0.record }
+        
+        let operation = CKModifyRecordsOperation(recordsToSave: recordsToSave, recordIDsToDelete: nil)
+        operation.modifyRecordsCompletionBlock = { (records, recordIDs, error) in
+//            print(records)
+//            print(recordIDs)
+//            print(error)
+        }
+        
+        
+        self.database.addOperation(operation)
     }
     
 }
