@@ -11,6 +11,7 @@
 		8B2AD4CB1B334128003B917F /* ORLocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2AD4CA1B334128003B917F /* ORLocalData.swift */; };
 		8B2AD4CD1B334F00003B917F /* ORDataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2AD4CC1B334F00003B917F /* ORDataCoordinator.swift */; };
 		8B3039631B2BFED000E5C95A /* ORSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3039621B2BFED000E5C95A /* ORSession.swift */; };
+		8B45F9AE1B67DB6600AA8E79 /* TheOneRepMax.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8B45F9AA1B67DB6600AA8E79 /* TheOneRepMax.xcdatamodeld */; };
 		8B6047741B4A193C001A2A68 /* ORSoloStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6047731B4A193C001A2A68 /* ORSoloStats.swift */; };
 		8B6047761B4A194B001A2A68 /* ORGroupStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6047751B4A194B001A2A68 /* ORGroupStats.swift */; };
 		8B6047781B4A195F001A2A68 /* ORStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6047771B4A195F001A2A68 /* ORStats.swift */; };
@@ -26,7 +27,6 @@
 		8B76DF561B34466C00DB95ED /* ORCloudDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B76DF551B34466C00DB95ED /* ORCloudDataRequest.swift */; };
 		8B76DF5E1B3447DF00DB95ED /* ORDataTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B76DF5D1B3447DF00DB95ED /* ORDataTools.swift */; };
 		8B8D6E4F1B50CB9A0046C1D2 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D6E4E1B50CB9A0046C1D2 /* Extensions.swift */; };
-		8B8D6ED21B51961D0046C1D2 /* TheOneRepMax.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D6EB31B51961D0046C1D2 /* TheOneRepMax.xcdatamodeld */; };
 		8B9E271B1B323890008AE331 /* ORDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9E271A1B323890008AE331 /* ORDataManager.swift */; };
 		8BA5209A1B44CE9E005E0FF0 /* ORMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BA520991B44CE9E005E0FF0 /* ORMessage.swift */; };
 		8BB24B0D1B5F791800B17119 /* CloudRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB24B0C1B5F791800B17119 /* CloudRecord.swift */; };
@@ -54,6 +54,9 @@
 		8B2AD4CA1B334128003B917F /* ORLocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLocalData.swift; sourceTree = "<group>"; };
 		8B2AD4CC1B334F00003B917F /* ORDataCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataCoordinator.swift; sourceTree = "<group>"; };
 		8B3039621B2BFED000E5C95A /* ORSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORSession.swift; sourceTree = "<group>"; };
+		8B45F9AB1B67DB6600AA8E79 /* TheOneRepMax.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax.xcdatamodel; sourceTree = "<group>"; };
+		8B45F9AC1B67DB6600AA8E79 /* TheOneRepMax_v38.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v38.xcdatamodel; sourceTree = "<group>"; };
+		8B45F9AD1B67DB6600AA8E79 /* TheOneRepMax_v39.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v39.xcdatamodel; sourceTree = "<group>"; };
 		8B6047731B4A193C001A2A68 /* ORSoloStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORSoloStats.swift; sourceTree = "<group>"; };
 		8B6047751B4A194B001A2A68 /* ORGroupStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORGroupStats.swift; sourceTree = "<group>"; };
 		8B6047771B4A195F001A2A68 /* ORStats.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORStats.swift; sourceTree = "<group>"; };
@@ -67,46 +70,13 @@
 		8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLiftEntry.swift; sourceTree = "<group>"; };
 		8B650CBC1B2BA77100F0EA52 /* ORLiftTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLiftTemplate.swift; sourceTree = "<group>"; };
 		8B650CC21B2BA8DD00F0EA52 /* ORAthlete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORAthlete.swift; sourceTree = "<group>"; };
-		8B7405971B56EE09007F3258 /* TheOneRepMax_v33.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v33.xcdatamodel; sourceTree = "<group>"; };
 		8B76DF511B34464600DB95ED /* ORDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataRequest.swift; sourceTree = "<group>"; };
 		8B76DF531B34465700DB95ED /* ORLocalDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLocalDataRequest.swift; sourceTree = "<group>"; };
 		8B76DF551B34466C00DB95ED /* ORCloudDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudDataRequest.swift; sourceTree = "<group>"; };
 		8B76DF5D1B3447DF00DB95ED /* ORDataTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataTools.swift; sourceTree = "<group>"; };
 		8B8D6E4E1B50CB9A0046C1D2 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		8B8D6EB41B51961D0046C1D2 /* TheOneRepMax.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EB51B51961D0046C1D2 /* TheOneRepMax_v 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TheOneRepMax_v 3.xcdatamodel"; sourceTree = "<group>"; };
-		8B8D6EB61B51961D0046C1D2 /* TheOneRepMax_v10.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v10.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EB71B51961D0046C1D2 /* TheOneRepMax_v11.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v11.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EB81B51961D0046C1D2 /* TheOneRepMax_v12.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v12.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EB91B51961D0046C1D2 /* TheOneRepMax_v13.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v13.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EBA1B51961D0046C1D2 /* TheOneRepMax_v14.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v14.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EBB1B51961D0046C1D2 /* TheOneRepMax_v15.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v15.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EBC1B51961D0046C1D2 /* TheOneRepMax_v16.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v16.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EBD1B51961D0046C1D2 /* TheOneRepMax_v17.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v17.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EBE1B51961D0046C1D2 /* TheOneRepMax_v18.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v18.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EBF1B51961D0046C1D2 /* TheOneRepMax_v2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v2.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EC01B51961D0046C1D2 /* TheOneRepMax_v21.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v21.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EC11B51961D0046C1D2 /* TheOneRepMax_v22.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v22.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EC21B51961D0046C1D2 /* TheOneRepMax_v23.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v23.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EC31B51961D0046C1D2 /* TheOneRepMax_v24.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v24.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EC41B51961D0046C1D2 /* TheOneRepMax_v25.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v25.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EC51B51961D0046C1D2 /* TheOneRepMax_v26.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v26.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EC61B51961D0046C1D2 /* TheOneRepMax_v27.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v27.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EC71B51961D0046C1D2 /* TheOneRepMax_v28.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v28.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EC81B51961D0046C1D2 /* TheOneRepMax_v29.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v29.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6EC91B51961D0046C1D2 /* TheOneRepMax_v30.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v30.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6ECA1B51961D0046C1D2 /* TheOneRepMax_v31.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v31.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6ECB1B51961D0046C1D2 /* TheOneRepMax_v32.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v32.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6ECC1B51961D0046C1D2 /* TheOneRepMax_v4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v4.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6ECD1B51961D0046C1D2 /* TheOneRepMax_v5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v5.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6ECE1B51961D0046C1D2 /* TheOneRepMax_v6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v6.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6ECF1B51961D0046C1D2 /* TheOneRepMax_v7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v7.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6ED01B51961D0046C1D2 /* TheOneRepMax_v8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v8.xcdatamodel; sourceTree = "<group>"; };
-		8B8D6ED11B51961D0046C1D2 /* TheOneRepMax_v9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v9.xcdatamodel; sourceTree = "<group>"; };
 		8B9E271A1B323890008AE331 /* ORDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataManager.swift; sourceTree = "<group>"; };
 		8BA520991B44CE9E005E0FF0 /* ORMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORMessage.swift; sourceTree = "<group>"; };
-		8BB24B0A1B5D929E00B17119 /* TheOneRepMax_v34.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v34.xcdatamodel; sourceTree = "<group>"; };
-		8BB24B0B1B5F728600B17119 /* TheOneRepMax_v35.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v35.xcdatamodel; sourceTree = "<group>"; };
 		8BB24B0C1B5F791800B17119 /* CloudRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudRecord.swift; sourceTree = "<group>"; };
 		8BD0F1AA1B308E5400F96C96 /* ORCloudDataCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudDataCoordinator.swift; sourceTree = "<group>"; };
 		8BD0F1AC1B3091B300F96C96 /* ORDataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataResponse.swift; sourceTree = "<group>"; };
@@ -115,10 +85,6 @@
 		8BD0F1B41B31208700F96C96 /* ORCloudDataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudDataResponse.swift; sourceTree = "<group>"; };
 		8BD0F1B61B3120D900F96C96 /* ORLocalDataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLocalDataResponse.swift; sourceTree = "<group>"; };
 		8BE077271B2D4EF20070D128 /* ORTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORTransformer.swift; sourceTree = "<group>"; };
-		8BFFF1FF1B62B0C500E23033 /* TheOneRepMax_v36.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v36.xcdatamodel; sourceTree = "<group>"; };
-		8BFFF2001B62B7E900E23033 /* TheOneRepMax_v37.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v37.xcdatamodel; sourceTree = "<group>"; };
-		8BFFF2011B63718B00E23033 /* TheOneRepMax_v38.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v38.xcdatamodel; sourceTree = "<group>"; };
-		8BFFF2021B6380D500E23033 /* TheOneRepMax_v39.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v39.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,7 +138,7 @@
 		8B650C9F1B2BA75400F0EA52 /* ORMKit */ = {
 			isa = PBXGroup;
 			children = (
-				8B8D6EB31B51961D0046C1D2 /* TheOneRepMax.xcdatamodeld */,
+				8B45F9AA1B67DB6600AA8E79 /* TheOneRepMax.xcdatamodeld */,
 				8B650CA21B2BA75400F0EA52 /* ORMKit.h */,
 				8B76DF5B1B3446F300DB95ED /* Misc */,
 				8B76DF5C1B34470900DB95ED /* Data Stack */,
@@ -412,8 +378,8 @@
 				8B6047781B4A195F001A2A68 /* ORStats.swift in Sources */,
 				8B6047741B4A193C001A2A68 /* ORSoloStats.swift in Sources */,
 				8BD0F1B71B3120D900F96C96 /* ORLocalDataResponse.swift in Sources */,
-				8B8D6ED21B51961D0046C1D2 /* TheOneRepMax.xcdatamodeld in Sources */,
 				8B76DF521B34464600DB95ED /* ORDataRequest.swift in Sources */,
+				8B45F9AE1B67DB6600AA8E79 /* TheOneRepMax.xcdatamodeld in Sources */,
 				8B8D6E4F1B50CB9A0046C1D2 /* Extensions.swift in Sources */,
 				8BD0F1B51B31208700F96C96 /* ORCloudDataResponse.swift in Sources */,
 				8B76DF561B34466C00DB95ED /* ORCloudDataRequest.swift in Sources */,
@@ -629,48 +595,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		8B8D6EB31B51961D0046C1D2 /* TheOneRepMax.xcdatamodeld */ = {
+		8B45F9AA1B67DB6600AA8E79 /* TheOneRepMax.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				8BFFF2021B6380D500E23033 /* TheOneRepMax_v39.xcdatamodel */,
-				8BFFF2011B63718B00E23033 /* TheOneRepMax_v38.xcdatamodel */,
-				8BFFF2001B62B7E900E23033 /* TheOneRepMax_v37.xcdatamodel */,
-				8BFFF1FF1B62B0C500E23033 /* TheOneRepMax_v36.xcdatamodel */,
-				8BB24B0B1B5F728600B17119 /* TheOneRepMax_v35.xcdatamodel */,
-				8BB24B0A1B5D929E00B17119 /* TheOneRepMax_v34.xcdatamodel */,
-				8B7405971B56EE09007F3258 /* TheOneRepMax_v33.xcdatamodel */,
-				8B8D6EB41B51961D0046C1D2 /* TheOneRepMax.xcdatamodel */,
-				8B8D6EB51B51961D0046C1D2 /* TheOneRepMax_v 3.xcdatamodel */,
-				8B8D6EB61B51961D0046C1D2 /* TheOneRepMax_v10.xcdatamodel */,
-				8B8D6EB71B51961D0046C1D2 /* TheOneRepMax_v11.xcdatamodel */,
-				8B8D6EB81B51961D0046C1D2 /* TheOneRepMax_v12.xcdatamodel */,
-				8B8D6EB91B51961D0046C1D2 /* TheOneRepMax_v13.xcdatamodel */,
-				8B8D6EBA1B51961D0046C1D2 /* TheOneRepMax_v14.xcdatamodel */,
-				8B8D6EBB1B51961D0046C1D2 /* TheOneRepMax_v15.xcdatamodel */,
-				8B8D6EBC1B51961D0046C1D2 /* TheOneRepMax_v16.xcdatamodel */,
-				8B8D6EBD1B51961D0046C1D2 /* TheOneRepMax_v17.xcdatamodel */,
-				8B8D6EBE1B51961D0046C1D2 /* TheOneRepMax_v18.xcdatamodel */,
-				8B8D6EBF1B51961D0046C1D2 /* TheOneRepMax_v2.xcdatamodel */,
-				8B8D6EC01B51961D0046C1D2 /* TheOneRepMax_v21.xcdatamodel */,
-				8B8D6EC11B51961D0046C1D2 /* TheOneRepMax_v22.xcdatamodel */,
-				8B8D6EC21B51961D0046C1D2 /* TheOneRepMax_v23.xcdatamodel */,
-				8B8D6EC31B51961D0046C1D2 /* TheOneRepMax_v24.xcdatamodel */,
-				8B8D6EC41B51961D0046C1D2 /* TheOneRepMax_v25.xcdatamodel */,
-				8B8D6EC51B51961D0046C1D2 /* TheOneRepMax_v26.xcdatamodel */,
-				8B8D6EC61B51961D0046C1D2 /* TheOneRepMax_v27.xcdatamodel */,
-				8B8D6EC71B51961D0046C1D2 /* TheOneRepMax_v28.xcdatamodel */,
-				8B8D6EC81B51961D0046C1D2 /* TheOneRepMax_v29.xcdatamodel */,
-				8B8D6EC91B51961D0046C1D2 /* TheOneRepMax_v30.xcdatamodel */,
-				8B8D6ECA1B51961D0046C1D2 /* TheOneRepMax_v31.xcdatamodel */,
-				8B8D6ECB1B51961D0046C1D2 /* TheOneRepMax_v32.xcdatamodel */,
-				8B8D6ECC1B51961D0046C1D2 /* TheOneRepMax_v4.xcdatamodel */,
-				8B8D6ECD1B51961D0046C1D2 /* TheOneRepMax_v5.xcdatamodel */,
-				8B8D6ECE1B51961D0046C1D2 /* TheOneRepMax_v6.xcdatamodel */,
-				8B8D6ECF1B51961D0046C1D2 /* TheOneRepMax_v7.xcdatamodel */,
-				8B8D6ED01B51961D0046C1D2 /* TheOneRepMax_v8.xcdatamodel */,
-				8B8D6ED11B51961D0046C1D2 /* TheOneRepMax_v9.xcdatamodel */,
+				8B45F9AB1B67DB6600AA8E79 /* TheOneRepMax.xcdatamodel */,
+				8B45F9AC1B67DB6600AA8E79 /* TheOneRepMax_v38.xcdatamodel */,
+				8B45F9AD1B67DB6600AA8E79 /* TheOneRepMax_v39.xcdatamodel */,
 			);
-			currentVersion = 8BFFF2021B6380D500E23033 /* TheOneRepMax_v39.xcdatamodel */;
+			currentVersion = 8B45F9AD1B67DB6600AA8E79 /* TheOneRepMax_v39.xcdatamodel */;
 			path = TheOneRepMax.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

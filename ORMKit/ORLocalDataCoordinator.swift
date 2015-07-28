@@ -17,46 +17,38 @@ public class ORLocalDataCoordinator: ORDataCoordinator {
         self.managedObjectContext = context
     }
     
+    private func decideContext(context localContext: NSManagedObjectContext?) -> NSManagedObjectContext {
+        guard let context = localContext else { return self.managedObjectContext }
+        return context
+    }
+    
     public func fetch(model model: ORModel.Type, predicate: NSPredicate, sortDescriptors: [NSSortDescriptor]? = nil, context localContext: NSManagedObjectContext? = nil) -> ORLocalDataResponse  {
         
-        var context: NSManagedObjectContext!
-        if localContext != nil {
-            context = localContext!
-        } else {
-            context = self.managedObjectContext
-        }
+        let context = self.decideContext(context: localContext)
         
         let request = NSFetchRequest(entityName: model.recordType)
         request.predicate = predicate
         request.sortDescriptors = sortDescriptors
         request.includesSubentities = true
         
-        var error: NSError?
         let response = ORLocalDataResponse()
         do {
             let results = try context.executeFetchRequest(request)
             response.results = results
-        } catch let error1 as NSError {
-            error = error1
+        } catch let error as NSError {
+            response.error = error
         }
-        
-        response.error = error
         return response
     }
     
     public func save(context localContext: NSManagedObjectContext? = nil) -> ORLocalDataResponse {
-        var context: NSManagedObjectContext!
-        if localContext != nil {
-            context = localContext!
-        } else {
-            context = self.managedObjectContext
-        }
+        let context = self.decideContext(context: localContext)
         
         let response = ORLocalDataResponse()
         do {
             try context.save()
-        } catch let error1 as NSError {
-            response.error = error1
+        } catch let error as NSError {
+            response.error = error
         }
         return response
     }
@@ -68,8 +60,8 @@ public class ORLocalDataCoordinator: ORDataCoordinator {
         let response = ORLocalDataResponse()
         do {
             try self.managedObjectContext.save()
-        } catch let error1 as NSError {
-            response.error = error1
+        } catch let error as NSError {
+            response.error = error
         }
         return response
     }

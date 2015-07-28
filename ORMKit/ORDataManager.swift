@@ -24,13 +24,8 @@ public class ORDataManager {
     }
     
     public func fetchLocal(model model: ORModel.Type, predicates: [NSPredicate]? = nil, sortDescriptors: [NSSortDescriptor]? = nil, context: NSManagedObjectContext? = nil) -> ORLocalDataResponse {
-        var predicate: NSPredicate!
-        if let filters = predicates {
-            predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: filters)
-            
-        } else {
-            predicate = NSPredicate(value: true)
-        }
+        
+        let predicate = predicates != nil ? NSCompoundPredicate(type: .AndPredicateType, subpredicates: predicates!) : NSPredicate.allRows
         return self.localDataCoordinator.fetch(model: model, predicate: predicate, sortDescriptors: sortDescriptors, context: context)
     }
     

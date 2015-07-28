@@ -19,31 +19,27 @@ public class ORSoloStats: ORStats {
     
     private var _entries: [ORLiftEntry]!
     var entries: [ORLiftEntry] {
-        if let objects = self._entries {
-            return objects
-        }
+        guard self._entries == nil else { return self._entries }
+        
         let response = self.session.localData.fetchLiftEntries(athlete: self.athlete, organization: self.session.currentOrganization!)
         self._entries = response.objects as! [ORLiftEntry]
         return self._entries
     }
     
     private func entries(template liftTemplate: ORLiftTemplate? = nil, order: Sort? = nil) -> [ORLiftEntry] {
-        
         var desiredEntries = self.entries
         if let template = liftTemplate {
             desiredEntries = desiredEntries.filter { $0.liftTemplate == template }
         }
         
         if let sort = order {
-            let descriptor = NSSortDescriptor(key: "date", order: .Chronological)
+            let descriptor = NSSortDescriptor(key: "date", order: sort)
             desiredEntries = NSArray(array: desiredEntries).sortedArrayUsingDescriptors([descriptor]) as! [ORLiftEntry]
         }
         return desiredEntries
     }
     
     public func averageProgress(template template: ORLiftTemplate, dateRange: (NSDate, NSDate), dayInterval: Int) -> Float? {
-        let entries = self.entries(template: template, order: .Chronological)
-        
         let initial = self.estimatedMax(targetDate: dateRange.0, template: template)
         let final = self.estimatedMax(targetDate: dateRange.1, template: template)
         

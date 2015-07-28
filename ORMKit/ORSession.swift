@@ -50,56 +50,49 @@ public class ORSession {
 
     public var managedObjectContext: NSManagedObjectContext!
     
-    public init() {
-        
-    }
+    public init() { }
     
     public func signInWithCloud(completionHandler completionHandler: ((Bool, NSError?)->())?) {
         self.cloudData.container.fetchUserRecordIDWithCompletionHandler { (recordID, error) -> Void in
+            guard error == nil else { print(error); return }
             
-            if error == nil {
-                let query: CKQuery = ORAthlete.query(NSPredicate(format: "%K == %@", "userRecordName", recordID!.recordName))
+            let query = CKQuery(recordType: ORAthlete.recordType, predicate: NSPredicate(key: "userRecordName", comparator: .Equals, value: recordID!.recordName))
+            
+            CKContainer.defaultContainer().publicCloudDatabase.performQuery(query, inZoneWithID: nil) { (results, error) -> Void in
                 
-                CKContainer.defaultContainer().publicCloudDatabase.performQuery(query, inZoneWithID: nil) { (results, error) -> Void in
-                    
-                    var success = false
-                    defer { completionHandler?(success, error) }
-                    
-                    guard error == nil else { return }
-                    
-                    guard let userRecords = results
-                        where userRecords.count > 0 else {
-                           
-                        let record = CKRecord(recordType: ORAthlete.recordType)
-                        let athlete = ORAthlete.athlete(record: record)
-                        ORAthlete.setCurrentAthlete(athlete)
-                        success = true
-                        return
-                    }
-                    
-                    let record = userRecords.first!
-                    var athlete: ORAthlete!
-                    
-                    let context = NSManagedObjectContext(concurrencyType: .ConfinementConcurrencyType)
-                    context.parentContext = ORSession.currentSession.localData.context
-                    if let fetchedAthlete = self.localData.fetchObject(id: record.recordID.recordName, model: ORAthlete.self, context: context) as? ORAthlete {
-                        athlete = fetchedAthlete
-                    } else {
-                        athlete = ORAthlete.athlete(record: record, context: context)
-                    }
-                    
+                var success = false
+                defer { completionHandler?(success, error) }
+                
+                guard error == nil else { return }
+                
+                let context = NSManagedObjectContext.contextForCurrentThread()
+                var athlete: ORAthlete!
+                defer {
                     ORAthlete.setCurrentAthlete(athlete)
                     self.localData.save(context: context)
                     success = true
                 }
-            } else {
-                print(error)
+                
+                guard let userRecords = results
+                    where userRecords.count > 0 else {
+                        athlete = ORAthlete.athlete(record: CKRecord(recordType: ORAthlete.recordType))
+                        return
+                }
+                
+                let record = userRecords.first!
+                
+                guard let fetchedAthlete = self.localData.fetchObject(id: record.recordID.recordName, model: ORAthlete.self, context: context) as? ORAthlete else {
+                    athlete = ORAthlete.athlete(record: record, context: context)
+                    return
+                }
+                athlete = fetchedAthlete
+                
             }
         }
     }
     
     public func signInLocally() -> (Bool, ORAthlete?) {
-        let context = localData.context
+        let context = NSManagedObjectContext.contextForCurrentThread()
         
         let currentUserRecordName = NSUserDefaults.standardUserDefaults().objectForKey("currentUserRecordName") as? String
         if let recordName = currentUserRecordName {

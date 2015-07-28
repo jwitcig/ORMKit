@@ -22,4 +22,21 @@ public class ORDataResponse {
     public var success: Bool {
         return self.error == nil
     }
+    
+    lazy var context = NSManagedObjectContext.contextForCurrentThread()
+    
+    init() { }
+    
+    init(error: NSError?) {
+        self.error = error
+    }
+    
+    init(objects: [AnyObject]?, error: NSError?) {
+        self.error = error
+        
+        if let resultObjects = objects {
+            self.results = resultObjects
+        }
+    }
+
 }

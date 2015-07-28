@@ -15,9 +15,7 @@ class CloudRecord: NSManagedObject {
     
     @NSManaged var recordName: String
     @NSManaged var recordData: NSData
-    
-    var _record: CKRecord?
-    
+        
     var record: CKRecord? {
         get {
             let archivedData = NSData(data: self.recordData)

@@ -9,13 +9,21 @@
 import Foundation
 import CloudKit
 
+extension CKQuery {
+    
+    convenience init(recordType: String) {
+        self.init(recordType: recordType, predicate: NSPredicate.allRows)
+    }
+    
+}
+
 extension String {
     
     var range: Range<String.Index> {
         return Range<String.Index>(start: self.startIndex, end: self.endIndex)
     }
     
-    func isBefore(toString toString: String) -> Bool {
+    public func isBefore(string toString: String) -> Bool {
         return self.compare(toString, options: NSStringCompareOptions.CaseInsensitiveSearch, range: self.range, locale: nil) == .OrderedAscending
     }
     
@@ -51,6 +59,18 @@ extension NSDate {
     
 }
 
+extension NSPredicate {
+    
+    class var allRows: NSPredicate {
+        return NSPredicate(value: true)
+    }
+    
+    convenience init(key: String, comparator: PredicateComparator, value: AnyObject) {
+        self.init(format: "\(key) \(comparator.rawValue) %@", value as! NSObject)
+    }
+    
+}
+
 extension NSSortDescriptor {
     
     convenience init(key: String, order: Sort) {
@@ -78,7 +98,7 @@ extension NSManagedObject {
                 guard value as? CloudRecord == nil else { continue }
                 
                 guard value as? Set<ORModel> == nil else {
-                    dataDict[key] = (value as! Set<ORModel>).map { $0.reference }
+                    dataDict[key] = (value as! Set<ORModel>).references
                     continue
                 }
                 
@@ -143,6 +163,38 @@ extension NSManagedObjectContext {
     
     private static var threadContexts = [NSThread: NSManagedObjectContext]()
     
+}
+
+protocol CKRepresentativeType {
+    var recordID: CKRecordID { get }
+    var recordName: String { get }
+}
+
+extension CKRepresentativeType {
+    var recordName: String { return self.recordID.recordName }
+}
+
+extension CKReference: CKRepresentativeType { }
+
+extension CKRecord: CKRepresentativeType { }
+
+extension CollectionType where Generator.Element : CKRepresentativeType {
+    
+    var recordIDs: [CKRecordID] { return self.map { $0.recordID } }
+    var recordNames: [String] { return self.map { $0.recordID.recordName } }
+}
+
+extension CollectionType where Generator.Element : ORModel {
+    
+    var references: [CKReference] { return self.map { $0.reference } }
+    var records: [CKRecord] { return self.map { $0.record } }
+    var recordNames: [String] { return self.map { $0.recordName } }
+}
+
+enum PredicateComparator: String {
+    case Equals = "=="
+    case Contains = "CONTAINS"
+    case In = "IN"
 }
 
 let userInteractiveThread = dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.rawValue), 0)

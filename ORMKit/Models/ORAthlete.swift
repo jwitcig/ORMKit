@@ -25,11 +25,11 @@ public class ORAthlete: ORModel, ModelSubclassing {
     }
 
     public class func athlete(record record: CKRecord? = nil, context: NSManagedObjectContext? = nil) -> ORAthlete {
-        return super.model(type: ORAthlete.self, record: record, context: context) as! ORAthlete
+        return super.model(type: ORAthlete.self, record: record, context: context)
     }
     
     public class func athletes(records records: [CKRecord], context: NSManagedObjectContext? = nil) -> [ORAthlete] {
-        return super.models(type: ORAthlete.self, records: records, context: context) as! [ORAthlete]
+        return super.models(type: ORAthlete.self, records: records, context: context)
     }
     
     override public class var recordType: String { return RecordType.ORAthlete.rawValue }
@@ -46,14 +46,6 @@ public class ORAthlete: ORModel, ModelSubclassing {
     @NSManaged public var athleteOrganizations: Set<OROrganization>
     @NSManaged public var adminOrganizations: Set<OROrganization>
 
-    public static func query(predicate: NSPredicate?) -> CKQuery {
-        if let filter = predicate {
-            return CKQuery(recordType: ORAthlete.recordType, predicate: filter)
-        } else {
-            return CKQuery(recordType: ORAthlete.recordType, predicate: NSPredicate(value: true))
-        }
-    }
-   
     public static func signUp(context context: NSManagedObjectContext, completionHandler: ((Bool, ORAthlete?, NSError)->())?) {
         
         CKContainer.defaultContainer().fetchUserRecordIDWithCompletionHandler { (recordID, error) -> Void in
@@ -110,9 +102,9 @@ public class ORAthlete: ORModel, ModelSubclassing {
     
     override func writeValuesFromRecord(record: CKRecord) {
         super.writeValuesFromRecord(record)
-        self.userRecordName = record.propertyForName(CloudFields.userRecordName.rawValue, defaultValue: "") as! String
-        self.firstName = record.propertyForName(CloudFields.firstName.rawValue, defaultValue: "") as! String
-        self.lastName = record.propertyForName(CloudFields.lastName.rawValue, defaultValue: "") as! String
+        self.userRecordName = record.propertyForName(CloudFields.userRecordName.rawValue, defaultValue: "")
+        self.firstName = record.propertyForName(CloudFields.firstName.rawValue, defaultValue: "")
+        self.lastName = record.propertyForName(CloudFields.lastName.rawValue, defaultValue: "")
     }
     
 }

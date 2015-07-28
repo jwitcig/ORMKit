@@ -21,21 +21,14 @@ public class ORCloudDataCoordinator: ORDataCoordinator {
     
     internal func fetch(model model: ORModel.Type, predicate: NSPredicate, completionHandler: ((ORCloudDataResponse)->())?) {
         let query = CKQuery(recordType: model.recordType, predicate: predicate)
-        
-        self.database.performQuery(query, inZoneWithID: nil) { (results, error) -> Void in
-            let response = ORCloudDataResponse()
-            response.error = error
-            response.results = results != nil ? results! : []
-            
-            completionHandler?(response)
+        self.database.performQuery(query, inZoneWithID: nil) {
+            completionHandler?(ORCloudDataResponse(objects: $0, error: $1))
         }
     }
     
     internal func save(record record: CKRecord, completionHandler: ((ORCloudDataResponse)->())?) {
-        self.database.saveRecord(record) { (record, error) -> Void in
-            let response = ORCloudDataResponse()
-            response.error = error
-            completionHandler?(response)
+        self.database.saveRecord(record) {
+            completionHandler?(ORCloudDataResponse(objects: $0 != nil ? [$0!] : nil, error: $1))
         }
     }
     

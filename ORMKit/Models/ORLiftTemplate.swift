@@ -31,11 +31,11 @@ public class ORLiftTemplate: ORModel, ModelSubclassing {
     override public class var recordType: String { return RecordType.ORLiftTemplate.rawValue }
     
     public class func template(record: CKRecord? = nil, context: NSManagedObjectContext? = nil) -> ORLiftTemplate {
-        return super.model(type: ORLiftTemplate.self, record: record, context: context) as! ORLiftTemplate
+        return super.model(type: ORLiftTemplate.self, record: record, context: context)
     }
     
     public class func templates(records records: [CKRecord], context: NSManagedObjectContext? = nil) -> [ORLiftTemplate] {
-        return super.models(type: ORLiftTemplate.self, records: records, context: context) as! [ORLiftTemplate]
+        return super.models(type: ORLiftTemplate.self, records: records, context: context)
     }
     @NSManaged public var defaultLift: NSNumber
     @NSManaged public var liftDescription: String
@@ -47,23 +47,15 @@ public class ORLiftTemplate: ORModel, ModelSubclassing {
     
     @NSManaged public var creator: ORAthlete
     
-    public static func query(predicate: NSPredicate?) -> CKQuery {
-        if let filter = predicate {
-            return CKQuery(recordType: ORLiftTemplate.recordType, predicate: filter)
-        } else {
-            return CKQuery(recordType: ORLiftTemplate.recordType, predicate: NSPredicate(value: true))
-        }
-    }
-    
     override func writeValuesFromRecord(record: CKRecord) {
         super.writeValuesFromRecord(record)
         
         guard let context = self.managedObjectContext else { return }
         
-        self.liftName = record.propertyForName(CloudFields.liftName.rawValue, defaultValue: "") as! String
-        self.defaultLift = NSNumber(bool: record.propertyForName(CloudFields.defaultLift.rawValue, defaultValue: true) as! Bool)
-        self.liftDescription = record.propertyForName(CloudFields.liftDescription.rawValue, defaultValue: "") as! String
-        self.solo = NSNumber(bool: record.propertyForName(CloudFields.solo.rawValue, defaultValue: true) as! Bool)
+        self.liftName = record.propertyForName(CloudFields.liftName.rawValue, defaultValue: "")
+        self.defaultLift = NSNumber(bool: record.propertyForName(CloudFields.defaultLift.rawValue, defaultValue: true))
+        self.liftDescription = record.propertyForName(CloudFields.liftDescription.rawValue, defaultValue: "")
+        self.solo = NSNumber(bool: record.propertyForName(CloudFields.solo.rawValue, defaultValue: true))
         
         if let value = record.modelForName(CloudFields.organization.rawValue) as? OROrganization {
             self.organization = context.crossContextEquivalent(object: value) as? OROrganization

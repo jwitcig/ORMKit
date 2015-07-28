@@ -29,11 +29,11 @@ public class ORMessage: ORModel, ModelSubclassing {
     override public class var recordType: String { return RecordType.ORMessage.rawValue }
     
     public class func message(record: CKRecord? = nil, context: NSManagedObjectContext? = nil) -> ORMessage {
-        return super.model(type: ORMessage.self, record: record, context: context) as! ORMessage
+        return super.model(type: ORMessage.self, record: record, context: context)
     }
     
     public class func messages(records records: [CKRecord], context: NSManagedObjectContext? = nil) -> [ORMessage] {
-        return super.models(type: ORMessage.self, records: records, context: context) as! [ORMessage]
+        return super.models(type: ORMessage.self, records: records, context: context) 
     }
     
     @NSManaged public var title: String
@@ -41,20 +41,12 @@ public class ORMessage: ORModel, ModelSubclassing {
     @NSManaged public var createdDate: NSDate
     @NSManaged public var organization: OROrganization?
     @NSManaged public var creator: ORAthlete
-    
-    public static func query(predicate: NSPredicate?) -> CKQuery {
-        if let filter = predicate {
-            return CKQuery(recordType: ORMessage.recordType, predicate: filter)
-        } else {
-            return CKQuery(recordType: ORMessage.recordType, predicate: NSPredicate(value: true))
-        }
-    }
-    
+        
     override func writeValuesFromRecord(record: CKRecord) {
         super.writeValuesFromRecord(record)
-        self.title = record.propertyForName(CloudFields.title.rawValue, defaultValue: "") as! String
-        self.body = record.propertyForName(CloudFields.body.rawValue, defaultValue: "") as! String
-        self.createdDate = record.propertyForName(CloudFields.createdDate.rawValue, defaultValue: NSDate()) as! NSDate
+        self.title = record.propertyForName(CloudFields.title.rawValue, defaultValue: "")
+        self.body = record.propertyForName(CloudFields.body.rawValue, defaultValue: "")
+        self.createdDate = record.propertyForName(CloudFields.createdDate.rawValue, defaultValue: NSDate()) 
         if let value = record.modelForName(CloudFields.organization.rawValue) as? OROrganization {
             self.organization = value
         }
