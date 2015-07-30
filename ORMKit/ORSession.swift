@@ -14,9 +14,16 @@ public class ORSession {
     public static var currentSession = ORSession()
     
     public var soloSession: Bool { return self.currentOrganization == nil }
-    public var currentAthleteId: CKRecordID?
-    public var currentAthlete: ORAthlete?
+    public var currentAthlete: ORAthlete? {
+        get {
+            guard let ID = self.currentAthleteID else { return nil }
+            return NSManagedObjectContext.contextForCurrentThread().objectWithID(ID) as? ORAthlete
+        }
+        set { self.currentAthleteID = newValue?.objectID }
+    }
     public var currentOrganization: OROrganization?
+    
+    private var currentAthleteID: NSManagedObjectID?
     
     private var _localData: ORLocalData!
     public var localData: ORLocalData! {
@@ -86,7 +93,7 @@ public class ORSession {
                     return
                 }
                 athlete = fetchedAthlete
-                
+                athlete.updateFromCloudRecord(record)
             }
         }
     }

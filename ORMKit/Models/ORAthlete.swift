@@ -11,19 +11,25 @@ import CloudKit
 
 public class ORAthlete: ORModel, ModelSubclassing {
   
-    enum CloudFields: String {
-        case userRecordName = "userRecordName"
-        case firstName = "firstName"
-        case lastName = "lastName"
+    enum Fields: String {
+        case userRecordName
+        case firstName
+        case lastName
+        
+        
+        enum LocalOnly: String {
+            case athleteOrganizations
+            case adminOrganizations
+            
+            static var allCases: [LocalOnly] {
+                return [athleteOrganizations, adminOrganizations]
+            }
+            
+            static var allValues: [String] {
+                return LocalOnly.allCases.map { $0.rawValue }
+            }
+        }
     }
-    enum LocalFields: String {
-        case userRecordName = "userRecordName"
-        case athleteOrganizations = "athleteOrganizations"
-        case adminOrganizations = "adminOrganizations"
-        case firstName = "firstName"
-        case lastName = "lastName"
-    }
-
     public class func athlete(record record: CKRecord? = nil, context: NSManagedObjectContext? = nil) -> ORAthlete {
         return super.model(type: ORAthlete.self, record: record, context: context)
     }
@@ -61,9 +67,7 @@ public class ORAthlete: ORModel, ModelSubclassing {
                             
                             do {
                                 try context.save()
-                            } catch _ {
-                            }
-                            
+                            } catch { }
                             
                         } else {
                             print(error)
@@ -91,8 +95,6 @@ public class ORAthlete: ORModel, ModelSubclassing {
     }
     
     public static func setCurrentAthlete(athlete: ORAthlete) {
-
-        
         NSUserDefaults.standardUserDefaults().setObject(athlete.recordName, forKey: "currentUserRecordName")
         let result = NSUserDefaults.standardUserDefaults().synchronize()
         if result {
@@ -102,9 +104,9 @@ public class ORAthlete: ORModel, ModelSubclassing {
     
     override func writeValuesFromRecord(record: CKRecord) {
         super.writeValuesFromRecord(record)
-        self.userRecordName = record.propertyForName(CloudFields.userRecordName.rawValue, defaultValue: "")
-        self.firstName = record.propertyForName(CloudFields.firstName.rawValue, defaultValue: "")
-        self.lastName = record.propertyForName(CloudFields.lastName.rawValue, defaultValue: "")
+        self.userRecordName = record.propertyForName(Fields.userRecordName.rawValue, defaultValue: "")
+        self.firstName = record.propertyForName(Fields.firstName.rawValue, defaultValue: "")
+        self.lastName = record.propertyForName(Fields.lastName.rawValue, defaultValue: "")
     }
     
 }

@@ -11,19 +11,24 @@ import CloudKit
 
 public class ORMessage: ORModel, ModelSubclassing {
     
-    enum CloudFields: String {
-        case title = "title"
-        case body = "body"
-        case createdDate = "createdDate"
-        case organization = "organization"
-        case creator = "creator"
-    }
-    enum LocalFields: String {
-        case title = "title"
-        case body = "body"
-        case createdDate = "createdDate"
-        case organization = "organization"
-        case creator = "creator"
+    enum Fields: String {
+        case title
+        case body
+        case createdDate
+        case organization
+        case creator
+        
+        enum LocalOnly: String {
+            case NoFields
+            
+            static var allCases: [LocalOnly] {
+                return []
+            }
+            
+            static var allValues: [String] {
+                return LocalOnly.allCases.map { $0.rawValue }
+            }
+        }
     }
     
     override public class var recordType: String { return RecordType.ORMessage.rawValue }
@@ -44,13 +49,13 @@ public class ORMessage: ORModel, ModelSubclassing {
         
     override func writeValuesFromRecord(record: CKRecord) {
         super.writeValuesFromRecord(record)
-        self.title = record.propertyForName(CloudFields.title.rawValue, defaultValue: "")
-        self.body = record.propertyForName(CloudFields.body.rawValue, defaultValue: "")
-        self.createdDate = record.propertyForName(CloudFields.createdDate.rawValue, defaultValue: NSDate()) 
-        if let value = record.modelForName(CloudFields.organization.rawValue) as? OROrganization {
+        self.title = record.propertyForName(Fields.title.rawValue, defaultValue: "")
+        self.body = record.propertyForName(Fields.body.rawValue, defaultValue: "")
+        self.createdDate = record.propertyForName(Fields.createdDate.rawValue, defaultValue: NSDate()) 
+        if let value = record.modelForName(Fields.organization.rawValue) as? OROrganization {
             self.organization = value
         }
-        if let value = record.modelForName(CloudFields.creator.rawValue) as? ORAthlete {
+        if let value = record.modelForName(Fields.creator.rawValue) as? ORAthlete {
             self.creator = value
         }
         

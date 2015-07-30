@@ -31,18 +31,26 @@ extension CKRecord {
 }
 
 public class OROrganization: ORModel, ModelSubclassing {
-
-    public enum CloudFields: String {
-        case orgName = "orgName"
-        case orgDescription = "description"
-        case athletes = "athletes"
-        case admins = "admins"
-    }
-    public enum LocalFields: String {
-        case orgName = "orgName"
-        case orgDescription = "orgDescription"
-        case athletes = "athletes"
-        case admins = "admins"
+    
+    public enum Fields: String {
+        case orgName
+        case orgDescription
+        case athletes
+        case admins
+        
+        enum LocalOnly: String {
+            case liftTemplates
+            case athletes
+            case admins
+            
+            static var allCases: [LocalOnly] {
+                return [liftTemplates, athletes, admins]
+            }
+            
+            static var allValues: [String] {
+                return LocalOnly.allCases.map { $0.rawValue }
+            }
+        }
     }
     
     public class func organization(record record: CKRecord? = nil, context: NSManagedObjectContext? = nil) -> OROrganization {
@@ -69,13 +77,13 @@ public class OROrganization: ORModel, ModelSubclassing {
         
         guard let context = self.managedObjectContext else { return }
         
-        self.orgName = record.propertyForName(LocalFields.orgName.rawValue, defaultValue: "")
-        self.orgDescription = record.propertyForName(LocalFields.orgDescription.rawValue, defaultValue: "")
+        self.orgName = record.propertyForName(Fields.orgName.rawValue, defaultValue: "")
+        self.orgDescription = record.propertyForName(Fields.orgDescription.rawValue, defaultValue: "")
         
-        if let value = record.modelListForName(LocalFields.athletes.rawValue) as? [ORAthlete] {
+        if let value = record.modelListForName(Fields.athletes.rawValue) as? [ORAthlete] {
             self.athletes = Set(context.crossContextEquivalents(objects: value) as! [ORAthlete])
         }
-        if let value = record.modelListForName(LocalFields.admins.rawValue) as? [ORAthlete] {
+        if let value = record.modelListForName(Fields.admins.rawValue) as? [ORAthlete] {
             self.admins = Set(context.crossContextEquivalents(objects: value) as! [ORAthlete])
         }
     }

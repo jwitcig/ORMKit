@@ -11,21 +11,25 @@ import CloudKit
 
 public class ORLiftTemplate: ORModel, ModelSubclassing {
     
-    enum CloudFields: String {
-        case defaultLift = "default"
-        case liftDescription = "liftDescription"
-        case liftName = "liftName"
-        case solo = "solo"
-        case creator = "creator"
-        case organization = "organization"
-    }
-    enum LocalFields: String {
-        case defaultLift = "defaultLift"
-        case liftDescription = "liftDescription"
-        case liftName = "liftName"
-        case solo = "solo"
-        case creator = "creator"
-        case organization = "organization"
+    enum Fields: String {
+        case defaultLift
+        case liftDescription
+        case liftName
+        case solo
+        case creator
+        case organization
+        
+        enum LocalOnly: String {
+            case NoFields
+            
+            static var allCases: [LocalOnly] {
+                return []
+            }
+            
+            static var allValues: [String] {
+                return LocalOnly.allCases.map { $0.rawValue }
+            }
+        }
     }
     
     override public class var recordType: String { return RecordType.ORLiftTemplate.rawValue }
@@ -52,15 +56,15 @@ public class ORLiftTemplate: ORModel, ModelSubclassing {
         
         guard let context = self.managedObjectContext else { return }
         
-        self.liftName = record.propertyForName(CloudFields.liftName.rawValue, defaultValue: "")
-        self.defaultLift = NSNumber(bool: record.propertyForName(CloudFields.defaultLift.rawValue, defaultValue: true))
-        self.liftDescription = record.propertyForName(CloudFields.liftDescription.rawValue, defaultValue: "")
-        self.solo = NSNumber(bool: record.propertyForName(CloudFields.solo.rawValue, defaultValue: true))
+        self.liftName = record.propertyForName(Fields.liftName.rawValue, defaultValue: "")
+        self.defaultLift = NSNumber(bool: record.propertyForName(Fields.defaultLift.rawValue, defaultValue: true))
+        self.liftDescription = record.propertyForName(Fields.liftDescription.rawValue, defaultValue: "")
+        self.solo = NSNumber(bool: record.propertyForName(Fields.solo.rawValue, defaultValue: true))
         
-        if let value = record.modelForName(CloudFields.organization.rawValue) as? OROrganization {
+        if let value = record.modelForName(Fields.organization.rawValue) as? OROrganization {
             self.organization = context.crossContextEquivalent(object: value) as? OROrganization
         }
-        if let value = record.modelForName(CloudFields.creator.rawValue) as? ORAthlete {
+        if let value = record.modelForName(Fields.creator.rawValue) as? ORAthlete {
             self.creator = value
         }
     }

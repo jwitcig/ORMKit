@@ -134,9 +134,28 @@ public class ORCloudData: DataConvenience {
         
         let operation = CKModifyRecordsOperation(recordsToSave: recordsToSave, recordIDsToDelete: nil)
         operation.modifyRecordsCompletionBlock = { (records, recordIDs, error) in
-//            print(records)
-//            print(recordIDs)
-//            print(error)
+            print(records)
+            print(recordIDs)
+            print(error)
+        }
+        
+        operation.perRecordCompletionBlock = {
+            
+            
+            guard $1 == nil else {
+                print($0)
+                print($1)
+                let error = $1
+                return
+            }
+            guard let record = $0 else { return }
+            
+            let context = NSManagedObjectContext.contextForCurrentThread()
+            let model = ORModel.model(type: ORModel.self, record: record, context: context)
+            model.cloudRecordDirty = false
+            do {
+                try context.save()
+            } catch { }
         }
         
         self.database.addOperation(operation)

@@ -90,6 +90,10 @@ extension NSManagedObject {
         get {
             var dataDict = [String: AnyObject]()
             
+            let keys1 = self.entity.attributeKeys
+            
+            
+            
             let keys = self.changedValues().keys.array
             for key in keys {
                 
@@ -117,17 +121,59 @@ extension NSManagedObject {
 
 extension NSManagedObjectContext {
     
-    convenience init(parentContext: NSManagedObjectContext) {
-        self.init(concurrencyType: .ConfinementConcurrencyType)
-        self.parentContext = parentContext
+    public convenience init(parentContext: NSManagedObjectContext? = nil) {
+        var selfObject: NSManagedObjectContext!
+        defer {
+            NSNotificationCenter.defaultCenter().addObserver(selfObject, selector: Selector("managedObjectContextWillSave:"), name: NSManagedObjectContextWillSaveNotification, object: selfObject)
+            NSNotificationCenter.defaultCenter().addObserver(selfObject, selector: Selector("managedObjectContextDidSave:"), name: NSManagedObjectContextDidSaveNotification, object: selfObject)
+        }
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("managedObjectContextDidSave:"), name: NSManagedObjectContextDidSaveNotification, object: self)
+        guard let parentManagedObjectContext = parentContext else {
+            self.init(concurrencyType: .MainQueueConcurrencyType)
+            selfObject = self
+            return
+        }
+        
+        self.init(concurrencyType: .ConfinementConcurrencyType)
+        self.parentContext = parentManagedObjectContext
+        selfObject = self
+    }
+    
+    func managedObjectContextWillSave(notification: NSNotification) {
+        let context = notification.object as! NSManagedObjectContext
+        
+        var observedObjects = context.insertedObjects
+        for item in context.updatedObjects {
+            observedObjects.insert(item)
+        }
+        
+        for object in observedObjects {
+            guard let model = object as? ORModel else { continue }
+            
+            let changedKeys = model.changedValues().keys.array.filter {
+                !["athleteOrganizations", "adminOrganizations", "messages", "liftTemplates", "athletes", "cloudRecordDirty"].contains($0)
+            }
+            
+            
+            
+            guard !model.cloudUpdateSinceSave else {
+                model.cloudUpdateSinceSave = false
+                model.cloudRecordDirty = false
+                continue
+            }
+            
+            if changedKeys.count == 0 {
+                model.cloudRecordDirty = false
+            } else {
+                model.cloudRecordDirty = true
+            }
+        }
     }
     
     func managedObjectContextDidSave(notification: NSNotification) {
         let savedContext = notification.object as! NSManagedObjectContext
         
-        let mainMOC = self.parentContext!
+        let mainMOC = ORSession.currentSession.localData.context
         
         // ignore change notifications for the main MOC
         guard mainMOC != savedContext else { return }
@@ -152,8 +198,14 @@ extension NSManagedObjectContext {
     }
     
     public class func contextForCurrentThread() -> NSManagedObjectContext {
-        let thread = NSThread.currentThread()
+        return NSManagedObjectContext.contextForThread(NSThread.currentThread())
+    }
     
+    public class func contextForThread(thread: NSThread) -> NSManagedObjectContext {
+        guard thread != NSThread.mainThread() else {
+            return ORSession.currentSession.localData.context
+        }
+        
         if let context = NSManagedObjectContext.threadContexts[thread] { return context }
         
         let newContext = NSManagedObjectContext(parentContext: ORSession.currentSession.localData.context)
@@ -161,7 +213,7 @@ extension NSManagedObjectContext {
         return newContext
     }
     
-    private static var threadContexts = [NSThread: NSManagedObjectContext]()
+    private static var threadContexts = [NSThread.mainThread(): ORSession.currentSession.localData.context]
     
 }
 

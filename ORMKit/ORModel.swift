@@ -14,16 +14,24 @@ protocol ModelSubclassing {
 }
 
 enum RecordType: String {
-    case OROrganization = "OROrganization"
-    case ORLiftTemplate = "ORLiftTemplate"
-    case ORLiftEntry = "ORLiftEntry"
+    case OROrganization
+    case ORLiftTemplate
+    case ORLiftEntry
     
-    case ORMessage = "ORMessage"
+    case ORMessage
     
-    case ORAthlete = "ORAthlete"
+    case ORAthlete
 }
 
 public class ORModel: NSManagedObject {
+    
+    static var LocalOnlyFields = [
+        OROrganization.recordType: OROrganization.Fields.LocalOnly.allValues,
+        ORLiftTemplate.recordType: ORLiftTemplate.Fields.LocalOnly.allValues,
+        ORLiftEntry.recordType: ORLiftEntry.Fields.LocalOnly.allValues,
+        ORMessage.recordType: ORMessage.Fields.LocalOnly.allValues,
+        ORAthlete.recordType: ORAthlete.Fields.LocalOnly.allValues,
+    ]
     
     public var record: CKRecord {
         get {
@@ -34,7 +42,6 @@ public class ORModel: NSManagedObject {
                 record = CKRecord(recordType: ORModel.recordType)
             }
             self.writeValuesToRecord(&record!)
-            self.record = record
             return record
         }
         set {
@@ -52,6 +59,7 @@ public class ORModel: NSManagedObject {
     }
     
     @NSManaged public var cloudRecordDirty: Bool
+    public var cloudUpdateSinceSave = false
     
     private class func defaultModel(type type: ORModel.Type, context: NSManagedObjectContext? = nil) -> ORModel {
         
@@ -65,18 +73,22 @@ public class ORModel: NSManagedObject {
         return model
     }
     
+    internal func updateFromCloudRecord(record: CKRecord) {
+        self.record = record
+        self.cloudUpdateSinceSave = true
+    }
+    
     public class func model<T>(type type: T.Type, record cloudRecord: CKRecord? = nil, context: NSManagedObjectContext? = nil) -> T {
         
         guard let record = cloudRecord else {
             return ORModel.defaultModel(type: type as! ORModel.Type, context: context) as! T
         }
         let model = ORModel.getOrCreateLocalRecord(record: record, type: type as! ORModel.Type, context: context) as! ORModel
-        model.record = record
+        model.updateFromCloudRecord(record)
         return model as! T
     }
     
     public class func models<T>(type type: T.Type, records: [CKRecord], context: NSManagedObjectContext? = nil) -> [T] {
-
         guard let storedObjects = ORSession.currentSession.localData.fetchObjects(
                     ids: records.recordNames,
                     model: type as! ORModel.Type,
@@ -90,7 +102,7 @@ public class ORModel: NSManagedObject {
         let missingObjectRecords = records.filter { !storedObjectsRecordNames.contains($0.recordID.recordName) }
         
         storedObjects.map { model in
-            model.record = records.filter { $0.recordID.recordName == model.recordName }.first!
+            model.updateFromCloudRecord( records.filter { $0.recordID.recordName == model.recordName }.first! )
         }
         
         var models = storedObjects
@@ -114,7 +126,46 @@ public class ORModel: NSManagedObject {
     func writeValuesFromRecord(record: CKRecord) { }
     
     func writeValuesToRecord(inout record: CKRecord) {
-        record.setValuesForKeysWithDictionary(self.changedKeysForCloudKit)
+        var newDataDict = [String: AnyObject]()
+        
+        var keys = self.entity.attributeKeys
+        keys += self.entity.relationshipsByName.keys.array
+        
+        
+        var rejectKeys = ["cloudRecordDirty"]
+        if let entityName = self.entity.name {
+            if let entityRejectKeys = ORModel.LocalOnlyFields[entityName] {
+                rejectKeys += entityRejectKeys
+            }
+        }
+        
+        let filteredKeys = keys.filter { !rejectKeys.contains($0) }
+        
+        for key in filteredKeys {
+            let value = self.valueForKey(key)
+            
+            guard value as? CloudRecord == nil else { continue }
+            
+            guard value as? ORModel == nil else {
+                let newModel = value as! ORModel
+                
+                guard let existingModel = newDataDict[key] as? ORModel
+                    where newModel.recordName == existingModel.recordName else {
+                        newDataDict[key] = newModel.reference
+                        continue
+                }
+                continue
+            }
+            
+            guard value as? Set<ORModel> == nil else {
+                newDataDict[key] = (value as! Set<ORModel>).references
+                continue
+            }
+            
+            newDataDict[key] = value
+        }
+
+        record.setValuesForKeysWithDictionary(newDataDict)
     }
     
     public func updateRecord() { _ = self.record }
@@ -124,7 +175,7 @@ public class ORModel: NSManagedObject {
         guard let object = ORSession.currentSession.localData.fetchObject(id: record.recordID.recordName, model: type, context: context) else {
             
             let model = ORModel.defaultModel(type: type, context: context)
-            model.record = record
+            model.updateFromCloudRecord(record)
             return model
         }
         return object
