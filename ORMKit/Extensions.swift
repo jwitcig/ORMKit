@@ -65,8 +65,12 @@ extension NSPredicate {
         return NSPredicate(value: true)
     }
     
-    convenience init(key: String, comparator: PredicateComparator, value: AnyObject) {
-        self.init(format: "\(key) \(comparator.rawValue) %@", value as! NSObject)
+    convenience init(key: String, comparator: PredicateComparator, value comparisonValue: AnyObject?) {
+        guard let value = comparisonValue else {
+            self.init(format: "\(key) \(comparator.rawValue) nil")
+            return
+        }
+        self.init(format: "\(key) \(comparator.rawValue) %@", argumentArray: [value])
     }
     
 }
@@ -146,15 +150,20 @@ extension NSManagedObjectContext {
         for item in context.updatedObjects {
             observedObjects.insert(item)
         }
-        
+                
         for object in observedObjects {
             guard let model = object as? ORModel else { continue }
             
-            let changedKeys = model.changedValues().keys.array.filter {
-                !["athleteOrganizations", "adminOrganizations", "messages", "liftTemplates", "athletes", "cloudRecordDirty"].contains($0)
+            var rejectKeys = ["cloudRecord", "cloudRecordDirty"]
+            if let entityName = object.entity.name {
+                if let entityRejectKeys = ORModel.LocalOnlyFields[entityName] {
+                    rejectKeys += entityRejectKeys
+                }
             }
             
-            
+            let changedKeys = model.changedValues().keys.array.filter {
+                !rejectKeys.contains($0)
+            }
             
             guard !model.cloudUpdateSinceSave else {
                 model.cloudUpdateSinceSave = false
@@ -185,16 +194,12 @@ extension NSManagedObjectContext {
         }
     }
     
-    public func crossContextEquivalent(object object: NSManagedObject) -> NSManagedObject {
-        return self.objectWithID(object.objectID)
+    public func crossContextEquivalent<T>(object object: T) -> T {
+        return self.objectWithID((object as! NSManagedObject).objectID) as! T
     }
     
-    public func crossContextEquivalents(objects objects: [NSManagedObject]) -> [NSManagedObject] {
-        var equivalents = [NSManagedObject]()
-        for object in objects {
-            equivalents.append(self.crossContextEquivalent(object: object))
-        }
-        return equivalents
+    public func crossContextEquivalents<T>(objects objects: [T]) -> [T] {
+        return objects.map { self.crossContextEquivalent(object: $0 as! NSManagedObject) as! T }
     }
     
     public class func contextForCurrentThread() -> NSManagedObjectContext {
@@ -217,23 +222,19 @@ extension NSManagedObjectContext {
     
 }
 
-protocol CKRepresentativeType {
-    var recordID: CKRecordID { get }
-    var recordName: String { get }
-}
-
-extension CKRepresentativeType {
-    var recordName: String { return self.recordID.recordName }
-}
-
-extension CKReference: CKRepresentativeType { }
-
-extension CKRecord: CKRepresentativeType { }
-
-extension CollectionType where Generator.Element : CKRepresentativeType {
+extension CollectionType where Generator.Element : CKRecord {
     
     var recordIDs: [CKRecordID] { return self.map { $0.recordID } }
-    var recordNames: [String] { return self.map { $0.recordID.recordName } }
+}
+
+extension CollectionType where Generator.Element : CKReference {
+    
+    var recordIDs: [CKRecordID] { return self.map { $0.recordID } }
+}
+
+extension CollectionType where Generator.Element : CKRecordID {
+    
+    var recordNames: [String] { return self.map { $0.recordName } }
 }
 
 extension CollectionType where Generator.Element : ORModel {
@@ -241,6 +242,11 @@ extension CollectionType where Generator.Element : ORModel {
     var references: [CKReference] { return self.map { $0.reference } }
     var records: [CKRecord] { return self.map { $0.record } }
     var recordNames: [String] { return self.map { $0.recordName } }
+}
+
+extension Set {
+    
+    public var array: [Generator.Element] { return Array(self) }
 }
 
 enum PredicateComparator: String {

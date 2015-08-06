@@ -19,16 +19,33 @@ public class ORCloudDataCoordinator: ORDataCoordinator {
         self.database = database
     }
     
-    internal func fetch(model model: ORModel.Type, predicate: NSPredicate, completionHandler: ((ORCloudDataResponse)->())?) {
+    internal func fetch(model model: ORModel.Type, predicate: NSPredicate, options: ORDataOperationOptions? = nil,completionHandler: ((ORCloudDataResponse)->())?) {
+        let dataRequest = ORCloudDataRequest()
         let query = CKQuery(recordType: model.recordType, predicate: predicate)
-        self.database.performQuery(query, inZoneWithID: nil) {
-            completionHandler?(ORCloudDataResponse(objects: $0, error: $1))
+        
+        
+        query.sortDescriptors = options!.sortDescriptors
+        
+        let queryOperation = CKQueryOperation(query: query)
+        
+        if let operationOptions = options {
+            
+            queryOperation.resultsLimit = operationOptions.fetchLimit
         }
+        
+        var records = [CKRecord]()
+        queryOperation.recordFetchedBlock = {
+            records.append($0)
+        }
+        queryOperation.queryCompletionBlock = { cursor, error in
+            completionHandler?(ORCloudDataResponse(request: dataRequest, objects: records, error: error))
+        }
+        self.database.addOperation(queryOperation)
     }
     
     internal func save(record record: CKRecord, completionHandler: ((ORCloudDataResponse)->())?) {
         self.database.saveRecord(record) {
-            completionHandler?(ORCloudDataResponse(objects: $0 != nil ? [$0!] : nil, error: $1))
+            completionHandler?(ORCloudDataResponse(request: ORCloudDataRequest(), objects: $0 != nil ? [$0!] : nil, error: $1))
         }
     }
     

@@ -9,7 +9,7 @@
 import Cocoa
 import CloudKit
 
-class CloudRecord: NSManagedObject {
+public class CloudRecord: NSManagedObject {
     
     static let recordType = "CloudRecord"
     

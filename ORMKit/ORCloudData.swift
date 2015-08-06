@@ -22,13 +22,18 @@ public class ORCloudData: DataConvenience {
         get { return self.dataManager.cloudDataCoordinator.database }
     }
     
+    public var syncInProgress: Bool = false
+    
     public required init(session: ORSession, dataManager: ORDataManager) {
         self.session = session
         self.dataManager = dataManager
     }
     
-    public func fetchAllOrganizations(completionHandler: ((ORCloudDataResponse)->())?) {
-        self.dataManager.fetchCloud(model: OROrganization.self, predicate: NSPredicate.allRows, completionHandler: completionHandler)
+    public func fetchAllOrganizations(options options: ORDataOperationOptions? = nil, completionHandler: ((ORCloudDataResponse)->())?) {
+        self.dataManager.fetchCloud(model: OROrganization.self,
+                                predicate: NSPredicate.allRows,
+                                  options: options,
+                        completionHandler: completionHandler)
     }
     
     public func fetchAssociatedOrganizations(athlete unsafeAthlete: ORAthlete, completionHandler: ((ORCloudDataResponse)->())?) {
@@ -39,28 +44,29 @@ public class ORCloudData: DataConvenience {
         let predicate = NSPredicate(key: "athletes", comparator: .Contains, value: athlete.reference)
         
         self.dataManager.fetchCloud(model: OROrganization.self, predicate: predicate) {
-            
-            let context = NSManagedObjectContext.contextForCurrentThread()
-            let athlete = context.objectWithID(unsafeAthlete.objectID) as! ORAthlete
+            let athlete = $0.currentThreadContext.objectWithID(unsafeAthlete.objectID) as! ORAthlete
 
             var compoundResults = $0.objects
         
             let predicate = NSPredicate(key: "admins", comparator: .Contains, value: athlete.reference)
             self.dataManager.fetchCloud(model: OROrganization.self, predicate: predicate) {
-                let recordNames: [String] = compoundResults.recordNames
+                let recordNames: [String] = compoundResults.recordIDs.recordNames
                 compoundResults += $0.objects.filter {
                     !recordNames.contains($0.recordID.recordName)
                 }
                 
-                $0.results = compoundResults
-                completionHandler?($0)
+                completionHandler?(ORCloudDataResponse(
+                                                request: $0.request,
+                                                object: OROrganization.self,
+                                               objects: compoundResults,
+                                                 error: $0.error))
             }
         }
     }
     
     public func fetchLiftTemplates(session session: ORSession, completionHandler: ((ORCloudDataResponse)->())?) {
         guard let organization = session.currentOrganization else {
-            completionHandler?(ORCloudDataResponse(error: ORDataTools.currentOrganizationMissingError))
+            completionHandler?(ORCloudDataResponse(request: ORCloudDataRequest(), error: ORDataTools.currentOrganizationMissingError))
             return
         }
                 
@@ -78,18 +84,21 @@ public class ORCloudData: DataConvenience {
     }
 
     public func fetchLiftEntries(template template: ORLiftTemplate, completionHandler: ((ORCloudDataResponse)->())?) {
-        let predicate = NSPredicate(key: "liftTemplate", comparator: .Equals, value: template.reference)
-        self.dataManager.fetchCloud(model: ORLiftEntry.self, predicate: predicate, completionHandler: completionHandler)
+        self.dataManager.fetchCloud(model: ORLiftEntry.self,
+                                predicate: NSPredicate(key: "liftTemplate", comparator: .Equals, value: template.reference),
+                        completionHandler: completionHandler)
     }
     
     public func fetchLiftEntries(templates templates: [ORLiftTemplate], completionHandler: ((ORCloudDataResponse)->())?) {
-        let predicate = NSPredicate(key: "liftTemplate", comparator: .In, value: templates.references)
-        self.dataManager.fetchCloud(model: ORLiftEntry.self, predicate: predicate, completionHandler: completionHandler)
+        self.dataManager.fetchCloud(model: ORLiftEntry.self,
+                                predicate: NSPredicate(key: "liftTemplate", comparator: .In, value: templates.references),
+                        completionHandler: completionHandler)
     }
     
     public func fetchMessages(organization organization: OROrganization, completionHandler: ((ORCloudDataResponse)->())?) {
-        let predicate = NSPredicate(key: "organization", comparator: .Equals, value: organization.reference)
-        self.dataManager.fetchCloud(model: ORMessage.self, predicate: predicate, completionHandler: completionHandler)
+        self.dataManager.fetchCloud(model: ORMessage.self,
+                                predicate: NSPredicate(key: "organization", comparator: .Equals, value: organization.reference),
+                        completionHandler: completionHandler)
     }
     
     public func save(model model: ORModel, completionHandler: ((ORCloudDataResponse)->())?) {
@@ -97,13 +106,21 @@ public class ORCloudData: DataConvenience {
     }
     
     public func fetchAthletes(organization organization: OROrganization, completionHandler: ((ORCloudDataResponse)->())?) {
-        self.dataManager.fetchCloud(model: ORAthlete.self, predicate: NSPredicate.allRows, completionHandler: completionHandler)
+        self.dataManager.fetchCloud(model: ORAthlete.self,
+                                predicate: NSPredicate.allRows,
+                        completionHandler: completionHandler)
     }
     
-    public func syncronizeDataToLocalStore(completionHandler: ((ORCloudDataResponse)->())? = nil) {
+    public func syncronizeDataToLocalStore(completionHandler: ((ORCloudDataResponse)->())? = nil) -> Bool {
+        guard !self.syncInProgress else {
+            print("sync in progress")
+            return false
+        }
+        self.syncInProgress = true
+        
         self.fetchAssociatedOrganizations(athlete: self.session.currentAthlete!) {
             guard $0.success else { return }
-            
+                        
             let organizations = OROrganization.organizations(records: $0.objects, context: $0.context)
             self.session.localData.save(context: $0.context)
             
@@ -118,47 +135,58 @@ public class ORCloudData: DataConvenience {
                     ORLiftEntry.entries(records: $0.objects, context: $0.context)
                     self.session.localData.save(context: $0.context)
                     completionHandler?($0)
+                    
+                    self.syncInProgress = false
                 }
             }
         }
+        return true
     }
     
-    public func syncronizeDataToCloudStore(completionHandler: ((ORDataResponse)->())? = nil) {
-        var response: ORLocalDataResponse!
-        defer { completionHandler?(response) }
-        
-        response = self.session.localData.fetchDirtyObjects(model: ORModel.self)
-        guard response.success else { return }
-        
-        let recordsToSave = response.objects.records
-        
-        let operation = CKModifyRecordsOperation(recordsToSave: recordsToSave, recordIDsToDelete: nil)
-        operation.modifyRecordsCompletionBlock = { (records, recordIDs, error) in
-            print(records)
-            print(recordIDs)
-            print(error)
+    public func syncronizeDataToCloudStore(perRecordCompletionHandler perRecordCompletionHandler: ((ORCloudDataResponse)->())? = nil, completionHandler: ((ORCloudDataResponse)->())? = nil) -> Bool {
+        guard !self.syncInProgress else {
+            print("sync in progress")
+            return false
         }
         
-        operation.perRecordCompletionBlock = {
-            
-            
-            guard $1 == nil else {
-                print($0)
-                print($1)
-                let error = $1
-                return
-            }
-            guard let record = $0 else { return }
+        let request = ORCloudDataRequest()
+        self.syncInProgress = true
+        
+        let dirtyFetchResponse = self.session.localData.fetchDirtyObjects(model: ORModel.self)
+        guard dirtyFetchResponse.success else { return true }
+        
+        let recordsToSave = dirtyFetchResponse.objects.records
+        let deletedObjectIDs = self.session.localData.fetchDeletedIDs().dataObjects as? [CKRecordID]
+        
+        let operation = CKModifyRecordsOperation(recordsToSave: recordsToSave, recordIDsToDelete: deletedObjectIDs)
+        
+        operation.perRecordCompletionBlock = { completedRecord, error in
+            guard error == nil else { return }
+            guard let record = completedRecord else { return }
             
             let context = NSManagedObjectContext.contextForCurrentThread()
             let model = ORModel.model(type: ORModel.self, record: record, context: context)
             model.cloudRecordDirty = false
-            do {
-                try context.save()
-            } catch { }
+            
+            self.session.localData.save(context: context)
+            perRecordCompletionHandler?(ORCloudDataResponse(request: request, object: record, error: error, context: context))
         }
         
+        operation.modifyRecordsCompletionBlock = { attemptedSaveRecords, attemptedDeleteRecordIDs, error in
+            
+            completionHandler?(ORCloudDataResponse(request: request, error: error))
+            self.syncInProgress = false
+            
+            let context = NSManagedObjectContext.contextForCurrentThread()
+
+            if let deletedIDs = deletedObjectIDs {
+                let deletedObjectsRecords = self.session.localData.fetchCloudRecords([NSPredicate(key: "recordName", comparator: .In, value: deletedIDs.recordNames)], context: context)
+                self.session.localData.delete(objects: deletedObjectsRecords, context: context)
+            }
+        }
+                                                
         self.database.addOperation(operation)
+        return true
     }
     
 }

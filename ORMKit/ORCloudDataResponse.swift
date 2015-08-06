@@ -12,7 +12,11 @@ import CloudKit
 public class ORCloudDataResponse: ORDataResponse {
     
     public var objects: [CKRecord] {
-        return self.results as! [CKRecord]
+        return self.dataObjects as! [CKRecord]
+    }
+    
+    public var object: CKRecord? {
+        return self.dataObject as? CKRecord
     }
     
 }

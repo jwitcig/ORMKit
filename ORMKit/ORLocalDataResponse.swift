@@ -9,9 +9,13 @@
 import Foundation
 
 public class ORLocalDataResponse: ORDataResponse {
-
+    
     public var objects: [ORModel] {
-        return self.results as! [ORModel]
+        return self.dataObjects as! [ORModel]
+    }
+    
+    public var object: ORModel? {
+        return self.dataObject as? ORModel
     }
     
 }

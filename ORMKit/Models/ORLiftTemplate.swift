@@ -51,6 +51,10 @@ public class ORLiftTemplate: ORModel, ModelSubclassing {
     
     @NSManaged public var creator: ORAthlete
     
+//    public func updatedRecently(athlete athlete: ORAthlete, maxNumberOfDays: Int = 14) -> Bool? {
+//        ORSession.currentSession.localData.fetchLiftEntries(athlete: <#T##ORAthlete#>, organization: <#T##OROrganization#>, template: <#T##ORLiftTemplate?#>, order: <#T##Sort?#>)
+//    }
+    
     override func writeValuesFromRecord(record: CKRecord) {
         super.writeValuesFromRecord(record)
         
@@ -60,7 +64,7 @@ public class ORLiftTemplate: ORModel, ModelSubclassing {
         self.defaultLift = NSNumber(bool: record.propertyForName(Fields.defaultLift.rawValue, defaultValue: true))
         self.liftDescription = record.propertyForName(Fields.liftDescription.rawValue, defaultValue: "")
         self.solo = NSNumber(bool: record.propertyForName(Fields.solo.rawValue, defaultValue: true))
-        
+                
         if let value = record.modelForName(Fields.organization.rawValue) as? OROrganization {
             self.organization = context.crossContextEquivalent(object: value) as? OROrganization
         }

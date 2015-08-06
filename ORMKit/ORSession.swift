@@ -17,9 +17,20 @@ public class ORSession {
     public var currentAthlete: ORAthlete? {
         get {
             guard let ID = self.currentAthleteID else { return nil }
-            return NSManagedObjectContext.contextForCurrentThread().objectWithID(ID) as? ORAthlete
+            
+            do {
+                return try NSManagedObjectContext.contextForCurrentThread().existingObjectWithID(ID) as? ORAthlete
+            } catch { }
+            return nil
         }
-        set { self.currentAthleteID = newValue?.objectID }
+        set {
+            if let athlete = newValue {
+                do {
+                    try athlete.managedObjectContext?.obtainPermanentIDsForObjects([athlete])
+                    self.currentAthleteID = athlete.objectID
+                } catch { }
+            }
+        }
     }
     public var currentOrganization: OROrganization?
     
@@ -59,7 +70,7 @@ public class ORSession {
     
     public init() { }
     
-    public func signInWithCloud(completionHandler completionHandler: ((Bool, NSError?)->())?) {
+    public func signInWithCloud(completionHandler completionHandler: ((ORCloudDataResponse)->())?) {
         self.cloudData.container.fetchUserRecordIDWithCompletionHandler { (recordID, error) -> Void in
             guard error == nil else { print(error); return }
             
@@ -67,17 +78,17 @@ public class ORSession {
             
             CKContainer.defaultContainer().publicCloudDatabase.performQuery(query, inZoneWithID: nil) { (results, error) -> Void in
                 
-                var success = false
-                defer { completionHandler?(success, error) }
+                var athlete: ORAthlete!
+        
+                let dataRequest = ORCloudDataRequest()
+                defer { completionHandler?(ORCloudDataResponse(request: dataRequest, object: athlete, error: error)) }
                 
                 guard error == nil else { return }
                 
                 let context = NSManagedObjectContext.contextForCurrentThread()
-                var athlete: ORAthlete!
                 defer {
                     ORAthlete.setCurrentAthlete(athlete)
                     self.localData.save(context: context)
-                    success = true
                 }
                 
                 guard let userRecords = results

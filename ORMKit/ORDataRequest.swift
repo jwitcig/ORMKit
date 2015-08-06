@@ -10,4 +10,12 @@ import Foundation
 
 class ORDataRequest {
     
+    var predicates = [NSPredicate]()
+    
+    var timestamp = NSDate()
+    
+    var elapsedTimeSinceRequest: NSTimeInterval {
+        return self.timestamp.timeIntervalSinceNow
+    }
+    
 }

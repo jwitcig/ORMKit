@@ -22,7 +22,7 @@ extension CKRecord {
     }
     
     func modelListForName(name: String) -> [ORModel]? {
-        guard let recordNames = ((self.valueForKey(name) as? [CKReference])?.recordNames) else {
+        guard let recordNames = ((self.valueForKey(name) as? [CKReference])?.recordIDs.recordNames) else {
             return nil
         }
         return ORSession.currentSession.localData.fetchObjects(ids: recordNames, model: ORModel.self)
@@ -40,11 +40,9 @@ public class OROrganization: ORModel, ModelSubclassing {
         
         enum LocalOnly: String {
             case liftTemplates
-            case athletes
-            case admins
             
             static var allCases: [LocalOnly] {
-                return [liftTemplates, athletes, admins]
+                return [liftTemplates]
             }
             
             static var allValues: [String] {

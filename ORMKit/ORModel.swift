@@ -84,13 +84,12 @@ public class ORModel: NSManagedObject {
             return ORModel.defaultModel(type: type as! ORModel.Type, context: context) as! T
         }
         let model = ORModel.getOrCreateLocalRecord(record: record, type: type as! ORModel.Type, context: context) as! ORModel
-        model.updateFromCloudRecord(record)
         return model as! T
     }
     
     public class func models<T>(type type: T.Type, records: [CKRecord], context: NSManagedObjectContext? = nil) -> [T] {
         guard let storedObjects = ORSession.currentSession.localData.fetchObjects(
-                    ids: records.recordNames,
+                    ids: records.recordIDs.recordNames,
                     model: type as! ORModel.Type,
                     context: context)
             where storedObjects.count > 0 else {
@@ -130,7 +129,6 @@ public class ORModel: NSManagedObject {
         
         var keys = self.entity.attributeKeys
         keys += self.entity.relationshipsByName.keys.array
-        
         
         var rejectKeys = ["cloudRecordDirty"]
         if let entityName = self.entity.name {

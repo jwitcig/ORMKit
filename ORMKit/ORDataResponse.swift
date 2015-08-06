@@ -10,7 +10,11 @@ import Foundation
 
 public class ORDataResponse {
     
-    public var results = [AnyObject]()
+    var request: ORDataRequest
+    
+    var dataObjects = [AnyObject]()
+    var dataObject: AnyObject?
+    
     public var error: NSError? {
         didSet {
             if let err = self.error {
@@ -19,24 +23,34 @@ public class ORDataResponse {
         }
     }
     
-    public var success: Bool {
-        return self.error == nil
-    }
+    public var success: Bool { return self.error == nil }
     
-    lazy var context = NSManagedObjectContext.contextForCurrentThread()
+    public var timestamp = NSDate()
     
-    init() { }
+    var context: NSManagedObjectContext?
+    public lazy var currentThreadContext = NSManagedObjectContext.contextForCurrentThread()
     
-    init(error: NSError?) {
+    init(
+           request: ORDataRequest,
+            object: AnyObject? = nil,
+           objects: [AnyObject]? = nil,
+             error: NSError? = nil,
+           context: NSManagedObjectContext? = nil) {
+            
+        self.request = request
+        self.dataObject = object
+        self.dataObjects = objects != nil ? objects! : []
         self.error = error
+            
+        self.context = context
     }
     
-    init(objects: [AnyObject]?, error: NSError?) {
-        self.error = error
-        
-        if let resultObjects = objects {
-            self.results = resultObjects
-        }
+    public var elapsedTimeSinceResponse: NSTimeInterval {
+        return self.timestamp.timeIntervalSinceNow
     }
-
+    
+    public var elapsedTimeBetweenRequestAndResponse: NSTimeInterval {
+        return self.timestamp.timeIntervalSinceDate(self.request.timestamp)
+    }
+    
 }

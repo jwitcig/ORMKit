@@ -23,14 +23,34 @@ public class ORDataManager {
         self.cloudDataCoordinator = ORCloudDataCoordinator(container: cloudContainer, database: cloudDatabase)
     }
     
-    public func fetchLocal(model model: ORModel.Type, predicates: [NSPredicate]? = nil, sortDescriptors: [NSSortDescriptor]? = nil, context: NSManagedObjectContext? = nil) -> ORLocalDataResponse {
+    public func fetchLocal(model model: ORModel.Type, predicates: [NSPredicate]? = nil, sortDescriptors: [NSSortDescriptor]? = nil, context: NSManagedObjectContext? = nil, fetchLimit: Int = 0) -> ORLocalDataResponse {
         
-        let predicate = predicates != nil ? NSCompoundPredicate(type: .AndPredicateType, subpredicates: predicates!) : NSPredicate.allRows
-        return self.localDataCoordinator.fetch(model: model, predicate: predicate, sortDescriptors: sortDescriptors, context: context)
+        
+        
+        
+        return self.fetchLocal(entityName: model.recordType,
+                               predicates: predicates,
+                          sortDescriptors: sortDescriptors,
+                                  context: context,
+                               fetchLimit: fetchLimit)
     }
     
-    public func fetchCloud(model model: ORModel.Type, predicate: NSPredicate, completionHandler: ((ORCloudDataResponse)->())?) {
-        self.cloudDataCoordinator.fetch(model: model, predicate: predicate, completionHandler: completionHandler)
+    public func fetchLocal(entityName entityName: String, predicates: [NSPredicate]? = nil, sortDescriptors: [NSSortDescriptor]? = nil, context: NSManagedObjectContext? = nil, fetchLimit: Int = 0) -> ORLocalDataResponse {
+        
+        let predicate = predicates != nil ? NSCompoundPredicate(type: .AndPredicateType, subpredicates: predicates!) : NSPredicate.allRows
+        return self.localDataCoordinator.fetch(
+            entityName: entityName,
+            predicate: predicate,
+            sortDescriptors: sortDescriptors,
+            context: context,
+            fetchLimit: fetchLimit)
+    }
+    
+    public func fetchCloud(model model: ORModel.Type, predicate: NSPredicate, options: ORDataOperationOptions? = nil, completionHandler: ((ORCloudDataResponse)->())?) {
+        self.cloudDataCoordinator.fetch(model: model,
+                                    predicate: predicate,
+                                      options: options,
+                            completionHandler: completionHandler)
     }
     
     public func saveCloud(record record: CKRecord, completionHandler: ((ORCloudDataResponse)->())?) {
@@ -41,8 +61,8 @@ public class ORDataManager {
         return self.localDataCoordinator.save(context: context)
     }
     
-    public func delete(objects objects: [ORModel]) -> ORLocalDataResponse {
-        return self.localDataCoordinator.delete(objects: objects)
+    public func delete(objects objects: [NSManagedObject], context: NSManagedObjectContext? = nil) -> ORLocalDataResponse {
+        return self.localDataCoordinator.delete(objects: objects, context: context)
     }
     
 }

@@ -52,44 +52,21 @@ public class ORAthlete: ORModel, ModelSubclassing {
     @NSManaged public var athleteOrganizations: Set<OROrganization>
     @NSManaged public var adminOrganizations: Set<OROrganization>
 
-    public static func signUp(context context: NSManagedObjectContext, completionHandler: ((Bool, ORAthlete?, NSError)->())?) {
+    public static func signUp(context context: NSManagedObjectContext, completionHandler: ((ORCloudDataResponse, ORAthlete?)->())?) {
         
         CKContainer.defaultContainer().fetchUserRecordIDWithCompletionHandler { (recordID, error) -> Void in
-            if error == nil {
+            var athlete: ORAthlete?
+            let dataRequest = ORCloudDataRequest()
+            defer { completionHandler?(ORCloudDataResponse(request: dataRequest, object: athlete, error: error), athlete) }
+            
+            guard error == nil else { return }
+            
+            athlete = ORAthlete.athlete(record: CKRecord(recordType: ORAthlete.recordType, recordID: recordID!))
+            
+            CKContainer.defaultContainer().publicCloudDatabase.saveRecord(athlete!.record) { (record, error) -> Void in
+                guard error == nil else { return }
                 
-                let athlete = ORAthlete.athlete(record: CKRecord(recordType: ORAthlete.recordType, recordID: recordID!))
-                
-                CKContainer.defaultContainer().publicCloudDatabase.saveRecord(athlete.record, completionHandler: { (record, error) -> Void in
-                    
-                    if error == nil {
-                        
-                        if error == nil {
-                            
-                            do {
-                                try context.save()
-                            } catch { }
-                            
-                        } else {
-                            print(error)
-                        }
-                        
-                        if let handler = completionHandler {
-                            if error == nil {
-                                handler(true, athlete, error!)
-                            } else {
-                                handler(false, nil,
-                                    error!)
-                            }
-                        }
-                        
-                    } else {
-                        print(error)
-                    }
-                    
-                })
-                
-            } else {
-                print(error)
+                // Implement local sign up stuff
             }
         }
     }
@@ -104,6 +81,7 @@ public class ORAthlete: ORModel, ModelSubclassing {
     
     override func writeValuesFromRecord(record: CKRecord) {
         super.writeValuesFromRecord(record)
+        
         self.userRecordName = record.propertyForName(Fields.userRecordName.rawValue, defaultValue: "")
         self.firstName = record.propertyForName(Fields.firstName.rawValue, defaultValue: "")
         self.lastName = record.propertyForName(Fields.lastName.rawValue, defaultValue: "")
