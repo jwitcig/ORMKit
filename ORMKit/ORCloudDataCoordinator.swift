@@ -19,12 +19,12 @@ public class ORCloudDataCoordinator: ORDataCoordinator {
         self.database = database
     }
     
-    internal func fetch(model model: ORModel.Type, predicate: NSPredicate, options: ORDataOperationOptions? = nil,completionHandler: ((ORCloudDataResponse)->())?) {
+    internal func fetch<T: ORModel>(model model: T.Type, predicate: NSPredicate, options: ORDataOperationOptions? = nil,completionHandler: (([T], ORCloudDataResponse)->())?) {
         let dataRequest = ORCloudDataRequest()
         let query = CKQuery(recordType: model.recordType, predicate: predicate)
         
         
-        query.sortDescriptors = options!.sortDescriptors
+        query.sortDescriptors = options?.sortDescriptors
         
         let queryOperation = CKQueryOperation(query: query)
         
@@ -38,14 +38,23 @@ public class ORCloudDataCoordinator: ORDataCoordinator {
             records.append($0)
         }
         queryOperation.queryCompletionBlock = { cursor, error in
-            completionHandler?(ORCloudDataResponse(request: dataRequest, objects: records, error: error))
+            
+            let context = NSManagedObjectContext.contextForCurrentThread()
+            let models = ORModel.models(type: model, records: records, context: context)
+            
+            let response = ORCloudDataResponse(request: dataRequest, error: error, context: context)
+            response.records = records
+            
+            completionHandler?(models, response)
         }
         self.database.addOperation(queryOperation)
     }
     
     internal func save(record record: CKRecord, completionHandler: ((ORCloudDataResponse)->())?) {
+        let request = ORCloudDataRequest()
+                
         self.database.saveRecord(record) {
-            completionHandler?(ORCloudDataResponse(request: ORCloudDataRequest(), objects: $0 != nil ? [$0!] : nil, error: $1))
+            completionHandler?(ORCloudDataResponse(request: request, error: $1))
         }
     }
     

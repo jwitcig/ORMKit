@@ -65,13 +65,13 @@ public class ORLiftEntry: ORModel, ModelSubclassing {
         self.reps = record.propertyForName(Fields.reps.rawValue, defaultValue: 0)
         self.weightLifted = record.propertyForName(Fields.weightLifted.rawValue, defaultValue: 0)
         if let value = record.modelForName(Fields.liftTemplate.rawValue) as? ORLiftTemplate {
-            self.liftTemplate = context.crossContextEquivalent(object: value) as! ORLiftTemplate
+            self.liftTemplate = context.crossContextEquivalent(object: value)
         }
         if let value = record.modelForName(Fields.organization.rawValue) as? OROrganization {
-            self.organization = context.crossContextEquivalent(object: value) as? OROrganization
+            self.organization = context.crossContextEquivalent(object: value)
         }
         if let value = record.modelForName(Fields.athlete.rawValue) as? ORAthlete {
-            self.athlete = context.crossContextEquivalent(object: value) as! ORAthlete
+            self.athlete = context.crossContextEquivalent(object: value)
         }
     }
     

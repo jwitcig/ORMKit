@@ -7,13 +7,11 @@
 //
 
 import Foundation
+import CloudKit
 
 public class ORDataResponse {
     
     var request: ORDataRequest
-    
-    var dataObjects = [AnyObject]()
-    var dataObject: AnyObject?
     
     public var error: NSError? {
         didSet {
@@ -22,7 +20,7 @@ public class ORDataResponse {
             }
         }
     }
-    
+        
     public var success: Bool { return self.error == nil }
     
     public var timestamp = NSDate()
@@ -32,14 +30,10 @@ public class ORDataResponse {
     
     init(
            request: ORDataRequest,
-            object: AnyObject? = nil,
-           objects: [AnyObject]? = nil,
              error: NSError? = nil,
            context: NSManagedObjectContext? = nil) {
             
         self.request = request
-        self.dataObject = object
-        self.dataObjects = objects != nil ? objects! : []
         self.error = error
             
         self.context = context

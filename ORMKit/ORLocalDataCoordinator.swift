@@ -21,7 +21,7 @@ public class ORLocalDataCoordinator: ORDataCoordinator {
         return localContext != nil ? localContext! : self.managedObjectContext
     }
     
-    public func fetch(entityName entityName: String, predicate: NSPredicate, sortDescriptors: [NSSortDescriptor]? = nil, context localContext: NSManagedObjectContext? = nil, fetchLimit: Int = 0) -> ORLocalDataResponse  {
+    public func fetch(entityName entityName: String, predicate: NSPredicate, sortDescriptors: [NSSortDescriptor]? = nil, context localContext: NSManagedObjectContext? = nil, fetchLimit: Int = 0) -> ([NSManagedObject], ORLocalDataResponse)  {
         
         let context = self.decideContext(context: localContext)
         
@@ -33,18 +33,15 @@ public class ORLocalDataCoordinator: ORDataCoordinator {
         request.includesSubentities = true
         request.fetchLimit = fetchLimit
         
-        var objects: [ORModel]!
+        var objects: [NSManagedObject]!
         var error: NSError?
         do {
             objects = try context.executeFetchRequest(request) as! [ORModel]
         } catch let err as NSError {
             error = err
+            objects = []
         }
-        
-        if fetchLimit == 1 {
-            return ORLocalDataResponse(request: dataRequest, object: objects.first, error: error, context: context)
-        }
-        return ORLocalDataResponse(request: dataRequest, objects: objects, error: error, context: context)
+        return (objects, ORLocalDataResponse(request: dataRequest, error: error, context: context))
     }
     
     public func save(context localContext: NSManagedObjectContext? = nil) -> ORLocalDataResponse {
@@ -77,7 +74,6 @@ public class ORLocalDataCoordinator: ORDataCoordinator {
             error = err
         }
         return ORLocalDataResponse(request: dataRequest,
-                                   objects: error == nil ? objects : nil,
                                      error: error,
                                    context: context)
     }

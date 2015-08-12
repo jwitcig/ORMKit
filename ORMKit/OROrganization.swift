@@ -52,11 +52,11 @@ public class OROrganization: ORModel, ModelSubclassing {
     }
     
     public class func organization(record record: CKRecord? = nil, context: NSManagedObjectContext? = nil) -> OROrganization {
-        return super.model(type: OROrganization.self, record: record, context: context)
+        return super.model(type: self, record: record, context: context)
     }
     
     public class func organizations(records records: [CKRecord], context: NSManagedObjectContext? = nil) -> [OROrganization] {
-        return super.models(type: OROrganization.self, records: records, context: context)
+        return super.models(type: self, records: records, context: context)
     }
 
     @NSManaged public var messages: Set<ORMessage>
@@ -79,10 +79,10 @@ public class OROrganization: ORModel, ModelSubclassing {
         self.orgDescription = record.propertyForName(Fields.orgDescription.rawValue, defaultValue: "")
         
         if let value = record.modelListForName(Fields.athletes.rawValue) as? [ORAthlete] {
-            self.athletes = Set(context.crossContextEquivalents(objects: value) as! [ORAthlete])
+            self.athletes = Set(context.crossContextEquivalents(objects: value))
         }
         if let value = record.modelListForName(Fields.admins.rawValue) as? [ORAthlete] {
-            self.admins = Set(context.crossContextEquivalents(objects: value) as! [ORAthlete])
+            self.admins = Set(context.crossContextEquivalents(objects: value))
         }
     }
     

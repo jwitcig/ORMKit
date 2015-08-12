@@ -24,57 +24,57 @@ public class ORLocalData: DataConvenience {
         self.dataManager = dataManager
     }
     
-    public func fetchObject(id id: String, model: ORModel.Type, context: NSManagedObjectContext? = nil) -> ORModel? {
-        return self.dataManager.fetchLocal(model: model,
+    public func fetchObject<T: ORModel>(id id: String, model: T.Type, context: NSManagedObjectContext? = nil) -> T? {
+        let (objects, _) = self.dataManager.fetchLocal(model: model,
             predicates: [NSPredicate(key: "cloudRecord.recordName", comparator: .Equals, value: id)],
             context: context,
-            fetchLimit: 1).object
+            fetchLimit: 1)
+        
+        return objects.first
     }
     
-    public func fetchObject(record record: CKRecord, model: ORModel.Type, context: NSManagedObjectContext? = nil) -> ORModel? {
+    public func fetchObject<T: ORModel>(record record: CKRecord, model: T.Type, context: NSManagedObjectContext? = nil) -> T? {
         return self.fetchObject(id: record.recordID.recordName, model: model, context: context)
     }
     
-    public func fetchObjects(ids ids: [String], model: ORModel.Type, context: NSManagedObjectContext? = nil) -> [ORModel]? {
-        return self.dataManager.fetchLocal(model: model,
+    public func fetchObjects<T: ORModel>(ids ids: [String], model: T.Type, context: NSManagedObjectContext? = nil) -> [T]? {
+        let (objects, _) = self.dataManager.fetchLocal(model: model,
             predicates: [NSPredicate(key: "cloudRecord.recordName", comparator: .In, value: ids)],
-            context: context).objects
+            context: context)
+        return objects
     }
     
-    public func fetchObjects(records records: [CKRecord], model: ORModel.Type, context: NSManagedObjectContext? = nil) -> [ORModel]? {
+    public func fetchObjects<T: ORModel>(records records: [CKRecord], model: T.Type, context: NSManagedObjectContext? = nil) -> [T]? {
         return self.fetchObjects(ids: records.recordIDs.recordNames, model: model, context: context)
     }
     
-    public func fetchObjects(model model: ORModel.Type, predicates: [NSPredicate], context: NSManagedObjectContext? = nil) -> [ORModel]? {
-        return self.dataManager.fetchLocal(entityName: model.recordType, predicates: predicates, context: context).objects
+    public func fetchObjects<T: ORModel>(model model: T.Type, predicates: [NSPredicate], context: NSManagedObjectContext? = nil) -> ([T], ORLocalDataResponse) {
+        let (objects, response) = self.dataManager.fetchLocal(entityName: model.recordType, predicates: predicates, context: context)
+        return (objects as! [T], response)
     }
     
-    public func fetchCloudRecords(predicates: [NSPredicate], context: NSManagedObjectContext? = nil) -> [CloudRecord] {
-        return self.dataManager.fetchLocal(entityName: CloudRecord.recordType, predicates: predicates, context: context).dataObjects as! [CloudRecord]
+    public func fetchCloudRecords(predicates: [NSPredicate], context: NSManagedObjectContext? = nil) -> ([CloudRecord], ORLocalDataResponse) {
+        let (objects, response) = self.dataManager.fetchLocal(entityName: CloudRecord.recordType, predicates: predicates, context: context)
+        return (objects as! [CloudRecord], response)
     }
     
-    public func fetchDirtyObjects(model model: ORModel.Type) -> ORLocalDataResponse {
-        let response = self.dataManager.fetchLocal(model: model,
+    public func fetchDirtyObjects<T: ORModel>(model model: T.Type) -> ([T], ORLocalDataResponse) {
+        let (objects, response) = self.dataManager.fetchLocal(model: model,
             predicates: [NSPredicate(key: "cloudRecordDirty", comparator: .Equals, value: true)])
         
-        return ORLocalDataResponse(
-            request: response.request,
-            objects: response.objects.filter { $0.deleted == false },
-              error: response.error,
-            context: response.context)
+        return (objects.filter { $0.deleted == false }, response)
     }
     
-    public func fetchDeletedIDs(context: NSManagedObjectContext? = nil) -> ORLocalDataResponse {
-        let response = self.dataManager.fetchLocal(
+    public func fetchDeletedIDs(context: NSManagedObjectContext? = nil) -> ([CKRecordID], ORLocalDataResponse) {
+        let (objects, response) = self.dataManager.fetchLocal(
                             entityName: CloudRecord.recordType,
                             predicates: [NSPredicate(key: "model", comparator: .Equals, value: nil)],
                                context: context)
-        
-        let IDs = (response.dataObjects as! [CloudRecord]).map { CKRecordID(recordName: $0.recordName) }
-        return ORLocalDataResponse(request: response.request, objects: IDs, error: response.error, context: response.context)
+        let IDs = (objects as! [CloudRecord]).map { CKRecordID(recordName: $0.recordName) }
+        return (IDs, response)
     }
     
-    public func fetchAll(model model: ORModel.Type, context: NSManagedObjectContext? = nil) -> ORLocalDataResponse {
+    public func fetchAll<T: ORModel>(model model: T.Type, context: NSManagedObjectContext? = nil) -> ([T], ORLocalDataResponse) {
         return self.dataManager.fetchLocal(model: model, predicates: [NSPredicate.allRows], context: context)
     }
     
@@ -91,11 +91,11 @@ public class ORLocalData: DataConvenience {
     }
     
     public func deleteAll(model model: ORModel.Type) -> ORLocalDataResponse {
-        let response = self.fetchAll(model: model)
-        return response.success ? self.dataManager.delete(objects: response.objects) : response
+        let (models, response) = self.fetchAll(model: model)
+        return response.success ? self.dataManager.delete(objects: models) : response
     }
     
-    public func fetchLiftEntries(athlete athlete: ORAthlete, organization: OROrganization, template liftTemplate: ORLiftTemplate? = nil, order: Sort? = nil, options: ORDataOperationOptions? = nil) -> ORLocalDataResponse {
+    public func fetchLiftEntries(athlete athlete: ORAthlete, organization: OROrganization, template liftTemplate: ORLiftTemplate? = nil, order: Sort? = nil, options: ORDataOperationOptions? = nil) -> ([ORLiftEntry], ORLocalDataResponse) {
         
         var predicates = [
             NSPredicate(key: "athlete", comparator: .Equals, value: athlete),

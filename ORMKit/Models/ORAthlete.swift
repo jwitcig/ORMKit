@@ -57,7 +57,7 @@ public class ORAthlete: ORModel, ModelSubclassing {
         CKContainer.defaultContainer().fetchUserRecordIDWithCompletionHandler { (recordID, error) -> Void in
             var athlete: ORAthlete?
             let dataRequest = ORCloudDataRequest()
-            defer { completionHandler?(ORCloudDataResponse(request: dataRequest, object: athlete, error: error), athlete) }
+            defer { completionHandler?(ORCloudDataResponse(request: dataRequest, error: error), athlete) }
             
             guard error == nil else { return }
             

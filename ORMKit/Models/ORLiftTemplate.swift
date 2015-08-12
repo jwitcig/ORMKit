@@ -66,7 +66,7 @@ public class ORLiftTemplate: ORModel, ModelSubclassing {
         self.solo = NSNumber(bool: record.propertyForName(Fields.solo.rawValue, defaultValue: true))
                 
         if let value = record.modelForName(Fields.organization.rawValue) as? OROrganization {
-            self.organization = context.crossContextEquivalent(object: value) as? OROrganization
+            self.organization = context.crossContextEquivalent(object: value)
         }
         if let value = record.modelForName(Fields.creator.rawValue) as? ORAthlete {
             self.creator = value

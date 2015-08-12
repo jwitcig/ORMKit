@@ -61,13 +61,23 @@ public class ORModel: NSManagedObject {
     @NSManaged public var cloudRecordDirty: Bool
     public var cloudUpdateSinceSave = false
     
-    private class func defaultModel(type type: ORModel.Type, context: NSManagedObjectContext? = nil) -> ORModel {
+    private class func defaultModel(type type: ORModel.Type, context: NSManagedObjectContext? = nil, insertIntoManagedObjectContext: Bool = true) -> ORModel {
         
         let managedObjectContext = context != nil ? context! : ORSession.currentSession.localData.context
         
-        let model = NSEntityDescription.insertNewObjectForEntityForName(type.recordType, inManagedObjectContext: managedObjectContext) as! ORModel
+        var model: ORModel!
         
-        model.cloudRecord = NSEntityDescription.insertNewObjectForEntityForName(CloudRecord.recordType, inManagedObjectContext: managedObjectContext) as! CloudRecord
+        if insertIntoManagedObjectContext {
+            model = NSEntityDescription.insertNewObjectForEntityForName(type.recordType, inManagedObjectContext: managedObjectContext) as! ORModel
+            
+            model.cloudRecord = NSEntityDescription.insertNewObjectForEntityForName(CloudRecord.recordType, inManagedObjectContext: managedObjectContext) as! CloudRecord
+        } else {
+            let modelEntityDescription = NSEntityDescription.entityForName(type.recordType, inManagedObjectContext: managedObjectContext)!
+            model = NSManagedObject(entity: modelEntityDescription, insertIntoManagedObjectContext: nil) as! ORModel
+            
+            let cloudRecordEntityDescription = NSEntityDescription.entityForName(CloudRecord.recordType, inManagedObjectContext: managedObjectContext)!
+            model.cloudRecord = NSManagedObject(entity: cloudRecordEntityDescription, insertIntoManagedObjectContext: nil) as! CloudRecord
+        }
         
         model.record = CKRecord(recordType: type.recordType)
         return model

@@ -16,10 +16,10 @@ public class ORCloudData: DataConvenience {
     var session: ORSession
     
     var container: CKContainer {
-        get { return self.dataManager.cloudDataCoordinator.container }
+        return self.dataManager.cloudDataCoordinator.container
     }
     public var database: CKDatabase {
-        get { return self.dataManager.cloudDataCoordinator.database }
+        return self.dataManager.cloudDataCoordinator.database
     }
     
     public var syncInProgress: Bool = false
@@ -29,14 +29,14 @@ public class ORCloudData: DataConvenience {
         self.dataManager = dataManager
     }
     
-    public func fetchAllOrganizations(options options: ORDataOperationOptions? = nil, completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchAllOrganizations(options options: ORDataOperationOptions? = nil, completionHandler: (([OROrganization], ORCloudDataResponse)->())?) {
         self.dataManager.fetchCloud(model: OROrganization.self,
                                 predicate: NSPredicate.allRows,
                                   options: options,
                         completionHandler: completionHandler)
     }
     
-    public func fetchAssociatedOrganizations(athlete unsafeAthlete: ORAthlete, completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchAssociatedOrganizations(athlete unsafeAthlete: ORAthlete, completionHandler: (([OROrganization], ORCloudDataResponse)->())?) {
         let context = NSManagedObjectContext.contextForCurrentThread()
         
         let athlete = context.objectWithID(unsafeAthlete.objectID) as! ORAthlete
@@ -44,29 +44,32 @@ public class ORCloudData: DataConvenience {
         let predicate = NSPredicate(key: "athletes", comparator: .Contains, value: athlete.reference)
         
         self.dataManager.fetchCloud(model: OROrganization.self, predicate: predicate) {
-            let athlete = $0.currentThreadContext.objectWithID(unsafeAthlete.objectID) as! ORAthlete
+            let athlete = $1.currentThreadContext.objectWithID(unsafeAthlete.objectID) as! ORAthlete
 
-            var compoundResults = $0.objects
-        
+            guard var compoundResults = $1.records else { return }
+            
             let predicate = NSPredicate(key: "admins", comparator: .Contains, value: athlete.reference)
-            self.dataManager.fetchCloud(model: OROrganization.self, predicate: predicate) {
+            self.dataManager.fetchCloud(model: OROrganization.self, predicate: predicate) { (organizations, response) in
+                
+                guard let organizationRecords = response.records else { return }
+                
                 let recordNames: [String] = compoundResults.recordIDs.recordNames
-                compoundResults += $0.objects.filter {
+                compoundResults += organizationRecords.filter {
                     !recordNames.contains($0.recordID.recordName)
                 }
                 
-                completionHandler?(ORCloudDataResponse(
-                                                request: $0.request,
-                                                object: OROrganization.self,
-                                               objects: compoundResults,
-                                                 error: $0.error))
+                let organizations = OROrganization.organizations(records: compoundResults, context: response.currentThreadContext)
+                
+                completionHandler?(organizations, ORCloudDataResponse(
+                                                request: response.request,
+                                                 error: response.error))
             }
         }
     }
     
-    public func fetchLiftTemplates(session session: ORSession, completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchLiftTemplates(session session: ORSession, completionHandler: (([ORLiftTemplate], ORCloudDataResponse)->())?) {
         guard let organization = session.currentOrganization else {
-            completionHandler?(ORCloudDataResponse(request: ORCloudDataRequest(), error: ORDataTools.currentOrganizationMissingError))
+            completionHandler?([], ORCloudDataResponse(request: ORCloudDataRequest(), error: ORDataTools.currentOrganizationMissingError))
             return
         }
                 
@@ -77,25 +80,25 @@ public class ORCloudData: DataConvenience {
         }
     }
     
-    public func fetchLiftTemplates(organizations organizations: [OROrganization], completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchLiftTemplates(organizations organizations: [OROrganization], completionHandler: (([ORLiftTemplate], ORCloudDataResponse)->())?) {
         self.dataManager.fetchCloud(model: ORLiftTemplate.self,
                                 predicate: NSPredicate(key: "organization", comparator: .In, value: organizations.references),
                         completionHandler: completionHandler)
     }
 
-    public func fetchLiftEntries(template template: ORLiftTemplate, completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchLiftEntries(template template: ORLiftTemplate, completionHandler: (([ORLiftEntry], ORCloudDataResponse)->())?) {
         self.dataManager.fetchCloud(model: ORLiftEntry.self,
                                 predicate: NSPredicate(key: "liftTemplate", comparator: .Equals, value: template.reference),
                         completionHandler: completionHandler)
     }
     
-    public func fetchLiftEntries(templates templates: [ORLiftTemplate], completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchLiftEntries(templates templates: [ORLiftTemplate], completionHandler: (([ORLiftEntry], ORCloudDataResponse)->())?) {
         self.dataManager.fetchCloud(model: ORLiftEntry.self,
                                 predicate: NSPredicate(key: "liftTemplate", comparator: .In, value: templates.references),
                         completionHandler: completionHandler)
     }
     
-    public func fetchMessages(organization organization: OROrganization, completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchMessages(organization organization: OROrganization, completionHandler: (([ORMessage], ORCloudDataResponse)->())?) {
         self.dataManager.fetchCloud(model: ORMessage.self,
                                 predicate: NSPredicate(key: "organization", comparator: .Equals, value: organization.reference),
                         completionHandler: completionHandler)
@@ -105,7 +108,7 @@ public class ORCloudData: DataConvenience {
         self.dataManager.saveCloud(record: model.record, completionHandler: completionHandler)
     }
     
-    public func fetchAthletes(organization organization: OROrganization, completionHandler: ((ORCloudDataResponse)->())?) {
+    public func fetchAthletes(organization organization: OROrganization, completionHandler: (([ORAthlete], ORCloudDataResponse)->())?) {
         self.dataManager.fetchCloud(model: ORAthlete.self,
                                 predicate: NSPredicate.allRows,
                         completionHandler: completionHandler)
@@ -118,24 +121,22 @@ public class ORCloudData: DataConvenience {
         }
         self.syncInProgress = true
         
-        self.fetchAssociatedOrganizations(athlete: self.session.currentAthlete!) {
-            guard $0.success else { return }
-                        
-            let organizations = OROrganization.organizations(records: $0.objects, context: $0.context)
-            self.session.localData.save(context: $0.context)
+        self.fetchAssociatedOrganizations(athlete: self.session.currentAthlete!) { (organizations, response) in
+            guard response.success else { return }
             
-            self.fetchLiftTemplates(organizations: organizations) {
-                guard $0.success else { return }
+            self.session.localData.save(context: response.currentThreadContext)
+            
+            self.fetchLiftTemplates(organizations: organizations) { (liftTemplates, response) in
+                guard response.success else { return }
 
-                let templates = ORLiftTemplate.templates(records: $0.objects, context: $0.context)
-                self.session.localData.save(context: $0.context)
+                self.session.localData.save(context: response.currentThreadContext)
                 
-                self.fetchLiftEntries(templates: templates) {
-                    guard $0.success else { return }
-                    ORLiftEntry.entries(records: $0.objects, context: $0.context)
-                    self.session.localData.save(context: $0.context)
-                    completionHandler?($0)
-                    
+                self.fetchLiftEntries(templates: liftTemplates) { (liftEntries, response) in
+                    guard response.success else { return }
+
+                    self.session.localData.save(context: response.currentThreadContext)
+
+                    completionHandler?(response)
                     self.syncInProgress = false
                 }
             }
@@ -152,13 +153,13 @@ public class ORCloudData: DataConvenience {
         let request = ORCloudDataRequest()
         self.syncInProgress = true
         
-        let dirtyFetchResponse = self.session.localData.fetchDirtyObjects(model: ORModel.self)
+        let (dirtyObjects, dirtyFetchResponse) = self.session.localData.fetchDirtyObjects(model: ORModel.self)
         guard dirtyFetchResponse.success else { return true }
         
-        let recordsToSave = dirtyFetchResponse.objects.records
-        let deletedObjectIDs = self.session.localData.fetchDeletedIDs().dataObjects as? [CKRecordID]
+        let recordsToSave = dirtyObjects
+        let (deletedObjectIDs, _) = self.session.localData.fetchDeletedIDs()
         
-        let operation = CKModifyRecordsOperation(recordsToSave: recordsToSave, recordIDsToDelete: deletedObjectIDs)
+        let operation = CKModifyRecordsOperation(recordsToSave: recordsToSave.records, recordIDsToDelete: deletedObjectIDs)
         
         operation.perRecordCompletionBlock = { completedRecord, error in
             guard error == nil else { return }
@@ -169,7 +170,7 @@ public class ORCloudData: DataConvenience {
             model.cloudRecordDirty = false
             
             self.session.localData.save(context: context)
-            perRecordCompletionHandler?(ORCloudDataResponse(request: request, object: record, error: error, context: context))
+            perRecordCompletionHandler?(ORCloudDataResponse(request: request, error: error, context: context))
         }
         
         operation.modifyRecordsCompletionBlock = { attemptedSaveRecords, attemptedDeleteRecordIDs, error in
@@ -179,10 +180,8 @@ public class ORCloudData: DataConvenience {
             
             let context = NSManagedObjectContext.contextForCurrentThread()
 
-            if let deletedIDs = deletedObjectIDs {
-                let deletedObjectsRecords = self.session.localData.fetchCloudRecords([NSPredicate(key: "recordName", comparator: .In, value: deletedIDs.recordNames)], context: context)
-                self.session.localData.delete(objects: deletedObjectsRecords, context: context)
-            }
+            let (deletedObjectsRecords, _) = self.session.localData.fetchCloudRecords([NSPredicate(key: "recordName", comparator: .In, value: deletedObjectIDs.recordNames)], context: context)
+            self.session.localData.delete(objects: deletedObjectsRecords, context: context)
         }
                                                 
         self.database.addOperation(operation)

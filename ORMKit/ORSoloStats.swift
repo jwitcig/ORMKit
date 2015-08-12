@@ -21,8 +21,8 @@ public class ORSoloStats: ORStats {
     var entries: [ORLiftEntry] {
         guard self._entries == nil else { return self._entries }
         
-        let response = self.session.localData.fetchLiftEntries(athlete: self.athlete, organization: self.session.currentOrganization!)
-        self._entries = response.objects as! [ORLiftEntry]
+        let (entries, _) = self.session.localData.fetchLiftEntries(athlete: self.athlete, organization: self.session.currentOrganization!)
+        self._entries = entries
         return self._entries
     }
     

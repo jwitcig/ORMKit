@@ -70,7 +70,7 @@ public class ORSession {
     
     public init() { }
     
-    public func signInWithCloud(completionHandler completionHandler: ((ORCloudDataResponse)->())?) {
+    public func signInWithCloud(completionHandler completionHandler: ((ORAthlete?, ORCloudDataResponse)->())?) {
         self.cloudData.container.fetchUserRecordIDWithCompletionHandler { (recordID, error) -> Void in
             guard error == nil else { print(error); return }
             
@@ -81,7 +81,7 @@ public class ORSession {
                 var athlete: ORAthlete!
         
                 let dataRequest = ORCloudDataRequest()
-                defer { completionHandler?(ORCloudDataResponse(request: dataRequest, object: athlete, error: error)) }
+                defer { completionHandler?(athlete, ORCloudDataResponse(request: dataRequest, error: error)) }
                 
                 guard error == nil else { return }
                 
@@ -98,8 +98,8 @@ public class ORSession {
                 }
                 
                 let record = userRecords.first!
-                
-                guard let fetchedAthlete = self.localData.fetchObject(id: record.recordID.recordName, model: ORAthlete.self, context: context) as? ORAthlete else {
+
+                guard let fetchedAthlete = self.localData.fetchObject(id: record.recordID.recordName, model: ORAthlete.self, context: context) else {
                     athlete = ORAthlete.athlete(record: record, context: context)
                     return
                 }
