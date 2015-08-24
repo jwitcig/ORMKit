@@ -5,5 +5,8 @@ import CloudKit
 
 
 
+let somethings = [NSManagedObjectContext]()
 
-Set([1, 2, 3, 4, 5, 6, 7, 1, 6, 2, 0])w
+if somethings == [] {
+    
+}

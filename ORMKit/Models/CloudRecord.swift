@@ -15,6 +15,8 @@ public class CloudRecord: NSManagedObject {
     
     @NSManaged var recordName: String
     @NSManaged var recordData: NSData
+    
+    @NSManaged var model: ORModel?
         
     var record: CKRecord? {
         get {

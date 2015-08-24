@@ -21,26 +21,29 @@ public class ORCloudDataCoordinator: ORDataCoordinator {
     
     internal func fetch<T: ORModel>(model model: T.Type, predicate: NSPredicate, options: ORDataOperationOptions? = nil,completionHandler: (([T], ORCloudDataResponse)->())?) {
         let dataRequest = ORCloudDataRequest()
-        let query = CKQuery(recordType: model.recordType, predicate: predicate)
         
+        let query = CKQuery(recordType: model.recordType, predicate: predicate)
         
         query.sortDescriptors = options?.sortDescriptors
         
         let queryOperation = CKQueryOperation(query: query)
         
         if let operationOptions = options {
-            
             queryOperation.resultsLimit = operationOptions.fetchLimit
         }
         
         var records = [CKRecord]()
-        queryOperation.recordFetchedBlock = {
-            records.append($0)
-        }
+        queryOperation.recordFetchedBlock = { records.append($0) }
         queryOperation.queryCompletionBlock = { cursor, error in
             
+            
+            
+            
             let context = NSManagedObjectContext.contextForCurrentThread()
-            let models = ORModel.models(type: model, records: records, context: context)
+            let models = ORModel.models(      type: model,
+                                           records: records,
+                                           context: context,
+                    insertIntoManagedObjectContext: options != nil ? options!.insertResultsIntoManagedObjectContext : true)
             
             let response = ORCloudDataResponse(request: dataRequest, error: error, context: context)
             response.records = records

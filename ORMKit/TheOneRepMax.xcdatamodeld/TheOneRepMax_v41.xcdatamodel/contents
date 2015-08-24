@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="8166.2" systemVersion="14F27" minimumToolsVersion="Automatic">
+    <entity name="CloudRecord" representedClassName="ORMKit.CloudRecord" syncable="YES">
+        <attribute name="recordData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="recordName" attributeType="String" syncable="YES"/>
+        <relationship name="model" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ORModel" inverseName="cloudRecord" inverseEntity="ORModel" syncable="YES"/>
+    </entity>
+    <entity name="ORAthlete" representedClassName="ORMKit.ORAthlete" parentEntity="ORModel" syncable="YES">
+        <attribute name="firstName" attributeType="String" syncable="YES"/>
+        <attribute name="lastName" attributeType="String" syncable="YES"/>
+        <attribute name="userRecordName" attributeType="String" syncable="YES"/>
+        <relationship name="adminOrganizations" toMany="YES" deletionRule="Nullify" destinationEntity="OROrganization" inverseName="admins" inverseEntity="OROrganization" syncable="YES"/>
+        <relationship name="athleteOrganizations" toMany="YES" deletionRule="Nullify" destinationEntity="OROrganization" inverseName="athletes" inverseEntity="OROrganization" syncable="YES"/>
+    </entity>
+    <entity name="ORLiftEntry" representedClassName="ORMKit.ORLiftEntry" parentEntity="ORModel" syncable="YES">
+        <attribute name="date" attributeType="Date" syncable="YES"/>
+        <attribute name="maxOut" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
+        <attribute name="reps" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="weightLifted" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <relationship name="athlete" maxCount="1" deletionRule="Nullify" destinationEntity="ORAthlete" syncable="YES"/>
+        <relationship name="liftTemplate" maxCount="1" deletionRule="Nullify" destinationEntity="ORLiftTemplate" syncable="YES"/>
+        <relationship name="organization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OROrganization" syncable="YES"/>
+    </entity>
+    <entity name="ORLiftTemplate" representedClassName="ORMKit.ORLiftTemplate" parentEntity="ORModel" syncable="YES">
+        <attribute name="defaultLift" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="liftDescription" attributeType="String" syncable="YES"/>
+        <attribute name="liftName" attributeType="String" syncable="YES"/>
+        <attribute name="solo" attributeType="Boolean" defaultValueString="YES" syncable="YES"/>
+        <relationship name="creator" maxCount="1" deletionRule="Nullify" destinationEntity="ORAthlete" syncable="YES"/>
+        <relationship name="organization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OROrganization" inverseName="liftTemplates" inverseEntity="OROrganization" syncable="YES"/>
+    </entity>
+    <entity name="ORMessage" representedClassName="ORMKit.ORMessage" parentEntity="ORModel" syncable="YES">
+        <attribute name="body" attributeType="String" syncable="YES"/>
+        <attribute name="createdDate" attributeType="Date" syncable="YES"/>
+        <attribute name="title" attributeType="String" syncable="YES"/>
+        <relationship name="creator" maxCount="1" deletionRule="Nullify" destinationEntity="ORAthlete" syncable="YES"/>
+        <relationship name="organization" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="OROrganization" inverseName="messages" inverseEntity="OROrganization" syncable="YES"/>
+    </entity>
+    <entity name="ORModel" representedClassName="ORMKit.ORModel" isAbstract="YES" syncable="YES">
+        <attribute name="cloudRecordDirty" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <relationship name="cloudRecord" maxCount="1" deletionRule="Nullify" destinationEntity="CloudRecord" inverseName="model" inverseEntity="CloudRecord" syncable="YES"/>
+    </entity>
+    <entity name="OROrganization" representedClassName="ORMKit.OROrganization" parentEntity="ORModel" syncable="YES">
+        <attribute name="orgDescription" attributeType="String" syncable="YES"/>
+        <attribute name="orgName" attributeType="String" minValueString="0" syncable="YES"/>
+        <relationship name="admins" toMany="YES" deletionRule="Nullify" destinationEntity="ORAthlete" inverseName="adminOrganizations" inverseEntity="ORAthlete" syncable="YES"/>
+        <relationship name="athletes" toMany="YES" deletionRule="Nullify" destinationEntity="ORAthlete" inverseName="athleteOrganizations" inverseEntity="ORAthlete" syncable="YES"/>
+        <relationship name="liftTemplates" toMany="YES" deletionRule="Nullify" destinationEntity="ORLiftTemplate" inverseName="organization" inverseEntity="ORLiftTemplate" syncable="YES"/>
+        <relationship name="messages" toMany="YES" deletionRule="Nullify" destinationEntity="ORMessage" inverseName="organization" inverseEntity="ORMessage" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="CloudRecord" positionX="180" positionY="216" width="128" height="90"/>
+        <element name="ORAthlete" positionX="189" positionY="198" width="128" height="120"/>
+        <element name="ORLiftEntry" positionX="414" positionY="129" width="128" height="150"/>
+        <element name="ORLiftTemplate" positionX="-27" positionY="144" width="128" height="135"/>
+        <element name="ORMessage" positionX="180" positionY="207" width="128" height="120"/>
+        <element name="ORModel" positionX="216" positionY="234" width="128" height="75"/>
+        <element name="OROrganization" positionX="180" positionY="198" width="128" height="135"/>
+    </elements>
+</model>

@@ -18,14 +18,30 @@ extension CKRecord {
     
     func modelForName(name: String) -> ORModel? {
         guard let reference = self.valueForKey(name) as? CKReference else { return nil }
-        return ORSession.currentSession.localData.fetchObject(id: reference.recordID.recordName, model: ORModel.self)
+        return self.modelFromReference(reference)
     }
     
     func modelListForName(name: String) -> [ORModel]? {
-        guard let recordNames = ((self.valueForKey(name) as? [CKReference])?.recordIDs.recordNames) else {
-            return nil
-        }
+        guard let references = self.valueForKey(name) as? [CKReference] else { return nil }
+        return self.modelListFromReferences(references)
+    }
+    
+    func modelFromReference(reference: CKReference) -> ORModel? {
+        return ORSession.currentSession.localData.fetchObject(id: reference.recordID.recordName, model: ORModel.self)
+    }
+    
+    func modelListFromReferences(references: [CKReference]) -> [ORModel]? {
+        let recordNames = references.recordIDs.recordNames
         return ORSession.currentSession.localData.fetchObjects(ids: recordNames, model: ORModel.self)
+    }
+    
+    func referenceForName(name: String) -> CKReference? {
+        return self[name] as? CKReference
+    }
+    
+    func referencesForName(name: String) -> Set<CKReference> {
+        let references = self[name] as? [CKReference]
+        return references != nil ? Set(references!) : Set()
     }
 
 }
@@ -68,21 +84,30 @@ public class OROrganization: ORModel, ModelSubclassing {
     @NSManaged public var athletes: Set<ORAthlete>
     @NSManaged public var admins: Set<ORAthlete>
     
+    public var athleteReferences: Set<CKReference>?
+    var adminReferences: Set<CKReference>?
+    
     override public class var recordType: String { return RecordType.OROrganization.rawValue }
     
     override func writeValuesFromRecord(record: CKRecord) {
         super.writeValuesFromRecord(record)
         
-        guard let context = self.managedObjectContext else { return }
-        
         self.orgName = record.propertyForName(Fields.orgName.rawValue, defaultValue: "")
         self.orgDescription = record.propertyForName(Fields.orgDescription.rawValue, defaultValue: "")
         
-        if let value = record.modelListForName(Fields.athletes.rawValue) as? [ORAthlete] {
-            self.athletes = Set(context.crossContextEquivalents(objects: value))
+        self.athleteReferences = record.referencesForName(Fields.athletes.rawValue)
+        self.adminReferences = record.referencesForName(Fields.admins.rawValue)
+        
+        guard let context = self.managedObjectContext else { return }
+        
+        if let references = self.athleteReferences,
+            let models = record.modelListFromReferences(Array(references)) as? [ORAthlete] {
+                self.athletes = Set(context.crossContextEquivalents(objects: models))
         }
-        if let value = record.modelListForName(Fields.admins.rawValue) as? [ORAthlete] {
-            self.admins = Set(context.crossContextEquivalents(objects: value))
+        
+        if let references = self.adminReferences,
+            let models = record.modelListFromReferences(Array(references)) as? [ORAthlete] {
+                self.admins = Set(context.crossContextEquivalents(objects: models))
         }
     }
     

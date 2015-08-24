@@ -14,6 +14,10 @@ public class ORDataOperationOptions {
     
     public var sortDescriptors = [NSSortDescriptor]()
     
+    public var insertResultsIntoManagedObjectContext = true
+    
     public init() { }
+    
+    public var includesPendingChanges = true
     
 }

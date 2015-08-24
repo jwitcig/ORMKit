@@ -23,24 +23,22 @@ public class ORDataManager {
         self.cloudDataCoordinator = ORCloudDataCoordinator(container: cloudContainer, database: cloudDatabase)
     }
     
-    public func fetchLocal<T: ORModel>(model model: T.Type, predicates: [NSPredicate]? = nil, sortDescriptors: [NSSortDescriptor]? = nil, context: NSManagedObjectContext? = nil, fetchLimit: Int = 0) -> ([T], ORLocalDataResponse) {
+    public func fetchLocal<T: ORModel>(model model: T.Type, predicates: [NSPredicate]? = nil, context: NSManagedObjectContext? = nil, options: ORDataOperationOptions? = nil) -> ([T], ORLocalDataResponse) {
         let (objects, response) = self.fetchLocal(entityName: model.recordType,
                                predicates: predicates,
-                          sortDescriptors: sortDescriptors,
                                   context: context,
-                               fetchLimit: fetchLimit)
+                                  options: options)
         return (objects as! [T], response)
     }
     
-    public func fetchLocal(entityName entityName: String, predicates: [NSPredicate]? = nil, sortDescriptors: [NSSortDescriptor]? = nil, context: NSManagedObjectContext? = nil, fetchLimit: Int = 0) -> ([NSManagedObject], ORLocalDataResponse) {
+    public func fetchLocal(entityName entityName: String, predicates: [NSPredicate]? = nil, context: NSManagedObjectContext? = nil, options: ORDataOperationOptions? = nil) -> ([NSManagedObject], ORLocalDataResponse) {
         
         let predicate = predicates != nil ? NSCompoundPredicate(type: .AndPredicateType, subpredicates: predicates!) : NSPredicate.allRows
         return self.localDataCoordinator.fetch(
             entityName: entityName,
-            predicate: predicate,
-            sortDescriptors: sortDescriptors,
-            context: context,
-            fetchLimit: fetchLimit)
+             predicate: predicate,
+               context: context,
+               options: options)
     }
     
     public func fetchCloud<T: ORModel>(model model: T.Type, predicate: NSPredicate, options: ORDataOperationOptions? = nil, completionHandler: (([T], ORCloudDataResponse)->())?) {

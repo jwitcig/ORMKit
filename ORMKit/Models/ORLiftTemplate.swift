@@ -58,18 +58,18 @@ public class ORLiftTemplate: ORModel, ModelSubclassing {
     override func writeValuesFromRecord(record: CKRecord) {
         super.writeValuesFromRecord(record)
         
-        guard let context = self.managedObjectContext else { return }
-        
         self.liftName = record.propertyForName(Fields.liftName.rawValue, defaultValue: "")
         self.defaultLift = NSNumber(bool: record.propertyForName(Fields.defaultLift.rawValue, defaultValue: true))
         self.liftDescription = record.propertyForName(Fields.liftDescription.rawValue, defaultValue: "")
         self.solo = NSNumber(bool: record.propertyForName(Fields.solo.rawValue, defaultValue: true))
-                
+        
+        guard let context = self.managedObjectContext else { return }
+        
         if let value = record.modelForName(Fields.organization.rawValue) as? OROrganization {
             self.organization = context.crossContextEquivalent(object: value)
         }
         if let value = record.modelForName(Fields.creator.rawValue) as? ORAthlete {
-            self.creator = value
+            self.creator = context.crossContextEquivalent(object: value)
         }
     }
     

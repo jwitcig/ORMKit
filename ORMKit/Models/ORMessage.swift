@@ -49,12 +49,13 @@ public class ORMessage: ORModel, ModelSubclassing {
         
     override func writeValuesFromRecord(record: CKRecord) {
         super.writeValuesFromRecord(record)
-        
-        guard let context = self.managedObjectContext else { return }
 
         self.title = record.propertyForName(Fields.title.rawValue, defaultValue: "")
         self.body = record.propertyForName(Fields.body.rawValue, defaultValue: "")
-        self.createdDate = record.propertyForName(Fields.createdDate.rawValue, defaultValue: NSDate()) 
+        self.createdDate = record.propertyForName(Fields.createdDate.rawValue, defaultValue: NSDate())
+        
+        guard let context = self.managedObjectContext else { return }
+
         if let value = record.modelForName(Fields.organization.rawValue) as? OROrganization {
             self.organization = context.crossContextEquivalent(object: value)
         }

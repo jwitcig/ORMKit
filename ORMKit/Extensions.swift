@@ -70,14 +70,20 @@ extension NSPredicate {
             self.init(format: "\(key) \(comparator.rawValue) nil")
             return
         }
-        self.init(format: "\(key) \(comparator.rawValue) %@", argumentArray: [value])
+        
+        var target = value
+        if let arrayValue = value as? [CKReference] where arrayValue.count == 0 {
+            target = [CKReference(recordID: CKRecordID(recordName: "!"), action: .None)]
+        }
+        
+        self.init(format: "\(key) \(comparator.rawValue) %@", argumentArray: [target])
     }
     
 }
 
 extension NSSortDescriptor {
     
-    convenience init(key: String, order: Sort) {
+    public convenience init(key: String, order: Sort) {
         switch order {
         case .Chronological:
             self.init(key: key, ascending: true)
@@ -94,13 +100,7 @@ extension NSManagedObject {
         get {
             var dataDict = [String: AnyObject]()
             
-            let keys1 = self.entity.attributeKeys
-            
-            
-            
-            let keys = self.changedValues().keys.array
-            for key in keys {
-                
+            for key in self.changedValues().keys.array {
                 let value = self.valueForKey(key)
                 
                 guard value as? CloudRecord == nil else { continue }
@@ -188,7 +188,7 @@ extension NSManagedObjectContext {
         guard mainMOC != savedContext else { return }
         
         guard mainMOC.persistentStoreCoordinator == savedContext.persistentStoreCoordinator else { return }
-        
+                
         runOnMainThread {
             mainMOC.mergeChangesFromContextDidSaveNotification(notification)
         }
@@ -239,9 +239,9 @@ extension CollectionType where Generator.Element : CKRecordID {
 
 extension CollectionType where Generator.Element : ORModel {
     
-    var references: [CKReference] { return self.map { $0.reference } }
-    var records: [CKRecord] { return self.map { $0.record } }
-    var recordNames: [String] { return self.map { $0.recordName } }
+    public var references: [CKReference] { return self.map { $0.reference } }
+    public var records: [CKRecord] { return self.map { $0.record } }
+    public var recordNames: [String] { return self.map { $0.recordName } }
 }
 
 extension Set {

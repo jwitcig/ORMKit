@@ -16,7 +16,7 @@ public class ORLocalData: DataConvenience {
     var session: ORSession
     
     public var context: NSManagedObjectContext {
-        get { return self.dataManager.localDataCoordinator.managedObjectContext }
+        return self.dataManager.localDataCoordinator.managedObjectContext
     }
     
     public required init(session: ORSession, dataManager: ORDataManager) {
@@ -24,32 +24,38 @@ public class ORLocalData: DataConvenience {
         self.dataManager = dataManager
     }
     
-    public func fetchObject<T: ORModel>(id id: String, model: T.Type, context: NSManagedObjectContext? = nil) -> T? {
+    public func fetchObject<T: ORModel>(id id: String, model: T.Type, context: NSManagedObjectContext? = nil, options: ORDataOperationOptions? = nil) -> T? {
+        
+        
+        let operationOptions = options != nil ? options! : ORDataOperationOptions()
+        operationOptions.fetchLimit = 1
+        
         let (objects, _) = self.dataManager.fetchLocal(model: model,
             predicates: [NSPredicate(key: "cloudRecord.recordName", comparator: .Equals, value: id)],
             context: context,
-            fetchLimit: 1)
+            options: operationOptions)
         
         return objects.first
     }
     
-    public func fetchObject<T: ORModel>(record record: CKRecord, model: T.Type, context: NSManagedObjectContext? = nil) -> T? {
+    public func fetchObject<T: ORModel>(record record: CKRecord, model: T.Type, context: NSManagedObjectContext? = nil, options: ORDataOperationOptions? = nil) -> T? {
         return self.fetchObject(id: record.recordID.recordName, model: model, context: context)
     }
     
-    public func fetchObjects<T: ORModel>(ids ids: [String], model: T.Type, context: NSManagedObjectContext? = nil) -> [T]? {
+    public func fetchObjects<T: ORModel>(ids ids: [String], model: T.Type, context: NSManagedObjectContext? = nil, options: ORDataOperationOptions? = nil) -> [T]? {
         let (objects, _) = self.dataManager.fetchLocal(model: model,
             predicates: [NSPredicate(key: "cloudRecord.recordName", comparator: .In, value: ids)],
-            context: context)
+            context: context,
+            options: options)
         return objects
     }
     
-    public func fetchObjects<T: ORModel>(records records: [CKRecord], model: T.Type, context: NSManagedObjectContext? = nil) -> [T]? {
-        return self.fetchObjects(ids: records.recordIDs.recordNames, model: model, context: context)
+    public func fetchObjects<T: ORModel>(records records: [CKRecord], model: T.Type, context: NSManagedObjectContext? = nil, options: ORDataOperationOptions? = nil) -> [T]? {
+        return self.fetchObjects(ids: records.recordIDs.recordNames, model: model, context: context, options: options)
     }
     
-    public func fetchObjects<T: ORModel>(model model: T.Type, predicates: [NSPredicate], context: NSManagedObjectContext? = nil) -> ([T], ORLocalDataResponse) {
-        let (objects, response) = self.dataManager.fetchLocal(entityName: model.recordType, predicates: predicates, context: context)
+    public func fetchObjects<T: ORModel>(model model: T.Type, predicates: [NSPredicate], context: NSManagedObjectContext? = nil, options: ORDataOperationOptions? = nil) -> ([T], ORLocalDataResponse) {
+        let (objects, response) = self.dataManager.fetchLocal(entityName: model.recordType, predicates: predicates, context: context, options: options)
         return (objects as! [T], response)
     }
     
@@ -95,7 +101,7 @@ public class ORLocalData: DataConvenience {
         return response.success ? self.dataManager.delete(objects: models) : response
     }
     
-    public func fetchLiftEntries(athlete athlete: ORAthlete, organization: OROrganization, template liftTemplate: ORLiftTemplate? = nil, order: Sort? = nil, options: ORDataOperationOptions? = nil) -> ([ORLiftEntry], ORLocalDataResponse) {
+    public func fetchLiftEntries(athlete athlete: ORAthlete, organization: OROrganization, template liftTemplate: ORLiftTemplate? = nil, options operationOptions: ORDataOperationOptions? = nil) -> ([ORLiftEntry], ORLocalDataResponse) {
         
         var predicates = [
             NSPredicate(key: "athlete", comparator: .Equals, value: athlete),
@@ -107,10 +113,10 @@ public class ORLocalData: DataConvenience {
                 NSPredicate(key: "liftTemplate", comparator: .Equals, value: template)
             )
         }
-
+        
         return self.dataManager.fetchLocal(model: ORLiftEntry.self,
                                       predicates: predicates,
-                                 sortDescriptors: order != nil ? [NSSortDescriptor(key: "date", order: order!)] : nil)
+                                         options: operationOptions)
     }
         
 }

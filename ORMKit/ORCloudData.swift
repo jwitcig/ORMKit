@@ -30,6 +30,7 @@ public class ORCloudData: DataConvenience {
     }
     
     public func fetchAllOrganizations(options options: ORDataOperationOptions? = nil, completionHandler: (([OROrganization], ORCloudDataResponse)->())?) {
+        
         self.dataManager.fetchCloud(model: OROrganization.self,
                                 predicate: NSPredicate.allRows,
                                   options: options,
@@ -119,25 +120,35 @@ public class ORCloudData: DataConvenience {
             print("sync in progress")
             return false
         }
+        
         self.syncInProgress = true
         
         self.fetchAssociatedOrganizations(athlete: self.session.currentAthlete!) { (organizations, response) in
-            guard response.success else { return }
+            guard response.success else {
+                self.syncInProgress = false
+                return
+            }
             
             self.session.localData.save(context: response.currentThreadContext)
             
             self.fetchLiftTemplates(organizations: organizations) { (liftTemplates, response) in
-                guard response.success else { return }
-
+                guard response.success else {
+                    self.syncInProgress = false
+                    return
+                }
+                
                 self.session.localData.save(context: response.currentThreadContext)
                 
                 self.fetchLiftEntries(templates: liftTemplates) { (liftEntries, response) in
-                    guard response.success else { return }
+                    guard response.success else {
+                        self.syncInProgress = false
+                        return
+                    }
 
                     self.session.localData.save(context: response.currentThreadContext)
 
-                    completionHandler?(response)
                     self.syncInProgress = false
+                    completionHandler?(response)
                 }
             }
         }
@@ -162,7 +173,7 @@ public class ORCloudData: DataConvenience {
         let operation = CKModifyRecordsOperation(recordsToSave: recordsToSave.records, recordIDsToDelete: deletedObjectIDs)
         
         operation.perRecordCompletionBlock = { completedRecord, error in
-            guard error == nil else { return }
+            guard error == nil else { print(completedRecord); return }
             guard let record = completedRecord else { return }
             
             let context = NSManagedObjectContext.contextForCurrentThread()
@@ -174,9 +185,9 @@ public class ORCloudData: DataConvenience {
         }
         
         operation.modifyRecordsCompletionBlock = { attemptedSaveRecords, attemptedDeleteRecordIDs, error in
-            
-            completionHandler?(ORCloudDataResponse(request: request, error: error))
             self.syncInProgress = false
+
+            completionHandler?(ORCloudDataResponse(request: request, error: error))
             
             let context = NSManagedObjectContext.contextForCurrentThread()
 

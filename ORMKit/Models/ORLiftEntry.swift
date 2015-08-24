@@ -58,12 +58,13 @@ public class ORLiftEntry: ORModel, ModelSubclassing {
     override func writeValuesFromRecord(record: CKRecord) {
         super.writeValuesFromRecord(record)
         
-        guard let context = self.managedObjectContext else { return }
-        
         self.date = record.propertyForName(Fields.date.rawValue, defaultValue: NSDate())
         self.maxOut = record.propertyForName(Fields.maxOut.rawValue, defaultValue: true)
         self.reps = record.propertyForName(Fields.reps.rawValue, defaultValue: 0)
         self.weightLifted = record.propertyForName(Fields.weightLifted.rawValue, defaultValue: 0)
+        
+        guard let context = self.managedObjectContext else { return }
+
         if let value = record.modelForName(Fields.liftTemplate.rawValue) as? ORLiftTemplate {
             self.liftTemplate = context.crossContextEquivalent(object: value)
         }
