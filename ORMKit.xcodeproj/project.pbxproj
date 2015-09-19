@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8B13A7971B730D0E00E5688C /* NSFlippedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B13A7961B730D0E00E5688C /* NSFlippedView.swift */; };
 		8B2AD4C91B33411E003B917F /* ORCloudData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2AD4C81B33411E003B917F /* ORCloudData.swift */; };
 		8B2AD4CB1B334128003B917F /* ORLocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2AD4CA1B334128003B917F /* ORLocalData.swift */; };
 		8B2AD4CD1B334F00003B917F /* ORDataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2AD4CC1B334F00003B917F /* ORDataCoordinator.swift */; };
@@ -23,6 +22,9 @@
 		8B650CBF1B2BA77100F0EA52 /* ORLiftEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */; };
 		8B650CC01B2BA77100F0EA52 /* ORLiftTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CBC1B2BA77100F0EA52 /* ORLiftTemplate.swift */; };
 		8B650CC31B2BA8DD00F0EA52 /* ORAthlete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CC21B2BA8DD00F0EA52 /* ORAthlete.swift */; };
+		8B6A563C1BA9EF4900965E4B /* ORMKitiOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B6A563B1BA9EF4900965E4B /* ORMKitiOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8B6A56431BA9EF4900965E4B /* ORMKitiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6A56391BA9EF4900965E4B /* ORMKitiOS.framework */; settings = {ASSET_TAGS = (); }; };
+		8B6A56481BA9EF4900965E4B /* ORMKitiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6A56471BA9EF4900965E4B /* ORMKitiOSTests.swift */; };
 		8B76DF521B34464600DB95ED /* ORDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B76DF511B34464600DB95ED /* ORDataRequest.swift */; };
 		8B76DF541B34465700DB95ED /* ORLocalDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B76DF531B34465700DB95ED /* ORLocalDataRequest.swift */; };
 		8B76DF561B34466C00DB95ED /* ORCloudDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B76DF551B34466C00DB95ED /* ORCloudDataRequest.swift */; };
@@ -38,7 +40,6 @@
 		8BD0F1AF1B30978000F96C96 /* OROrganization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1AE1B30978000F96C96 /* OROrganization.swift */; };
 		8BD0F1B31B310CF600F96C96 /* ORLocalDataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1B21B310CF600F96C96 /* ORLocalDataCoordinator.swift */; };
 		8BD0F1B51B31208700F96C96 /* ORCloudDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1B41B31208700F96C96 /* ORCloudDataResponse.swift */; };
-		8BE077281B2D4EF20070D128 /* ORTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE077271B2D4EF20070D128 /* ORTransformer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,11 +50,17 @@
 			remoteGlobalIDString = 8B650C9C1B2BA75400F0EA52;
 			remoteInfo = ORMKit;
 		};
+		8B6A56441BA9EF4900965E4B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8B650C941B2BA75400F0EA52 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8B6A56381BA9EF4900965E4B;
+			remoteInfo = ORMKitiOS;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		8B13A7931B6C0DB900E5688C /* TheOneRepMax_v40.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v40.xcdatamodel; sourceTree = "<group>"; };
-		8B13A7961B730D0E00E5688C /* NSFlippedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSFlippedView.swift; sourceTree = "<group>"; };
 		8B2AD4C81B33411E003B917F /* ORCloudData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudData.swift; sourceTree = "<group>"; };
 		8B2AD4CA1B334128003B917F /* ORLocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLocalData.swift; sourceTree = "<group>"; };
 		8B2AD4CC1B334F00003B917F /* ORDataCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataCoordinator.swift; sourceTree = "<group>"; };
@@ -74,6 +81,16 @@
 		8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLiftEntry.swift; sourceTree = "<group>"; };
 		8B650CBC1B2BA77100F0EA52 /* ORLiftTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLiftTemplate.swift; sourceTree = "<group>"; };
 		8B650CC21B2BA8DD00F0EA52 /* ORAthlete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORAthlete.swift; sourceTree = "<group>"; };
+		8B6A56131BA9EABE00965E4B /* ORMKit iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ORMKit iOS.h"; sourceTree = "<group>"; };
+		8B6A56151BA9EABE00965E4B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8B6A561F1BA9EABE00965E4B /* ORMKit_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ORMKit_iOSTests.swift; sourceTree = "<group>"; };
+		8B6A56211BA9EABE00965E4B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8B6A56391BA9EF4900965E4B /* ORMKitiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ORMKitiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B6A563B1BA9EF4900965E4B /* ORMKitiOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORMKitiOS.h; sourceTree = "<group>"; };
+		8B6A563D1BA9EF4900965E4B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8B6A56421BA9EF4900965E4B /* ORMKitiOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ORMKitiOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B6A56471BA9EF4900965E4B /* ORMKitiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ORMKitiOSTests.swift; sourceTree = "<group>"; };
+		8B6A56491BA9EF4900965E4B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B76DF511B34464600DB95ED /* ORDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataRequest.swift; sourceTree = "<group>"; };
 		8B76DF531B34465700DB95ED /* ORLocalDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLocalDataRequest.swift; sourceTree = "<group>"; };
 		8B76DF551B34466C00DB95ED /* ORCloudDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudDataRequest.swift; sourceTree = "<group>"; };
@@ -91,7 +108,7 @@
 		8BD0F1B41B31208700F96C96 /* ORCloudDataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudDataResponse.swift; sourceTree = "<group>"; };
 		8BDF968B1B804AF500B2D23E /* TheOneRepMax_v41.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v41.xcdatamodel; sourceTree = "<group>"; };
 		8BDF968C1B80E8D200B2D23E /* TheOneRepMax_v42.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v42.xcdatamodel; sourceTree = "<group>"; };
-		8BE077271B2D4EF20070D128 /* ORTransformer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORTransformer.swift; sourceTree = "<group>"; };
+		8BE1E19B1B99F2A40005AEFD /* TheOneRepMax_v3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v3.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +124,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B650CA91B2BA75400F0EA52 /* ORMKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8B6A56351BA9EF4900965E4B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8B6A563F1BA9EF4900965E4B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B6A56431BA9EF4900965E4B /* ORMKitiOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,6 +161,10 @@
 			children = (
 				8B650C9F1B2BA75400F0EA52 /* ORMKit */,
 				8B650CAC1B2BA75400F0EA52 /* ORMKitTests */,
+				8B6A56121BA9EABE00965E4B /* ORMKit iOS */,
+				8B6A561E1BA9EABE00965E4B /* ORMKit iOSTests */,
+				8B6A563A1BA9EF4900965E4B /* ORMKitiOS */,
+				8B6A56461BA9EF4900965E4B /* ORMKitiOSTests */,
 				8B650C9E1B2BA75400F0EA52 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -138,6 +174,8 @@
 			children = (
 				8B650C9D1B2BA75400F0EA52 /* ORMKit.framework */,
 				8B650CA81B2BA75400F0EA52 /* ORMKitTests.xctest */,
+				8B6A56391BA9EF4900965E4B /* ORMKitiOS.framework */,
+				8B6A56421BA9EF4900965E4B /* ORMKitiOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -147,8 +185,7 @@
 			children = (
 				8B45F9AA1B67DB6600AA8E79 /* TheOneRepMax.xcdatamodeld */,
 				8B650CA21B2BA75400F0EA52 /* ORMKit.h */,
-				8B13A7961B730D0E00E5688C /* NSFlippedView.swift */,
-				8B76DF5B1B3446F300DB95ED /* Misc */,
+				8B76DF5B1B3446F300DB95ED /* General */,
 				8B76DF5C1B34470900DB95ED /* Data Stack */,
 				8B650CBA1B2BA77100F0EA52 /* Models */,
 				8B6047791B4A1984001A2A68 /* Stats */,
@@ -196,6 +233,42 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		8B6A56121BA9EABE00965E4B /* ORMKit iOS */ = {
+			isa = PBXGroup;
+			children = (
+				8B6A56131BA9EABE00965E4B /* ORMKit iOS.h */,
+				8B6A56151BA9EABE00965E4B /* Info.plist */,
+			);
+			path = "ORMKit iOS";
+			sourceTree = "<group>";
+		};
+		8B6A561E1BA9EABE00965E4B /* ORMKit iOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				8B6A561F1BA9EABE00965E4B /* ORMKit_iOSTests.swift */,
+				8B6A56211BA9EABE00965E4B /* Info.plist */,
+			);
+			path = "ORMKit iOSTests";
+			sourceTree = "<group>";
+		};
+		8B6A563A1BA9EF4900965E4B /* ORMKitiOS */ = {
+			isa = PBXGroup;
+			children = (
+				8B6A563B1BA9EF4900965E4B /* ORMKitiOS.h */,
+				8B6A563D1BA9EF4900965E4B /* Info.plist */,
+			);
+			path = ORMKitiOS;
+			sourceTree = "<group>";
+		};
+		8B6A56461BA9EF4900965E4B /* ORMKitiOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				8B6A56471BA9EF4900965E4B /* ORMKitiOSTests.swift */,
+				8B6A56491BA9EF4900965E4B /* Info.plist */,
+			);
+			path = ORMKitiOSTests;
+			sourceTree = "<group>";
+		};
 		8B76DF571B3446A900DB95ED /* Data Request */ = {
 			isa = PBXGroup;
 			children = (
@@ -235,13 +308,12 @@
 			name = "Data Stores";
 			sourceTree = "<group>";
 		};
-		8B76DF5B1B3446F300DB95ED /* Misc */ = {
+		8B76DF5B1B3446F300DB95ED /* General */ = {
 			isa = PBXGroup;
 			children = (
 				8B3039621B2BFED000E5C95A /* ORSession.swift */,
-				8BE077271B2D4EF20070D128 /* ORTransformer.swift */,
 			);
-			name = Misc;
+			name = General;
 			sourceTree = "<group>";
 		};
 		8B76DF5C1B34470900DB95ED /* Data Stack */ = {
@@ -266,6 +338,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B650CA31B2BA75400F0EA52 /* ORMKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8B6A56361BA9EF4900965E4B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B6A563C1BA9EF4900965E4B /* ORMKitiOS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +388,42 @@
 			productReference = 8B650CA81B2BA75400F0EA52 /* ORMKitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		8B6A56381BA9EF4900965E4B /* ORMKitiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8B6A564A1BA9EF4900965E4B /* Build configuration list for PBXNativeTarget "ORMKitiOS" */;
+			buildPhases = (
+				8B6A56341BA9EF4900965E4B /* Sources */,
+				8B6A56351BA9EF4900965E4B /* Frameworks */,
+				8B6A56361BA9EF4900965E4B /* Headers */,
+				8B6A56371BA9EF4900965E4B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ORMKitiOS;
+			productName = ORMKitiOS;
+			productReference = 8B6A56391BA9EF4900965E4B /* ORMKitiOS.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		8B6A56411BA9EF4900965E4B /* ORMKitiOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8B6A564D1BA9EF4900965E4B /* Build configuration list for PBXNativeTarget "ORMKitiOSTests" */;
+			buildPhases = (
+				8B6A563E1BA9EF4900965E4B /* Sources */,
+				8B6A563F1BA9EF4900965E4B /* Frameworks */,
+				8B6A56401BA9EF4900965E4B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8B6A56451BA9EF4900965E4B /* PBXTargetDependency */,
+			);
+			name = ORMKitiOSTests;
+			productName = ORMKitiOSTests;
+			productReference = 8B6A56421BA9EF4900965E4B /* ORMKitiOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -325,6 +441,12 @@
 					8B650CA71B2BA75400F0EA52 = {
 						CreatedOnToolsVersion = 6.3.2;
 					};
+					8B6A56381BA9EF4900965E4B = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					8B6A56411BA9EF4900965E4B = {
+						CreatedOnToolsVersion = 7.0;
+					};
 				};
 			};
 			buildConfigurationList = 8B650C971B2BA75400F0EA52 /* Build configuration list for PBXProject "ORMKit" */;
@@ -341,6 +463,8 @@
 			targets = (
 				8B650C9C1B2BA75400F0EA52 /* ORMKit */,
 				8B650CA71B2BA75400F0EA52 /* ORMKitTests */,
+				8B6A56381BA9EF4900965E4B /* ORMKitiOS */,
+				8B6A56411BA9EF4900965E4B /* ORMKitiOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -360,6 +484,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8B6A56371BA9EF4900965E4B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8B6A56401BA9EF4900965E4B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -367,7 +505,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B13A7971B730D0E00E5688C /* NSFlippedView.swift in Sources */,
 				8B76DF5E1B3447DF00DB95ED /* ORDataTools.swift in Sources */,
 				8B6047761B4A194B001A2A68 /* ORGroupStats.swift in Sources */,
 				8B650CC31B2BA8DD00F0EA52 /* ORAthlete.swift in Sources */,
@@ -383,7 +520,6 @@
 				8B3039631B2BFED000E5C95A /* ORSession.swift in Sources */,
 				8B2AD4CB1B334128003B917F /* ORLocalData.swift in Sources */,
 				8B650CC01B2BA77100F0EA52 /* ORLiftTemplate.swift in Sources */,
-				8BE077281B2D4EF20070D128 /* ORTransformer.swift in Sources */,
 				8B650CBF1B2BA77100F0EA52 /* ORLiftEntry.swift in Sources */,
 				8B9FC5031B7466C9007E4B92 /* ORLocalDataResponse.swift in Sources */,
 				8B9E271B1B323890008AE331 /* ORDataManager.swift in Sources */,
@@ -407,6 +543,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8B6A56341BA9EF4900965E4B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8B6A563E1BA9EF4900965E4B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B6A56481BA9EF4900965E4B /* ORMKitiOSTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -414,6 +565,11 @@
 			isa = PBXTargetDependency;
 			target = 8B650C9C1B2BA75400F0EA52 /* ORMKit */;
 			targetProxy = 8B650CAA1B2BA75400F0EA52 /* PBXContainerItemProxy */;
+		};
+		8B6A56451BA9EF4900965E4B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8B6A56381BA9EF4900965E4B /* ORMKitiOS */;
+			targetProxy = 8B6A56441BA9EF4900965E4B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -459,7 +615,9 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VALID_ARCHS = "i386 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -498,6 +656,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = "macosx iphonesimulator iphoneos";
+				VALID_ARCHS = "i386 x86_64";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -517,7 +677,10 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jwitapps.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.11;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				VALID_ARCHS = "i386 x86_64 arm64 armv7s armv7";
 			};
 			name = Debug;
 		};
@@ -535,7 +698,10 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jwitapps.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx10.11;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
+				VALID_ARCHS = "i386 x86_64 arm64 armv7s armv7";
 			};
 			name = Release;
 		};
@@ -573,6 +739,74 @@
 			};
 			name = Release;
 		};
+		8B6A564B1BA9EF4900965E4B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = ORMKitiOS/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.jwitapps.ORMKitiOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8B6A564C1BA9EF4900965E4B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = ORMKitiOS/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.jwitapps.ORMKitiOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8B6A564E1BA9EF4900965E4B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = ORMKitiOSTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.jwitapps.ORMKitiOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		8B6A564F1BA9EF4900965E4B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = ORMKitiOSTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.jwitapps.ORMKitiOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -603,12 +837,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		8B6A564A1BA9EF4900965E4B /* Build configuration list for PBXNativeTarget "ORMKitiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B6A564B1BA9EF4900965E4B /* Debug */,
+				8B6A564C1BA9EF4900965E4B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		8B6A564D1BA9EF4900965E4B /* Build configuration list for PBXNativeTarget "ORMKitiOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B6A564E1BA9EF4900965E4B /* Debug */,
+				8B6A564F1BA9EF4900965E4B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
 		8B45F9AA1B67DB6600AA8E79 /* TheOneRepMax.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				8BE1E19B1B99F2A40005AEFD /* TheOneRepMax_v3.xcdatamodel */,
 				8BDF968C1B80E8D200B2D23E /* TheOneRepMax_v42.xcdatamodel */,
 				8BDF968B1B804AF500B2D23E /* TheOneRepMax_v41.xcdatamodel */,
 				8B13A7931B6C0DB900E5688C /* TheOneRepMax_v40.xcdatamodel */,
@@ -616,7 +867,7 @@
 				8B45F9AC1B67DB6600AA8E79 /* TheOneRepMax_v38.xcdatamodel */,
 				8B45F9AD1B67DB6600AA8E79 /* TheOneRepMax_v39.xcdatamodel */,
 			);
-			currentVersion = 8BDF968C1B80E8D200B2D23E /* TheOneRepMax_v42.xcdatamodel */;
+			currentVersion = 8BE1E19B1B99F2A40005AEFD /* TheOneRepMax_v3.xcdatamodel */;
 			path = TheOneRepMax.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

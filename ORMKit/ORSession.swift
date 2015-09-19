@@ -6,8 +6,13 @@
 //  Copyright (c) 2015 JwitApps. All rights reserved.
 //
 
-import Cocoa
+#if os(iOS)
+    import UIKit
+#elseif os(OSX)
+    import Cocoa
+#endif
 import CloudKit
+import CoreData
 
 public class ORSession {
     
@@ -17,11 +22,7 @@ public class ORSession {
     public var currentAthlete: ORAthlete? {
         get {
             guard let ID = self.currentAthleteID else { return nil }
-            
-            do {
-                return try NSManagedObjectContext.contextForCurrentThread().existingObjectWithID(ID) as? ORAthlete
-            } catch { }
-            return nil
+            return NSManagedObjectContext.contextForCurrentThread().objectWithID(ID) as? ORAthlete
         }
         set {
             if let athlete = newValue {

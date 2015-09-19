@@ -6,8 +6,13 @@
 //  Copyright (c) 2015 JwitApps. All rights reserved.
 //
 
-import Foundation
+#if os(iOS)
+    import UIKit
+#elseif os(OSX)
+    import Cocoa
+#endif
 import CloudKit
+import CoreData
 
 public class ORCloudDataCoordinator: ORDataCoordinator {
     
@@ -35,9 +40,6 @@ public class ORCloudDataCoordinator: ORDataCoordinator {
         var records = [CKRecord]()
         queryOperation.recordFetchedBlock = { records.append($0) }
         queryOperation.queryCompletionBlock = { cursor, error in
-            
-            
-            
             
             let context = NSManagedObjectContext.contextForCurrentThread()
             let models = ORModel.models(      type: model,

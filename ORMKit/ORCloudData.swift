@@ -6,8 +6,13 @@
 //  Copyright (c) 2015 JwitApps. All rights reserved.
 //
 
-import Foundation
+#if os(iOS)
+    import UIKit
+#elseif os(OSX)
+    import Cocoa
+#endif
 import CloudKit
+import CoreData
 
 public class ORCloudData: DataConvenience {
     
@@ -40,12 +45,12 @@ public class ORCloudData: DataConvenience {
     public func fetchAssociatedOrganizations(athlete unsafeAthlete: ORAthlete, completionHandler: (([OROrganization], ORCloudDataResponse)->())?) {
         let context = NSManagedObjectContext.contextForCurrentThread()
         
-        let athlete = context.objectWithID(unsafeAthlete.objectID) as! ORAthlete
+        let athlete = context.crossContextEquivalent(object: unsafeAthlete)
         
         let predicate = NSPredicate(key: "athletes", comparator: .Contains, value: athlete.reference)
         
         self.dataManager.fetchCloud(model: OROrganization.self, predicate: predicate) {
-            let athlete = $1.currentThreadContext.objectWithID(unsafeAthlete.objectID) as! ORAthlete
+            let athlete = $1.currentThreadContext.crossContextEquivalent(object: unsafeAthlete)
 
             guard var compoundResults = $1.records else { return }
             
@@ -137,6 +142,9 @@ public class ORCloudData: DataConvenience {
                     return
                 }
                 
+//                let (abandonedTemplates, response) = self.session.localData.fetchAbandonedRecords(cloudModels: liftTemplates, context: response.currentThreadContext)
+//                abandonedTemplates.map(response.currentThreadContext.deleteObject)
+                
                 self.session.localData.save(context: response.currentThreadContext)
                 
                 self.fetchLiftEntries(templates: liftTemplates) { (liftEntries, response) in
@@ -144,9 +152,13 @@ public class ORCloudData: DataConvenience {
                         self.syncInProgress = false
                         return
                     }
-
+                    
+                    
+                    let (abandonedEntries, _) = self.session.localData.fetchAbandonedRecords(cloudModels: liftEntries, context: response.currentThreadContext)
+                    abandonedEntries.map(response.currentThreadContext.deleteObject)
+                    
                     self.session.localData.save(context: response.currentThreadContext)
-
+                    
                     self.syncInProgress = false
                     completionHandler?(response)
                 }
@@ -186,7 +198,7 @@ public class ORCloudData: DataConvenience {
         
         operation.modifyRecordsCompletionBlock = { attemptedSaveRecords, attemptedDeleteRecordIDs, error in
             self.syncInProgress = false
-
+            
             completionHandler?(ORCloudDataResponse(request: request, error: error))
             
             let context = NSManagedObjectContext.contextForCurrentThread()

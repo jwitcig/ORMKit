@@ -6,8 +6,13 @@
 //  Copyright (c) 2015 JwitApps. All rights reserved.
 //
 
-import Cocoa
+#if os(iOS)
+    import UIKit
+#elseif os(OSX)
+    import Cocoa
+#endif
 import CloudKit
+import CoreData
 
 protocol ModelSubclassing {
     func writeValuesFromRecord(record: CKRecord)
@@ -141,8 +146,9 @@ public class ORModel: NSManagedObject {
     func writeValuesToRecord(inout record: CKRecord) {
         var newDataDict = [String: AnyObject]()
         
-        var keys = self.entity.attributeKeys
-        keys += self.entity.relationshipsByName.keys.array
+//        var keys = self.entity.attributeKeys
+        var keys = Array(self.entity.attributesByName.keys)
+        keys += Array(self.entity.relationshipsByName.keys)
         
         var rejectKeys = ["cloudRecordDirty"]
         if let entityName = self.entity.name {

@@ -6,8 +6,13 @@
 //  Copyright (c) 2015 JwitApps. All rights reserved.
 //
 
-import Cocoa
+#if os(iOS)
+    import UIKit
+#elseif os(OSX)
+    import Cocoa
+#endif
 import CloudKit
+import CoreData
 
 public class ORAthlete: ORModel, ModelSubclassing {
   
@@ -15,7 +20,6 @@ public class ORAthlete: ORModel, ModelSubclassing {
         case userRecordName
         case firstName
         case lastName
-        
         
         enum LocalOnly: String {
             case athleteOrganizations
@@ -72,7 +76,7 @@ public class ORAthlete: ORModel, ModelSubclassing {
     }
     
     public static func setCurrentAthlete(athlete: ORAthlete) {
-        NSUserDefaults.standardUserDefaults().setObject(athlete.recordName, forKey: "currentUserRecordName")
+        NSUserDefaults.standardUserDefaults().setObject(athlete.userRecordName, forKey: "currentUserRecordName")
         let result = NSUserDefaults.standardUserDefaults().synchronize()
         if result {
             ORSession.currentSession.currentAthlete = athlete

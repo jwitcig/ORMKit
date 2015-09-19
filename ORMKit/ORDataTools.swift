@@ -6,8 +6,14 @@
 //  Copyright (c) 2015 JwitApps. All rights reserved.
 //
 
-import Foundation
+#if os(iOS)
+    import UIKit
+#elseif os(OSX)
+    import Cocoa
+#endif
+
 import CloudKit
+
 internal class ORDataTools {
     
     internal class var currentOrganizationMissingError: NSError {

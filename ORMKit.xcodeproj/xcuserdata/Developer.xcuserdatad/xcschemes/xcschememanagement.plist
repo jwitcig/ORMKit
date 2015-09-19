@@ -4,20 +4,75 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>ORMKit iOS.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>12</integer>
+		</dict>
+		<key>ORMKit-iOS.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>10</integer>
+		</dict>
 		<key>ORMKit.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>ORMKitiOS.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>11</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>8B4552E91BA9C14D005547F6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8B4552F21BA9C14D005547F6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>8B650C9C1B2BA75400F0EA52</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>8B650CA71B2BA75400F0EA52</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8B6A55F21BA9E50E00965E4B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8B6A55FB1BA9E50E00965E4B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8B6A56101BA9EABE00965E4B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8B6A56191BA9EABE00965E4B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8B6A56381BA9EF4900965E4B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8B6A56411BA9EF4900965E4B</key>
 		<dict>
 			<key>primary</key>
 			<true/>

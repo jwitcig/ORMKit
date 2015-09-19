@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 JwitApps. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for ORMKit.
 FOUNDATION_EXPORT double ORMKitVersionNumber;

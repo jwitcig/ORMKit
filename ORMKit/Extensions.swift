@@ -6,8 +6,14 @@
 //  Copyright (c) 2015 JwitApps. All rights reserved.
 //
 
-import Foundation
+#if os(iOS)
+    import UIKit
+#elseif os(OSX)
+    import Cocoa
+#endif
+
 import CloudKit
+import CoreData
 
 extension CKQuery {
     
@@ -100,7 +106,7 @@ extension NSManagedObject {
         get {
             var dataDict = [String: AnyObject]()
             
-            for key in self.changedValues().keys.array {
+            for key in Array(self.changedValues().keys) {
                 let value = self.valueForKey(key)
                 
                 guard value as? CloudRecord == nil else { continue }
@@ -161,7 +167,7 @@ extension NSManagedObjectContext {
                 }
             }
             
-            let changedKeys = model.changedValues().keys.array.filter {
+            let changedKeys = Array(model.changedValues().keys).filter {
                 !rejectKeys.contains($0)
             }
             
@@ -191,15 +197,16 @@ extension NSManagedObjectContext {
                 
         runOnMainThread {
             mainMOC.mergeChangesFromContextDidSaveNotification(notification)
+            ORSession.currentSession.localData.save(context: mainMOC)
         }
     }
     
-    public func crossContextEquivalent<T>(object object: T) -> T {
-        return self.objectWithID((object as! NSManagedObject).objectID) as! T
+    public func crossContextEquivalent<T: NSManagedObject>(object object: T) -> T {
+        return self.objectWithID(object.objectID) as! T
     }
     
-    public func crossContextEquivalents<T>(objects objects: [T]) -> [T] {
-        return objects.map { self.crossContextEquivalent(object: $0 as! NSManagedObject) as! T }
+    public func crossContextEquivalents<T: NSManagedObject>(objects objects: [T]) -> [T] {
+        return objects.map { self.crossContextEquivalent(object: $0) }
     }
     
     public class func contextForCurrentThread() -> NSManagedObjectContext {
@@ -245,8 +252,13 @@ extension CollectionType where Generator.Element : ORModel {
 }
 
 extension Set {
-    
     public var array: [Generator.Element] { return Array(self) }
+}
+
+public extension NSUserDefaults {
+    subscript(key: String) -> AnyObject? {
+        return self.valueForKey(key)
+    }
 }
 
 enum PredicateComparator: String {

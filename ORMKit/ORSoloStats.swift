@@ -6,7 +6,11 @@
 //  Copyright (c) 2015 JwitApps. All rights reserved.
 //
 
-import Cocoa
+#if os(iOS)
+    import UIKit
+#elseif os(OSX)
+    import Cocoa
+#endif
 
 public class ORSoloStats: ORStats {
         

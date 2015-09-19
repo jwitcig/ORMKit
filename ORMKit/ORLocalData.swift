@@ -6,8 +6,13 @@
 //  Copyright (c) 2015 JwitApps. All rights reserved.
 //
 
-import Foundation
+#if os(iOS)
+    import UIKit
+#elseif os(OSX)
+    import Cocoa
+#endif
 import CloudKit
+import CoreData
 
 public class ORLocalData: DataConvenience {
     
@@ -78,6 +83,13 @@ public class ORLocalData: DataConvenience {
                                context: context)
         let IDs = (objects as! [CloudRecord]).map { CKRecordID(recordName: $0.recordName) }
         return (IDs, response)
+    }
+    
+    public func fetchAbandonedRecords<T: ORModel>(cloudModels cloudModels: [T], context: NSManagedObjectContext? = nil) -> ([T], ORLocalDataResponse) {
+        
+        let cloudModelRecordNames = cloudModels.recordNames
+        
+        return self.dataManager.fetchLocal(model: T.self, predicates: [NSPredicate(format: "NOT (cloudRecord.recordName IN %@)", cloudModelRecordNames)], context: context)
     }
     
     public func fetchAll<T: ORModel>(model model: T.Type, context: NSManagedObjectContext? = nil) -> ([T], ORLocalDataResponse) {
