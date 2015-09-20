@@ -71,14 +71,6 @@
 		8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLiftEntry.swift; sourceTree = "<group>"; };
 		8B650CBC1B2BA77100F0EA52 /* ORLiftTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLiftTemplate.swift; sourceTree = "<group>"; };
 		8B650CC21B2BA8DD00F0EA52 /* ORAthlete.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORAthlete.swift; sourceTree = "<group>"; };
-		8B6A56131BA9EABE00965E4B /* ORMKit iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ORMKit iOS.h"; sourceTree = "<group>"; };
-		8B6A56151BA9EABE00965E4B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8B6A561F1BA9EABE00965E4B /* ORMKit_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ORMKit_iOSTests.swift; sourceTree = "<group>"; };
-		8B6A56211BA9EABE00965E4B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8B6A563B1BA9EF4900965E4B /* ORMKitiOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORMKitiOS.h; sourceTree = "<group>"; };
-		8B6A563D1BA9EF4900965E4B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8B6A56471BA9EF4900965E4B /* ORMKitiOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ORMKitiOSTests.swift; sourceTree = "<group>"; };
-		8B6A56491BA9EF4900965E4B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B76DF511B34464600DB95ED /* ORDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataRequest.swift; sourceTree = "<group>"; };
 		8B76DF531B34465700DB95ED /* ORLocalDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLocalDataRequest.swift; sourceTree = "<group>"; };
 		8B76DF551B34466C00DB95ED /* ORCloudDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudDataRequest.swift; sourceTree = "<group>"; };
@@ -134,10 +126,6 @@
 			children = (
 				8B650C9F1B2BA75400F0EA52 /* ORMKit */,
 				8B650CAC1B2BA75400F0EA52 /* ORMKitTests */,
-				8B6A56121BA9EABE00965E4B /* ORMKit iOS */,
-				8B6A561E1BA9EABE00965E4B /* ORMKit iOSTests */,
-				8B6A563A1BA9EF4900965E4B /* ORMKitiOS */,
-				8B6A56461BA9EF4900965E4B /* ORMKitiOSTests */,
 				8B650C9E1B2BA75400F0EA52 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -202,42 +190,6 @@
 				8BB24B0C1B5F791800B17119 /* CloudRecord.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		8B6A56121BA9EABE00965E4B /* ORMKit iOS */ = {
-			isa = PBXGroup;
-			children = (
-				8B6A56131BA9EABE00965E4B /* ORMKit iOS.h */,
-				8B6A56151BA9EABE00965E4B /* Info.plist */,
-			);
-			path = "ORMKit iOS";
-			sourceTree = "<group>";
-		};
-		8B6A561E1BA9EABE00965E4B /* ORMKit iOSTests */ = {
-			isa = PBXGroup;
-			children = (
-				8B6A561F1BA9EABE00965E4B /* ORMKit_iOSTests.swift */,
-				8B6A56211BA9EABE00965E4B /* Info.plist */,
-			);
-			path = "ORMKit iOSTests";
-			sourceTree = "<group>";
-		};
-		8B6A563A1BA9EF4900965E4B /* ORMKitiOS */ = {
-			isa = PBXGroup;
-			children = (
-				8B6A563B1BA9EF4900965E4B /* ORMKitiOS.h */,
-				8B6A563D1BA9EF4900965E4B /* Info.plist */,
-			);
-			path = ORMKitiOS;
-			sourceTree = "<group>";
-		};
-		8B6A56461BA9EF4900965E4B /* ORMKitiOSTests */ = {
-			isa = PBXGroup;
-			children = (
-				8B6A56471BA9EF4900965E4B /* ORMKitiOSTests.swift */,
-				8B6A56491BA9EF4900965E4B /* Info.plist */,
-			);
-			path = ORMKitiOSTests;
 			sourceTree = "<group>";
 		};
 		8B76DF571B3446A900DB95ED /* Data Request */ = {
@@ -364,6 +316,7 @@
 				TargetAttributes = {
 					8B650C9C1B2BA75400F0EA52 = {
 						CreatedOnToolsVersion = 6.3.2;
+						DevelopmentTeam = 7R899BEBGC;
 					};
 					8B650CA71B2BA75400F0EA52 = {
 						CreatedOnToolsVersion = 6.3.2;
@@ -551,6 +504,9 @@
 		8B650CB41B2BA75400F0EA52 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer: Wendy Witcig (SAE38G688R)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wendy Witcig (SAE38G688R)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -559,9 +515,11 @@
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = ORMKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jwitapps.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx10.11;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
@@ -572,6 +530,9 @@
 		8B650CB51B2BA75400F0EA52 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer: Wendy Witcig (SAE38G688R)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Wendy Witcig (SAE38G688R)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -580,9 +541,11 @@
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = ORMKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jwitapps.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx10.11;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "macosx iphoneos iphonesimulator";
@@ -606,6 +569,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jwitapps.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "i386 x86_64 arm64 armv7s armv7";
 			};
 			name = Debug;
 		};
@@ -621,6 +585,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jwitapps.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "i386 x86_64 arm64 armv7s armv7";
 			};
 			name = Release;
 		};

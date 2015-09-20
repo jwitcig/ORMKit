@@ -77,7 +77,7 @@ public class ORSession {
             
             let query = CKQuery(recordType: ORAthlete.recordType, predicate: NSPredicate(key: "userRecordName", comparator: .Equals, value: recordID!.recordName))
             
-            CKContainer.defaultContainer().publicCloudDatabase.performQuery(query, inZoneWithID: nil) { (results, error) -> Void in
+            self.cloudData.container.publicCloudDatabase.performQuery(query, inZoneWithID: nil) { (results, error) -> Void in
                 
                 var athlete: ORAthlete!
         

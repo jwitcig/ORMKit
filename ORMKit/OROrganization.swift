@@ -37,7 +37,7 @@ extension CKRecord {
     
     func modelListFromReferences(references: [CKReference]) -> [ORModel]? {
         let recordNames = references.recordIDs.recordNames
-        return ORSession.currentSession.localData.fetchObjects(ids: recordNames, model: ORModel.self)
+        return ORSession.currentSession.localData.fetchObjects(ids: recordNames, model: ORModel.self, context: NSManagedObjectContext.contextForCurrentThread())
     }
     
     func referenceForName(name: String) -> CKReference? {

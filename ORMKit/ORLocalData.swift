@@ -130,5 +130,5 @@ public class ORLocalData: DataConvenience {
                                       predicates: predicates,
                                          options: operationOptions)
     }
-        
+    
 }
