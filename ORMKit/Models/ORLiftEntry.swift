@@ -41,11 +41,7 @@ public class ORLiftEntry: ORModel, ModelSubclassing {
     override public class var recordType: String { return RecordType.ORLiftEntry.rawValue }
     
     public class func entry(record: CKRecord? = nil, context: NSManagedObjectContext? = nil) -> ORLiftEntry {
-        return super.model(type: ORLiftEntry.self, record: record, context: context)
-    }
-    
-    public class func entries(records records: [CKRecord], context: NSManagedObjectContext? = nil) -> [ORLiftEntry] {
-        return super.models(type: ORLiftEntry.self, records: records, context: context)
+        return super.model(type: ORLiftEntry.self, context: context)
     }
     
     @NSManaged public var date: NSDate
@@ -53,32 +49,17 @@ public class ORLiftEntry: ORModel, ModelSubclassing {
     @NSManaged public var reps: NSNumber
     @NSManaged public var weightLifted: NSNumber
     public var max: NSNumber {
-        let rounded = round( weightLifted.floatValue + (weightLifted.floatValue * reps.floatValue * 0.033 ) )
+        return ORLiftEntry.oneRepMax(weightLifted: weightLifted.floatValue, reps: reps.floatValue)
+    }
+    
+    public class func oneRepMax(weightLifted weightLifted: Float, reps: Float) -> NSNumber {
+        guard reps != 1 else { return NSNumber(float: weightLifted) }
+        
+        let rounded = round( weightLifted + (weightLifted * reps * 0.033 ) )
         return NSNumber(float: rounded)
     }
-    @NSManaged public var organization: OROrganization?
     @NSManaged public var liftTemplate: ORLiftTemplate
     @NSManaged public var athlete: ORAthlete
     
-    override func writeValuesFromRecord(record: CKRecord) {
-        super.writeValuesFromRecord(record)
-        
-        self.date = record.propertyForName(Fields.date.rawValue, defaultValue: NSDate())
-        self.maxOut = record.propertyForName(Fields.maxOut.rawValue, defaultValue: true)
-        self.reps = record.propertyForName(Fields.reps.rawValue, defaultValue: 0)
-        self.weightLifted = record.propertyForName(Fields.weightLifted.rawValue, defaultValue: 0)
-        
-        guard let context = self.managedObjectContext else { return }
-
-        if let value = record.modelForName(Fields.liftTemplate.rawValue) as? ORLiftTemplate {
-            self.liftTemplate = context.crossContextEquivalent(object: value)
-        }
-        if let value = record.modelForName(Fields.organization.rawValue) as? OROrganization {
-            self.organization = context.crossContextEquivalent(object: value)
-        }
-        if let value = record.modelForName(Fields.athlete.rawValue) as? ORAthlete {
-            self.athlete = context.crossContextEquivalent(object: value)
-        }
-    }
     
 }

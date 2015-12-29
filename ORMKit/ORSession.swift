@@ -18,7 +18,8 @@ public class ORSession {
     
     public static var currentSession = ORSession()
     
-    public var soloSession: Bool { return self.currentOrganization == nil }
+    public var currentViewController: UIViewController!
+
     public var currentAthlete: ORAthlete? {
         get {
             guard let ID = self.currentAthleteID else { return nil }
@@ -33,7 +34,6 @@ public class ORSession {
             }
         }
     }
-    public var currentOrganization: OROrganization?
     
     private var currentAthleteID: NSManagedObjectID?
     
@@ -45,16 +45,7 @@ public class ORSession {
             self._localData.session = self
         }
     }
-    
-    private var _cloudData: ORCloudData!
-    public var cloudData: ORCloudData! {
-        get { return _cloudData }
-        set {
-            _cloudData = newValue
-            _cloudData.session = self
-        }
-    }
-    
+        
     private var _soloStats: ORSoloStats!
     public var soloStats: ORSoloStats {
         get { return _soloStats }
@@ -70,67 +61,58 @@ public class ORSession {
     public var managedObjectContext: NSManagedObjectContext!
     
     public init() { }
-    
-    public func signInWithCloud(completionHandler completionHandler: ((ORAthlete?, ORCloudDataResponse)->())?) {
-        self.cloudData.container.fetchUserRecordIDWithCompletionHandler { (recordID, error) -> Void in
-            guard error == nil else { print(error); return }
-            
-            let query = CKQuery(recordType: ORAthlete.recordType, predicate: NSPredicate(key: "userRecordName", comparator: .Equals, value: recordID!.recordName))
-            
-            self.cloudData.container.publicCloudDatabase.performQuery(query, inZoneWithID: nil) { (results, error) -> Void in
-                
-                var athlete: ORAthlete!
         
-                let dataRequest = ORCloudDataRequest()
-                defer { completionHandler?(athlete, ORCloudDataResponse(request: dataRequest, error: error)) }
-                
-                guard error == nil else { return }
-                
-                let context = NSManagedObjectContext.contextForCurrentThread()
-                defer {
-                    ORAthlete.setCurrentAthlete(athlete)
-                    self.localData.save(context: context)
-                }
-                
-                guard let userRecords = results
-                    where userRecords.count > 0 else {
-                        athlete = ORAthlete.athlete(record: CKRecord(recordType: ORAthlete.recordType))
-                        return
-                }
-                
-                let record = userRecords.first!
-
-                guard let fetchedAthlete = self.localData.fetchObject(id: record.recordID.recordName, model: ORAthlete.self, context: context) else {
-                    athlete = ORAthlete.athlete(record: record, context: context)
-                    return
-                }
-                athlete = fetchedAthlete
-                athlete.updateFromCloudRecord(record)
-            }
-        }
-    }
-    
     public func signInLocally() -> (Bool, ORAthlete?) {
         let context = NSManagedObjectContext.contextForCurrentThread()
         
-        let currentUserRecordName = NSUserDefaults.standardUserDefaults().objectForKey("currentUserRecordName") as? String
-        if let recordName = currentUserRecordName {
-            
-            let request = NSFetchRequest(entityName: ORAthlete.recordType)
-            request.predicate = NSPredicate(format: "%K == %@", "recordName", recordName)
-            let results: [AnyObject]?
-            do {
-                results = try context.executeFetchRequest(request)
-            } catch _ {
-                results = nil
-            }
-            
-            if let athlete = results?.first as? ORAthlete {
-                ORAthlete.setCurrentAthlete(athlete)
-                return (true, athlete)
-            }
+        guard let username = NSUserDefaults.standardUserDefaults().valueForKey("currentAthleteUsername") as? String else {
+            return (false, nil)
         }
-        return (false, nil)
+                
+        let usernamePredicate = NSPredicate(key: ORAthlete.Fields.username.rawValue, comparator: .Equals, value: username)
+        let (athletes, _) = self.localData.fetchObjects(model: ORAthlete.self, predicates: [usernamePredicate], context: context)
+        
+        
+        let lastLoggedInAthlete = athletes.first
+        
+        guard let athlete = lastLoggedInAthlete else {
+            return (false, nil)
+        }
+        
+        ORAthlete.setCurrentAthlete(athlete)
+        return (true, athlete)
+    }
+ 
+    public func initDefaultData() {
+        let predicate = NSPredicate(key: ORLiftTemplate.Fields.defaultLift.rawValue, comparator: .Equals, value: true)
+        let (templates, _) = localData.fetchObjects(model: ORLiftTemplate.self, predicates: [predicate])
+        
+        guard templates.count == 0 else {
+            print("Default data in place")
+            return
+        }
+        
+        let hangCleanTemplate = ORLiftTemplate.template()
+        hangCleanTemplate.liftName = "Hang Clean"
+        hangCleanTemplate.defaultLift = true
+        hangCleanTemplate.liftDescription = "Pull up"
+        
+        let squatTemplate = ORLiftTemplate.template()
+        squatTemplate.liftName = "Squat"
+        squatTemplate.defaultLift = true
+        squatTemplate.liftDescription = "Squat down"
+        
+        let benchPressTemplate = ORLiftTemplate.template()
+        benchPressTemplate.liftName = "Bench Press"
+        benchPressTemplate.defaultLift = true
+        benchPressTemplate.liftDescription = "Push up"
+        
+        let deadLiftTemplate = ORLiftTemplate.template()
+        deadLiftTemplate.liftName = "Dead Lift"
+        deadLiftTemplate.defaultLift = true
+        deadLiftTemplate.liftDescription = "Bend at the knees"
+        
+        localData.save()
     }
     
 }

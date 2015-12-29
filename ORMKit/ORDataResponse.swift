@@ -28,6 +28,8 @@ public class ORDataResponse {
         
     public var success: Bool { return self.error == nil }
     
+    public var failed: Bool { return !self.success }
+    
     public var timestamp = NSDate()
     
     var context: NSManagedObjectContext?

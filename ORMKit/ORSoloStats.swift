@@ -25,7 +25,7 @@ public class ORSoloStats: ORStats {
     var entries: [ORLiftEntry] {
         guard self._entries == nil else { return self._entries }
         
-        let (entries, _) = self.session.localData.fetchLiftEntries(athlete: self.athlete, organization: self.session.currentOrganization!)
+        let (entries, _) = self.session.localData.fetchLiftEntries(athlete: self.athlete)
     
         self._entries = entries
         return self._entries
@@ -64,30 +64,35 @@ public class ORSoloStats: ORStats {
             let previousEntry = entry
             let nextEntryIndex = index + 1
             
-            if nextEntryIndex < entries.count {
-                let nextEntry = entries[nextEntryIndex]
-                
-                if targetDate.isBetween(firstDate: previousEntry.date, secondDate: nextEntry.date, inclusive: true) {
-                    
-                    if targetDate.isSameDay(date: previousEntry.date) {
-                        return previousEntry.max.integerValue
-                    }
-                    if targetDate.isSameDay(date: nextEntry.date) {
-                        return nextEntry.max.integerValue
-                    }
-                    
-                    let dateRange = NSDate.daysBetween(startDate: previousEntry.date, endDate: nextEntry.date)
-                    let dateInset = NSDate.daysBetween(startDate: previousEntry.date, endDate: targetDate)
-                    
-                    let maxDifference = nextEntry.max.floatValue - previousEntry.max.floatValue
-                    
-                    let dateProportion = Float(dateInset) / Float(dateRange)
-                    
-                    return Int(
-                        round(dateProportion * maxDifference + previousEntry.max.floatValue)
-                    )
-                }
+            guard nextEntryIndex < entries.count else {
+                return nil
             }
+            
+            let nextEntry = entries[nextEntryIndex]
+            
+            guard targetDate.isBetween(firstDate: previousEntry.date, secondDate: nextEntry.date, inclusive: true) else {
+                return nil
+            }
+            
+            guard !targetDate.isSameDay(date: previousEntry.date) else {
+                return previousEntry.max.integerValue
+            }
+            
+            guard !targetDate.isSameDay(date: nextEntry.date) else {
+                return nextEntry.max.integerValue
+            }
+            
+            let dateRange = NSDate.daysBetween(startDate: previousEntry.date, endDate: nextEntry.date)
+            let dateInset = NSDate.daysBetween(startDate: previousEntry.date, endDate: targetDate)
+            
+            let maxDifference = nextEntry.max.floatValue - previousEntry.max.floatValue
+            
+            let dateProportion = Float(dateInset) / Float(dateRange)
+            
+            return Int(
+                round(dateProportion * maxDifference + previousEntry.max.floatValue)
+            )
+
         }
         return nil
     }

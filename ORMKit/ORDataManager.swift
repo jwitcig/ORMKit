@@ -19,13 +19,9 @@ public class ORDataManager {
     public var localDataCoordinator: ORLocalDataCoordinator {
         didSet { localDataCoordinator.dataManager = self }
     }
-    public var cloudDataCoordinator: ORCloudDataCoordinator {
-        didSet { cloudDataCoordinator.dataManager = self }
-    }
     
     public init(localDataContext: NSManagedObjectContext, cloudContainer: CKContainer, cloudDatabase: CKDatabase) {
         self.localDataCoordinator = ORLocalDataCoordinator(context: localDataContext)
-        self.cloudDataCoordinator = ORCloudDataCoordinator(container: cloudContainer, database: cloudDatabase)
     }
     
     public func fetchLocal<T: ORModel>(model model: T.Type, predicates: [NSPredicate]? = nil, context: NSManagedObjectContext? = nil, options: ORDataOperationOptions? = nil) -> ([T], ORLocalDataResponse) {
@@ -44,17 +40,6 @@ public class ORDataManager {
              predicate: predicate,
                context: context,
                options: options)
-    }
-    
-    public func fetchCloud<T: ORModel>(model model: T.Type, predicate: NSPredicate, options: ORDataOperationOptions? = nil, completionHandler: (([T], ORCloudDataResponse)->())?) {
-        self.cloudDataCoordinator.fetch(model: model,
-                                    predicate: predicate,
-                                      options: options,
-                            completionHandler: completionHandler)
-    }
-    
-    public func saveCloud(record record: CKRecord, completionHandler: ((ORCloudDataResponse)->())?) {
-        self.cloudDataCoordinator.save(record: record, completionHandler: completionHandler)
     }
     
     public func saveLocal(context context: NSManagedObjectContext? = nil) -> ORLocalDataResponse {

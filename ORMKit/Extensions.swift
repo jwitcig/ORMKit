@@ -35,7 +35,7 @@ extension String {
     
 }
 
-extension NSDate {
+public extension NSDate {
     
     func isBefore(date date: NSDate) -> Bool {
         return self.compare(date) == .OrderedAscending
@@ -77,12 +77,7 @@ extension NSPredicate {
             return
         }
         
-        var target = value
-        if let arrayValue = value as? [CKReference] where arrayValue.count == 0 {
-            target = [CKReference(recordID: CKRecordID(recordName: "!"), action: .None)]
-        }
-        
-        self.init(format: "\(key) \(comparator.rawValue) %@", argumentArray: [target])
+        self.init(format: "\(key) \(comparator.rawValue) %@", argumentArray: [value])
     }
     
 }
@@ -100,41 +95,12 @@ extension NSSortDescriptor {
     
 }
 
-extension NSManagedObject {
-    
-    public var changedKeysForCloudKit: [String: AnyObject] {
-        get {
-            var dataDict = [String: AnyObject]()
-            
-            for key in Array(self.changedValues().keys) {
-                let value = self.valueForKey(key)
-                
-                guard value as? CloudRecord == nil else { continue }
-                
-                guard value as? Set<ORModel> == nil else {
-                    dataDict[key] = (value as! Set<ORModel>).references
-                    continue
-                }
-                
-                guard let model = value as? ORModel else {
-                    dataDict[key] = value
-                    continue
-                }
-                
-                dataDict[key] = model.reference
-            }
-            return dataDict
-        }
-    }
-    
-}
-
 extension NSManagedObjectContext {
     
     public convenience init(parentContext: NSManagedObjectContext? = nil) {
         var selfObject: NSManagedObjectContext!
         defer {
-            NSNotificationCenter.defaultCenter().addObserver(selfObject, selector: Selector("managedObjectContextWillSave:"), name: NSManagedObjectContextWillSaveNotification, object: selfObject)
+//            NSNotificationCenter.defaultCenter().addObserver(selfObject, selector: Selector("managedObjectContextWillSave:"), name: NSManagedObjectContextWillSaveNotification, object: selfObject)
             NSNotificationCenter.defaultCenter().addObserver(selfObject, selector: Selector("managedObjectContextDidSave:"), name: NSManagedObjectContextDidSaveNotification, object: selfObject)
         }
         
@@ -147,42 +113,6 @@ extension NSManagedObjectContext {
         self.init(concurrencyType: .ConfinementConcurrencyType)
         self.parentContext = parentManagedObjectContext
         selfObject = self
-    }
-    
-    func managedObjectContextWillSave(notification: NSNotification) {
-        let context = notification.object as! NSManagedObjectContext
-        
-        var observedObjects = context.insertedObjects
-        for item in context.updatedObjects {
-            observedObjects.insert(item)
-        }
-                
-        for object in observedObjects {
-            guard let model = object as? ORModel else { continue }
-            
-            var rejectKeys = ["cloudRecord", "cloudRecordDirty"]
-            if let entityName = object.entity.name {
-                if let entityRejectKeys = ORModel.LocalOnlyFields[entityName] {
-                    rejectKeys += entityRejectKeys
-                }
-            }
-            
-            let changedKeys = Array(model.changedValues().keys).filter {
-                !rejectKeys.contains($0)
-            }
-            
-            guard !model.cloudUpdateSinceSave else {
-                model.cloudUpdateSinceSave = false
-                model.cloudRecordDirty = false
-                continue
-            }
-            
-            if changedKeys.count == 0 {
-                model.cloudRecordDirty = false
-            } else {
-                model.cloudRecordDirty = true
-            }
-        }
     }
     
     func managedObjectContextDidSave(notification: NSNotification) {
@@ -242,13 +172,6 @@ extension CollectionType where Generator.Element : CKReference {
 extension CollectionType where Generator.Element : CKRecordID {
     
     var recordNames: [String] { return self.map { $0.recordName } }
-}
-
-extension CollectionType where Generator.Element : ORModel {
-    
-    public var references: [CKReference] { return self.map { $0.reference } }
-    public var records: [CKRecord] { return self.map { $0.record } }
-    public var recordNames: [String] { return self.map { $0.recordName } }
 }
 
 extension Set {

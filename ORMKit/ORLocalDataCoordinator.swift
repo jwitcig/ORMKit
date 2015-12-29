@@ -49,6 +49,11 @@ public class ORLocalDataCoordinator: ORDataCoordinator {
         } catch let err as NSError {
             error = err
             objects = []
+            
+            let errorAlertController = UIAlertController(title: "Error", message: "An error has occured.", preferredStyle: .Alert)
+            
+            errorAlertController.addAction(UIAlertAction(title: "okay", style: .Default, handler: nil))
+            ORSession.currentSession.currentViewController.presentViewController(errorAlertController, animated: true, completion: nil)
         }
         return (objects, ORLocalDataResponse(request: dataRequest, error: error, context: context))
     }
