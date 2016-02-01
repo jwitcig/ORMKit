@@ -65,13 +65,13 @@ public extension NSDate {
     
 }
 
-extension NSPredicate {
+public extension NSPredicate {
     
     class var allRows: NSPredicate {
         return NSPredicate(value: true)
     }
     
-    convenience init(key: String, comparator: PredicateComparator, value comparisonValue: AnyObject?) {
+    public convenience init(key: String, comparator: PredicateComparator, value comparisonValue: AnyObject?) {
         guard let value = comparisonValue else {
             self.init(format: "\(key) \(comparator.rawValue) nil")
             return
@@ -184,7 +184,7 @@ public extension NSUserDefaults {
     }
 }
 
-enum PredicateComparator: String {
+public enum PredicateComparator: String {
     case Equals = "=="
     case Contains = "CONTAINS"
     case In = "IN"

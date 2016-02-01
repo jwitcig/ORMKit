@@ -16,7 +16,7 @@ import CoreData
 
 public class ORLiftTemplate: ORModel, ModelSubclassing {
     
-    enum Fields: String {
+    public enum Fields: String {
         case defaultLift
         case liftDescription
         case liftName

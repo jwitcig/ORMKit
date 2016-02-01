@@ -11,7 +11,6 @@
 #elseif os(OSX)
     import Cocoa
 #endif
-import CloudKit
 import CoreData
 
 public class ORDataManager {
@@ -20,7 +19,7 @@ public class ORDataManager {
         didSet { localDataCoordinator.dataManager = self }
     }
     
-    public init(localDataContext: NSManagedObjectContext, cloudContainer: CKContainer, cloudDatabase: CKDatabase) {
+    public init(localDataContext: NSManagedObjectContext) {
         self.localDataCoordinator = ORLocalDataCoordinator(context: localDataContext)
     }
     
