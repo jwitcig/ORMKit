@@ -456,7 +456,7 @@
 					};
 					8B72B3AE1C15E4B30079EE34 = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = 7R899BEBGC;
+						DevelopmentTeam = 349WFX4WJR;
 					};
 					8B72B3B71C15E4B30079EE34 = {
 						CreatedOnToolsVersion = 7.2;
@@ -817,8 +817,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD)";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
