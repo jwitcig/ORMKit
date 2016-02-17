@@ -21,19 +21,25 @@ public class ORSoloStats: ORStats {
     
     var athlete: ORAthlete
     
-    private var _entries: [ORLiftEntry]!
-    var entries: [ORLiftEntry] {
-        guard self._entries == nil else { return self._entries }
+    private var _allEntries: [ORLiftEntry]!
+    public var allEntries: [ORLiftEntry] {
+        guard self._allEntries == nil else { return self._allEntries }
         
         let (entries, _) = self.session.localData.fetchLiftEntries(athlete: self.athlete)
     
-        self._entries = entries
-        return self._entries
+        self._allEntries = entries
+        return self._allEntries
     }
     
-    private func entries(template liftTemplate: ORLiftTemplate? = nil, order: Sort? = nil) -> [ORLiftEntry] {
-        var desiredEntries = self.entries
-        if let template = liftTemplate {
+    public var defaultTemplate: ORLiftTemplate?
+    
+    public var daysSinceLastEntry: Int? {
+        return entries().sortedByReverseDate.first?.date.daysBeforeToday()
+    }
+    
+    public func entries(template liftTemplate: ORLiftTemplate? = nil, order: Sort? = nil) -> [ORLiftEntry] {
+        var desiredEntries = self.allEntries
+        if let template = liftTemplate ?? defaultTemplate {
             desiredEntries = desiredEntries.filter { $0.liftTemplate == template }
         }
         
@@ -44,29 +50,53 @@ public class ORSoloStats: ORStats {
         return desiredEntries
     }
     
-    public func averageProgress(template template: ORLiftTemplate, dateRange: (NSDate, NSDate), dayInterval: Int) -> Float? {
-        let initial = self.estimatedMax(targetDate: dateRange.0, template: template)
-        let final = self.estimatedMax(targetDate: dateRange.1, template: template)
+    public func averageProgress(dateRange: (NSDate, NSDate), dayInterval: Int? = nil, liftTemplate: ORLiftTemplate? = nil) -> Float? {
+        guard let template = liftTemplate ?? defaultTemplate else { return nil }
+        
+        let initial = self.estimatedMax(targetDate: dateRange.0, liftTemplate: template)
+        let final = self.estimatedMax(targetDate: dateRange.1, liftTemplate: template)
+        
+        
+        let dateRangeSpread = NSDate.daysBetween(startDate: dateRange.0, endDate: dateRange.1)
+        let interval = dayInterval ?? dateRangeSpread
         
         if let initialMax = initial, finalMax = final {
             let totalProgress = finalMax - initialMax
-            let dateRangeSpread = NSDate.daysBetween(startDate: dateRange.0, endDate: dateRange.1)
+            let dateRangeSpread = dateRangeSpread
             let dailyProgress = Float(totalProgress) / Float(dateRangeSpread)
-            return dailyProgress * Float(dayInterval)
+            return dailyProgress * Float(interval)
         }
         return nil
     }
     
-    public func estimatedMax(targetDate targetDate: NSDate, template: ORLiftTemplate) -> Int? {
+    public func dayLookback(numberOfDays numberOfDays: Int, liftTemplate: ORLiftTemplate? = nil) -> Float? {
+        let today = NSDate()
+        let initialDay = today.dateByAddingTimeInterval(Double(-numberOfDays*24*60*60))
+        
+        return averageProgress((initialDay, today), liftTemplate: liftTemplate)
+    }
+    
+    public func estimatedMax(targetDate targetDate: NSDate, liftTemplate: ORLiftTemplate? = nil) -> Int? {
+        guard let template = liftTemplate ?? defaultTemplate else { return nil }
+        
         let entries = self.entries(template: template, order: .Chronological)
+        
+        if let firstEntry = entries.first {
+            if targetDate.isBefore(date: firstEntry.date) && abs(targetDate.daysBetween(endDate: firstEntry.date)) <= 3 {
+                return firstEntry.max.integerValue
+            }
+        }
+        if let lastEntry = entries.last {
+            if lastEntry.date.isBefore(date: targetDate) && abs(targetDate.daysBetween(endDate: lastEntry.date)) <= 3 {
+                return lastEntry.max.integerValue
+            }
+        }
         
         for (index, entry) in entries.enumerate() {
             let previousEntry = entry
             let nextEntryIndex = index + 1
             
-            guard nextEntryIndex < entries.count else {
-                return nil
-            }
+            guard nextEntryIndex < entries.count else { return nil }
             
             let nextEntry = entries[nextEntryIndex]
             

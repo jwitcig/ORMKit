@@ -51,6 +51,18 @@ public extension NSDate {
         return dateComponents.day
     }
     
+    public func daysBetween(endDate endDate: NSDate) -> Int {
+        return NSDate.daysBetween(startDate: self, endDate: endDate)
+    }
+    
+    public class func daysBeforeToday(originalDate originalDate: NSDate) -> Int {
+        return originalDate.daysBeforeToday()
+    }
+    
+    public func daysBeforeToday() -> Int {
+        return NSDate.daysBetween(startDate: self, endDate: NSDate())
+    }
+    
     class func sorted(dates dates: [NSDate]) -> [NSDate] {
         return dates.sort { $0.0.isBefore(date: $0.1) }
     }
@@ -157,6 +169,17 @@ extension NSManagedObjectContext {
     
     private static var threadContexts = [NSThread.mainThread(): ORSession.currentSession.localData.context]
     
+}
+
+public extension CollectionType where Generator.Element : ORLiftEntry {
+    
+    var sortedByDate: [ORLiftEntry] {
+        return self.sort { $0.date.isBefore(date: $1.date) }
+    }
+    
+    var sortedByReverseDate: [ORLiftEntry] {
+        return self.sort { !$0.date.isBefore(date: $1.date) }
+    }
 }
 
 extension CollectionType where Generator.Element : CKRecord {
