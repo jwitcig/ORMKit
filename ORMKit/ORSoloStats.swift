@@ -50,8 +50,23 @@ public class ORSoloStats: ORStats {
         return desiredEntries
     }
     
-    public func averageProgress(dateRange: (NSDate, NSDate), dayInterval: Int? = nil, liftTemplate: ORLiftTemplate? = nil) -> Float? {
+    public func dateRangeOfEntries(liftTemplate liftTemplate: ORLiftTemplate? = nil) -> (NSDate, NSDate)? {
+        let sortedEntries = entries(template: liftTemplate, order: .Chronological)
+        if let firstEntryDate = sortedEntries.first?.date,
+            let lastEntryDate = sortedEntries.last?.date {
+                
+                return (firstEntryDate, lastEntryDate)
+        }
+        return nil
+    }
+    
+    public func averageProgress(dateRange customDateRange: (NSDate, NSDate)? = nil, dayInterval: Int? = nil, liftTemplate: ORLiftTemplate? = nil) -> (Float, (NSDate, NSDate))? {
         guard let template = liftTemplate ?? defaultTemplate else { return nil }
+        
+        let sortedEntries = entries().sortedByDate
+        guard let dateRange = customDateRange ?? (sortedEntries.first?.date, sortedEntries.last?.date) as? (NSDate, NSDate) else {
+            return nil
+        }
         
         let initial = self.estimatedMax(targetDate: dateRange.0, liftTemplate: template)
         let final = self.estimatedMax(targetDate: dateRange.1, liftTemplate: template)
@@ -64,7 +79,7 @@ public class ORSoloStats: ORStats {
             let totalProgress = finalMax - initialMax
             let dateRangeSpread = dateRangeSpread
             let dailyProgress = Float(totalProgress) / Float(dateRangeSpread)
-            return dailyProgress * Float(interval)
+            return (dailyProgress * Float(interval), dateRange)
         }
         return nil
     }
@@ -73,7 +88,7 @@ public class ORSoloStats: ORStats {
         let today = NSDate()
         let initialDay = today.dateByAddingTimeInterval(Double(-numberOfDays*24*60*60))
         
-        return averageProgress((initialDay, today), liftTemplate: liftTemplate)
+        return averageProgress(dateRange: (initialDay, today), liftTemplate: liftTemplate)?.0
     }
     
     public func estimatedMax(targetDate targetDate: NSDate, liftTemplate: ORLiftTemplate? = nil) -> Int? {
