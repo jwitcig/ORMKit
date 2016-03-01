@@ -33,8 +33,12 @@ public class ORSoloStats: ORStats {
     
     public var defaultTemplate: ORLiftTemplate?
     
+    public var currentEntry: ORLiftEntry? {
+        return entries().sortedByReverseDate.first
+    }
+    
     public var daysSinceLastEntry: Int? {
-        return entries().sortedByReverseDate.first?.date.daysBeforeToday()
+        return currentEntry?.date.daysBeforeToday()
     }
     
     public func entries(template liftTemplate: ORLiftTemplate? = nil, order: Sort? = nil) -> [ORLiftEntry] {
@@ -48,6 +52,17 @@ public class ORSoloStats: ORStats {
             desiredEntries = NSArray(array: desiredEntries).sortedArrayUsingDescriptors([descriptor]) as! [ORLiftEntry]
         }
         return desiredEntries
+    }
+    
+    // Gives increase as a percentage of the firstEntry's max
+    public func percentageIncrease(firstEntry firstEntry: ORLiftEntry, secondEntry: ORLiftEntry) -> Float {
+        return percentageIncrease(firstValue: firstEntry.max.integerValue, secondValue: secondEntry.max.integerValue)
+    }
+    
+    // Gives increase as a percentage of the firstValue
+    public func percentageIncrease(firstValue firstValue: Int, secondValue: Int) -> Float {
+        let difference = Float(secondValue - firstValue)
+        return difference / Float(firstValue) * 100
     }
     
     public func dateRangeOfEntries(liftTemplate liftTemplate: ORLiftTemplate? = nil) -> (NSDate, NSDate)? {
@@ -116,7 +131,7 @@ public class ORSoloStats: ORStats {
             let nextEntry = entries[nextEntryIndex]
             
             guard targetDate.isBetween(firstDate: previousEntry.date, secondDate: nextEntry.date, inclusive: true) else {
-                return nil
+                continue
             }
             
             guard !targetDate.isSameDay(date: previousEntry.date) else {

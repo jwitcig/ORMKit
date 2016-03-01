@@ -164,9 +164,9 @@
 		8B6047791B4A1984001A2A68 /* Stats */ = {
 			isa = PBXGroup;
 			children = (
+				8B6047771B4A195F001A2A68 /* ORStats.swift */,
 				8B6047731B4A193C001A2A68 /* ORSoloStats.swift */,
 				8B6047751B4A194B001A2A68 /* ORGroupStats.swift */,
-				8B6047771B4A195F001A2A68 /* ORStats.swift */,
 				8B8D6E4E1B50CB9A0046C1D2 /* Extensions.swift */,
 			);
 			name = Stats;
