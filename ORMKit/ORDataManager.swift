@@ -12,6 +12,7 @@
     import Cocoa
 #endif
 import CoreData
+import CloudKit
 
 public class ORDataManager {
         
@@ -19,8 +20,14 @@ public class ORDataManager {
         didSet { localDataCoordinator.dataManager = self }
     }
     
-    public init(localDataContext: NSManagedObjectContext) {
+    public var cloudDataCoordinator: ORCloudDataCoordinator {
+        didSet { cloudDataCoordinator.dataManager = self }
+    }
+    
+    public init(localDataContext: NSManagedObjectContext, cloudContainer: CKContainer, cloudDatabase: CKDatabase) {
         self.localDataCoordinator = ORLocalDataCoordinator(context: localDataContext)
+
+        self.cloudDataCoordinator = ORCloudDataCoordinator(container: cloudContainer, database: cloudDatabase)
     }
     
     public func fetchLocal<T: ORModel>(model model: T.Type, predicates: [NSPredicate]? = nil, context: NSManagedObjectContext? = nil, options: ORDataOperationOptions? = nil) -> ([T], ORLocalDataResponse) {
@@ -41,8 +48,19 @@ public class ORDataManager {
                options: options)
     }
     
+    public func fetchCloud<T: ORModel>(model model: T.Type, predicate: NSPredicate, options: ORDataOperationOptions? = nil, completionHandler: (([T], ORCloudDataResponse)->())?) {
+        self.cloudDataCoordinator.fetch(model: model,
+            predicate: predicate,
+            options: options,
+            completionHandler: completionHandler)
+    }
+    
     public func saveLocal(context context: NSManagedObjectContext? = nil) -> ORLocalDataResponse {
         return self.localDataCoordinator.save(context: context)
+    }
+    
+    public func saveCloud(record record: CKRecord, completionHandler: ((ORCloudDataResponse)->())?) {
+        self.cloudDataCoordinator.save(record: record, completionHandler: completionHandler)
     }
     
     public func delete(objects objects: [NSManagedObject], context: NSManagedObjectContext? = nil) -> ORLocalDataResponse {

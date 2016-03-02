@@ -50,7 +50,7 @@ public class ORLiftTemplate: ORModel, ModelSubclassing {
     @NSManaged public var solo: NSNumber
     
     @NSManaged public var creator: ORAthlete
-    
+
 //    public func updatedRecently(athlete athlete: ORAthlete, maxNumberOfDays: Int = 14) -> Bool? {
 //        ORSession.currentSession.localData.fetchLiftEntries(athlete: <#T##ORAthlete#>, organization: <#T##OROrganization#>, template: <#T##ORLiftTemplate?#>, order: <#T##Sort?#>)
 //    }

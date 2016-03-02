@@ -34,6 +34,34 @@ public class ORLocalData: DataConvenience {
         return (objects as! [T], response)
     }
     
+    public func fetchObjects<T: ORModel>(ids ids: [String], model: T.Type, context: NSManagedObjectContext? = nil) -> [T]? {
+        let (objects, _) = self.dataManager.fetchLocal(model: model,
+            predicates: [NSPredicate(key: "cloudRecord.recordName", comparator: .In, value: ids)],
+            context: context)
+        return objects
+    }
+    
+    public func fetchDirtyObjects<T: ORModel>(model model: T.Type) -> ([T], ORLocalDataResponse) {
+        let (objects, response) = self.dataManager.fetchLocal(model: model,
+            predicates: [NSPredicate(format: "%K != %K", "lastCloudSaveDate", "lastLocalSaveDate")])
+        
+        return (objects.filter { $0.deleted == false }, response)
+    }
+    
+    public func fetchDeletedIDs(context: NSManagedObjectContext? = nil) -> ([CKRecordID], ORLocalDataResponse) {
+        let (objects, response) = self.dataManager.fetchLocal(
+            entityName: CloudRecord.recordType,
+            predicates: [NSPredicate(key: "model", comparator: .Equals, value: nil)],
+            context: context)
+        let IDs = (objects as! [CloudRecord]).map { CKRecordID(recordName: $0.recordName) }
+        return (IDs, response)
+    }
+    
+    public func fetchCloudRecords(predicates: [NSPredicate], context: NSManagedObjectContext? = nil) -> ([CloudRecord], ORLocalDataResponse) {
+        let (objects, response) = self.dataManager.fetchLocal(entityName: CloudRecord.recordType, predicates: predicates, context: context)
+        return (objects as! [CloudRecord], response)
+    }
+    
     public func fetchAll<T: ORModel>(model model: T.Type, context: NSManagedObjectContext? = nil) -> ([T], ORLocalDataResponse) {
         return self.dataManager.fetchLocal(model: model, predicates: [NSPredicate.allRows], context: context)
     }

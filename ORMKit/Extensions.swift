@@ -182,6 +182,17 @@ public extension CollectionType where Generator.Element : ORLiftEntry {
     }
 }
 
+public extension CollectionType where Generator.Element : ORModel {
+   
+    var records: [CKRecord] {
+        return map { $0.record }
+    }
+    
+    var references: [CKReference] {
+        return map { $0.reference }
+    }
+}
+
 extension CollectionType where Generator.Element : CKRecord {
     
     var recordIDs: [CKRecordID] { return self.map { $0.recordID } }
@@ -193,6 +204,11 @@ extension CollectionType where Generator.Element : CKReference {
 }
 
 extension CollectionType where Generator.Element : CKRecordID {
+    
+    var recordNames: [String] { return self.map { $0.recordName } }
+}
+
+extension CollectionType where Generator.Element : ORModel {
     
     var recordNames: [String] { return self.map { $0.recordName } }
 }
