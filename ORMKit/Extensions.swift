@@ -213,6 +213,25 @@ public enum PredicateComparator: String {
     case In = "IN"
 }
 
+public extension Array {
+    subscript (safe index: Int) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+    
+    subscript (safe range: Range<Int>) -> [Element]? {
+        var elements = [Element]()
+        for index in range {
+            if let element = self[safe: index] {
+                elements.append(element)
+            } else {
+                return nil
+            }
+            
+        }
+        return elements
+    }
+}
+
 let userInteractiveThread = dispatch_get_global_queue(Int(QOS_CLASS_USER_INTERACTIVE.rawValue), 0)
 let userInitiatedThread = dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)
 let backgroundThread = dispatch_get_global_queue(Int(QOS_CLASS_UNSPECIFIED.rawValue), 0)
