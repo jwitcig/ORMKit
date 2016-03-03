@@ -84,6 +84,9 @@ public class ORSession {
     }
  
     public func initDefaultData() {
+        
+        
+        
         let predicate = NSPredicate(key: ORLiftTemplate.Fields.defaultLift.rawValue, comparator: .Equals, value: true)
         let (templates, _) = localData.fetchObjects(model: ORLiftTemplate.self, predicates: [predicate])
         

@@ -49,6 +49,15 @@ public class ORAthlete: ORModel, ModelSubclassing {
         return super.model(type: ORAthlete.self, context: context)
     }
     
+    public static func getLastAthlete() -> ORAthlete? {
+        
+        guard let username = NSUserDefaults.standardUserDefaults().valueForKey("currentAthleteUsername") else {
+            return nil
+        }
+        
+        let athlete = ORSession.c
+    }
+    
     public static func setCurrentAthlete(athlete: ORAthlete) {
         
         NSUserDefaults.standardUserDefaults().setValue(athlete.username, forKey: "currentAthleteUsername")

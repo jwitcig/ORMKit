@@ -124,5 +124,11 @@ public class ORCloudData: DataConvenience {
         return true
     }
     
+    func ensureAthlete() {
+        
+        
+        
+    }
+    
 }
 
