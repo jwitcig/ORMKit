@@ -29,6 +29,16 @@ public class ORLocalData: DataConvenience {
         self.dataManager = dataManager
     }
     
+    public func fetchObject<T: ORModel>(id id: String, model: T.Type, context: NSManagedObjectContext? = nil) -> T? {
+        
+        
+        let options = ORDataOperationOptions()
+        options.fetchLimit = 1
+        let (objects, _) = self.dataManager.fetchLocal(model: model, predicates: [NSPredicate(key: "cloudRecord.recordName", comparator: .Equals, value: id)], context: context, options: options)
+        
+        return objects.first
+    }
+    
     public func fetchObjects<T: ORModel>(model model: T.Type, predicates: [NSPredicate], context: NSManagedObjectContext? = nil, options: ORDataOperationOptions? = nil) -> ([T], ORLocalDataResponse) {
         let (objects, response) = self.dataManager.fetchLocal(entityName: model.recordType, predicates: predicates, context: context, options: options)
         return (objects as! [T], response)
@@ -43,7 +53,7 @@ public class ORLocalData: DataConvenience {
     
     public func fetchDirtyObjects<T: ORModel>(model model: T.Type) -> ([T], ORLocalDataResponse) {
         let (objects, response) = self.dataManager.fetchLocal(model: model,
-            predicates: [NSPredicate(format: "%K != %K", "lastCloudSaveDate", "lastLocalSaveDate")])
+            predicates: [NSPredicate(format: "(%K != %K) OR ((%K == nil) AND (%K != nil))", "lastLocalSaveDate", "lastCloudSaveDate", "lastCloudSaveDate", "lastLocalSaveDate")])
         
         return (objects.filter { $0.deleted == false }, response)
     }

@@ -112,7 +112,7 @@ extension NSManagedObjectContext {
     public convenience init(parentContext: NSManagedObjectContext? = nil) {
         var selfObject: NSManagedObjectContext!
         defer {
-//            NSNotificationCenter.defaultCenter().addObserver(selfObject, selector: Selector("managedObjectContextWillSave:"), name: NSManagedObjectContextWillSaveNotification, object: selfObject)
+            NSNotificationCenter.defaultCenter().addObserver(selfObject, selector: Selector("managedObjectContextWillSave:"), name: NSManagedObjectContextWillSaveNotification, object: selfObject)
             NSNotificationCenter.defaultCenter().addObserver(selfObject, selector: Selector("managedObjectContextDidSave:"), name: NSManagedObjectContextDidSaveNotification, object: selfObject)
         }
         
@@ -127,6 +127,16 @@ extension NSManagedObjectContext {
         selfObject = self
     }
     
+    func managedObjectContextWillSave(notification: NSNotification) {
+        (insertedObjects.array + updatedObjects.array).forEach {
+            
+            guard let model = $0 as? ORModel else { return }
+            if Array(model.changedValues().keys) != ["lastCloudSaveDate"] {
+                model.lastLocalSaveDate = NSDate()
+            }
+        }
+    }
+    
     func managedObjectContextDidSave(notification: NSNotification) {
         let savedContext = notification.object as! NSManagedObjectContext
         
@@ -136,7 +146,7 @@ extension NSManagedObjectContext {
         guard mainMOC != savedContext else { return }
         
         guard mainMOC.persistentStoreCoordinator == savedContext.persistentStoreCoordinator else { return }
-                
+        
         runOnMainThread {
             mainMOC.mergeChangesFromContextDidSaveNotification(notification)
             ORSession.currentSession.localData.save(context: mainMOC)

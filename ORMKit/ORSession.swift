@@ -45,6 +45,15 @@ public class ORSession {
             self._localData.session = self
         }
     }
+    
+    private var _cloudData: ORCloudData!
+    public var cloudData: ORCloudData! {
+        get { return _cloudData }
+        set {
+            self._cloudData = newValue
+            self._cloudData.session = self
+        }
+    }
         
     private var _soloStats: ORSoloStats!
     public var soloStats: ORSoloStats {
@@ -63,19 +72,8 @@ public class ORSession {
     public init() { }
         
     public func signInLocally() -> (Bool, ORAthlete?) {
-        let context = NSManagedObjectContext.contextForCurrentThread()
         
-        guard let username = NSUserDefaults.standardUserDefaults().valueForKey("currentAthleteUsername") as? String else {
-            return (false, nil)
-        }
-                
-        let usernamePredicate = NSPredicate(key: ORAthlete.Fields.username.rawValue, comparator: .Equals, value: username)
-        let (athletes, _) = self.localData.fetchObjects(model: ORAthlete.self, predicates: [usernamePredicate], context: context)
-        
-        
-        let lastLoggedInAthlete = athletes.first
-        
-        guard let athlete = lastLoggedInAthlete else {
+        guard let athlete = ORAthlete.getLastAthlete() else {
             return (false, nil)
         }
         

@@ -98,12 +98,16 @@ public class ORCloudData: DataConvenience {
         
         let operation = CKModifyRecordsOperation(recordsToSave: recordsToSave.records, recordIDsToDelete: deletedObjectIDs)
         
-        operation.perRecordCompletionBlock = { completedRecord, error in
+        operation.perRecordCompletionBlock = { (completedRecord: CKRecord?, error: NSError?) in
             guard error == nil else { return }
+            
             guard let record = completedRecord else { return }
             
             let context = NSManagedObjectContext.contextForCurrentThread()
+            
             let model = ORModel.model(type: ORModel.self, record: record, context: context)
+            model.record = record
+            model.lastCloudSaveDate = model.lastLocalSaveDate
             
             self.session.localData.save(context: context)
             perRecordCompletionHandler?(ORCloudDataResponse(request: request, error: error, context: context))

@@ -76,10 +76,18 @@ public class ORModel: NSManagedObject {
         if insertIntoManagedObjectContext == true {
             model = NSEntityDescription.insertNewObjectForEntityForName(type.recordType, inManagedObjectContext: managedObjectContext) as! ORModel
             
+            model.cloudRecord = NSEntityDescription.insertNewObjectForEntityForName(CloudRecord.recordType, inManagedObjectContext: managedObjectContext) as! CloudRecord
         } else {
             let modelEntityDescription = NSEntityDescription.entityForName(type.recordType, inManagedObjectContext: managedObjectContext)!
             model = NSManagedObject(entity: modelEntityDescription, insertIntoManagedObjectContext: nil) as! ORModel
+            
+            let cloudRecordEntityDescription = NSEntityDescription.entityForName(CloudRecord.recordType, inManagedObjectContext: managedObjectContext)!
+            model.cloudRecord = NSManagedObject(entity: cloudRecordEntityDescription, insertIntoManagedObjectContext: nil) as! CloudRecord
         }
+        
+        model.createdDate = NSDate()
+        
+        model.record = CKRecord(recordType: type.recordType)
         
         return model
     }
@@ -89,10 +97,12 @@ public class ORModel: NSManagedObject {
         return ORModel.defaultModel(type: type, context: context, insertIntoManagedObjectContext: insert) as! T
     }
     
-    public class func model<T: ORModel>(type type: T.Type, record: CKRecord, context: NSManagedObjectContext? = nil, insertIntoManagedObjectContext insert: Bool = true) -> T {
-        let model = ORModel.defaultModel(type: type)
-        model.record = record
+    public class func model<T: ORModel>(type type: T.Type, record: CKRecord?, context: NSManagedObjectContext? = nil, insertIntoManagedObjectContext insert: Bool = true) -> T {
         
+        guard let cloudRecord = record else {
+            return ORModel.defaultModel(type: type, context: context) as! T
+        }
+        let model = ORModel.getOrCreateLocalRecord(record: cloudRecord, type: type, context: context)
         return model as! T
     }
     
@@ -168,6 +178,16 @@ public class ORModel: NSManagedObject {
         record.setValuesForKeysWithDictionary(newDataDict)
     }
     
+    internal class func getOrCreateLocalRecord(record record: CKRecord, type: ORModel.Type, context: NSManagedObjectContext? = nil) -> NSManagedObject {
+        
+        guard let object = ORSession.currentSession.localData.fetchObject(id: record.recordID.recordName, model: type, context: context) else {
+            
+            let model = ORModel.defaultModel(type: type, context: context)
+            model.updateFromCloudRecord(record)
+            return model
+        }
+        return object
+    }
     
     class var recordType: String { return "ORModel" }
     

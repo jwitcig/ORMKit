@@ -51,16 +51,20 @@ public class ORAthlete: ORModel, ModelSubclassing {
     
     public static func getLastAthlete() -> ORAthlete? {
         
-        guard let username = NSUserDefaults.standardUserDefaults().valueForKey("currentAthleteUsername") else {
+        guard let recordName = NSUserDefaults.standardUserDefaults().valueForKey("currentAthleteRecordName") else {
             return nil
         }
         
-        let athlete = ORSession.c
+        let predicate = NSPredicate(key: "cloudRecord.recordName", comparator: .Equals, value: recordName)
+        let (athletes, response) = ORSession.currentSession.localData.fetchObjects(model: ORAthlete.self, predicates: [predicate])
+        
+        guard response.success else { print("Error fetching athlete(s)"); return nil }
+        return athletes.first
     }
     
     public static func setCurrentAthlete(athlete: ORAthlete) {
         
-        NSUserDefaults.standardUserDefaults().setValue(athlete.username, forKey: "currentAthleteUsername")
+        NSUserDefaults.standardUserDefaults().setValue(athlete.recordName, forKey: "currentAthleteRecordName")
         
         let result = NSUserDefaults.standardUserDefaults().synchronize()
         
