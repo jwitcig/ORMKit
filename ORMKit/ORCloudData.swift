@@ -31,6 +31,15 @@ public class ORCloudData: DataConvenience {
         self.dataManager = dataManager
     }
     
+    public func fetchAllObjectsID(athete: ORAthlete, completionHandler: ((([String: [CKRecordID]]), ORCloudDataResponse)->())?) {
+        self.dataManager.fetchCloudIDs(predicate: NSPredicate.allRows, completionHandler: completionHandler)
+    }
+    
+    public func fetchModels<T: ORModel>(model: T.Type, predicate: NSPredicate? = nil, options: ORDataOperationOptions? = nil, completionHandler: (([T], ORCloudDataResponse) -> ())? = nil) {
+        
+        self.dataManager.fetchCloud(model: model, predicate: predicate, options: options, completionHandler: completionHandler)
+    }
+    
     public func fetchLiftTemplates(session session: ORSession, completionHandler: (([ORLiftTemplate], ORCloudDataResponse)->())?) {
         fatalError()
     }
@@ -58,26 +67,42 @@ public class ORCloudData: DataConvenience {
         }
         self.syncInProgress = true
         
-//        self.fetchAssociatedOrganizations(athlete: self.session.currentAthlete!) { (organizations, response) in
-//            guard response.success else { return }
-//            
-//            self.session.localData.save(context: response.currentThreadContext)
-//            
-//            self.fetchLiftTemplates(organizations: organizations) { (liftTemplates, response) in
-//                guard response.success else { return }
-//                
-//                self.session.localData.save(context: response.currentThreadContext)
-//                
-//                self.fetchLiftEntries(templates: liftTemplates) { (liftEntries, response) in
-//                    guard response.success else { return }
-//                    
-//                    self.session.localData.save(context: response.currentThreadContext)
-//                    
-//                    completionHandler?(response)
-//                    self.syncInProgress = false
-//                }
-//            }
-//        }
+        guard let athlete = session.currentAthlete else { return false }
+        
+        session.cloudData.fetchAllObjectsID(athlete) { (cloudRecordIDsDict, response) in
+            guard response.success else { print(response.error); return }
+            
+            let localRecordNamesResponses = self.session.localData.fetchAllObjectIDs(context: response.currentThreadContext)
+
+            for ( (recordType, localRecordNames) , _) in localRecordNamesResponses {
+                
+                guard let cloudRecordIDs = cloudRecordIDsDict[recordType] else { continue }
+                
+                let newInCloudRecordIDs = cloudRecordIDs.filter { !localRecordNames.contains($0.recordName) }
+                
+                guard newInCloudRecordIDs.count > 0 else { completionHandler?(response); continue }
+                
+                let modelType = ORModel.modelType(recordType: recordType)
+                
+                let predicate = NSPredicate(key: "recordID", comparator: .In, value: newInCloudRecordIDs.references)
+                self.session.cloudData.fetchModels(modelType, predicate: predicate) { (models, response) in
+                    
+                    if response.success {
+                        self.session.localData.save(context: response.currentThreadContext)
+                    }
+                    
+                    runOnMainThread {
+                        self.session.messageUserDataChangeDelegates()
+                    }
+                    completionHandler?(response)
+                }
+                
+            }
+            
+            
+        }
+                
+        
         return true
     }
     
@@ -128,10 +153,14 @@ public class ORCloudData: DataConvenience {
         return true
     }
     
-    func ensureAthlete() {
-        
-        
-        
+}
+
+struct ORCloudQueryOperation {
+    
+    var dataOperation = CKQueryOperation()
+    
+    func addDependency(dependencyOperation: ORCloudQueryOperation) {
+        dataOperation.addDependency(dependencyOperation.dataOperation)
     }
     
 }

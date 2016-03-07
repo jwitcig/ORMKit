@@ -20,17 +20,62 @@ public class ORCloudDataCoordinator: ORDataCoordinator {
         self.database = database
     }
     
-    internal func fetch<T: ORModel>(model model: T.Type, predicate: NSPredicate, options: ORDataOperationOptions? = nil,completionHandler: (([T], ORCloudDataResponse)->())?) {
+    internal func fetchIDs(predicate: NSPredicate? = nil, completionHandler: ((([String: [CKRecordID]]), ORCloudDataResponse)->())?) {
         let dataRequest = ORCloudDataRequest()
-        let query = CKQuery(recordType: model.recordType, predicate: predicate)
+        let operationQueue = NSOperationQueue()
         
+        let completionOperation = NSOperation()
         
+        var recordsData = [String: [CKRecordID]]()
+        
+        var queryOperations = ["completion": completionOperation]
+        [ORAthlete.recordType, ORLiftTemplate.recordType, ORLiftEntry.recordType].forEach { recordType in
+            
+            recordsData[recordType] = [CKRecordID]()
+           
+            let queryPredicate = predicate ?? NSPredicate(value: true)
+            let query = CKQuery(recordType: recordType, predicate: queryPredicate)
+            
+            let queryOperation = CKQueryOperation(query: query)
+            queryOperation.database = database
+            queryOperation.desiredKeys = ["recordName"]
+            
+            queryOperation.recordFetchedBlock = {
+                recordsData[$0.recordType]?.append($0.recordID)
+            }
+            
+            if recordType == ORLiftEntry.recordType {
+                if let templateOperation = queryOperations[ORLiftTemplate.recordType] {
+                    queryOperation.addDependency(templateOperation)
+                }
+            }
+            
+            queryOperations[recordType] = queryOperation
+            completionOperation.addDependency(queryOperation)
+        }
+        
+        completionOperation.completionBlock = {
+            let context = NSManagedObjectContext.contextForCurrentThread()
+
+            let response = ORCloudDataResponse(request: dataRequest, context: context)
+            
+            completionHandler?(recordsData, response)
+        }
+        
+        let queryOperationsList = Array(queryOperations.values)
+        operationQueue.addOperations(queryOperationsList, waitUntilFinished: true)
+    }
+    
+    internal func fetch<T: ORModel>(model model: T.Type, predicate: NSPredicate? = nil, options: ORDataOperationOptions? = nil,completionHandler: (([T], ORCloudDataResponse)->())?) {
+        let dataRequest = ORCloudDataRequest()
+        
+        let query = CKQuery(recordType: model.recordType, predicate: predicate ?? NSPredicate.allRows)        
         query.sortDescriptors = options?.sortDescriptors
         
         let queryOperation = CKQueryOperation(query: query)
         
         if let operationOptions = options {
-            
+            queryOperation.desiredKeys = operationOptions.desiredKeys
             queryOperation.resultsLimit = operationOptions.fetchLimit
         }
         
@@ -39,7 +84,6 @@ public class ORCloudDataCoordinator: ORDataCoordinator {
             records.append($0)
         }
         queryOperation.queryCompletionBlock = { cursor, error in
-            
             let context = NSManagedObjectContext.contextForCurrentThread()
             let models = ORModel.models(type: model, records: records, context: context)
             

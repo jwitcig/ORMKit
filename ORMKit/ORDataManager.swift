@@ -30,6 +30,16 @@ public class ORDataManager {
         self.cloudDataCoordinator = ORCloudDataCoordinator(container: cloudContainer, database: cloudDatabase)
     }
     
+    public func fetchCloudIDs(predicate predicate: NSPredicate? = nil, completionHandler: ((([String: [CKRecordID]]), ORCloudDataResponse) -> ())?) {
+        self.cloudDataCoordinator.fetchIDs(predicate, completionHandler: completionHandler)
+    }
+    
+    public func fetchLocalIDs(model: ORModel.Type, predicate: NSPredicate? = nil, context: NSManagedObjectContext? = nil) -> ((String, [String]), ORLocalDataResponse) {
+        let queryPredicate = predicate ?? NSPredicate.allRows
+
+        return self.localDataCoordinator.fetchObjectIDs(entityName: model.recordType, predicate: queryPredicate, context: context)
+    }
+    
     public func fetchLocal<T: ORModel>(model model: T.Type, predicates: [NSPredicate]? = nil, context: NSManagedObjectContext? = nil, options: ORDataOperationOptions? = nil) -> ([T], ORLocalDataResponse) {
         let (objects, response) = self.fetchLocal(entityName: model.recordType,
                                predicates: predicates,
@@ -47,8 +57,8 @@ public class ORDataManager {
                context: context,
                options: options)
     }
-    
-    public func fetchCloud<T: ORModel>(model model: T.Type, predicate: NSPredicate, options: ORDataOperationOptions? = nil, completionHandler: (([T], ORCloudDataResponse)->())?) {
+        
+    public func fetchCloud<T: ORModel>(model model: T.Type, predicate: NSPredicate? = nil, options: ORDataOperationOptions? = nil, completionHandler: (([T], ORCloudDataResponse)->())?) {
         self.cloudDataCoordinator.fetch(model: model,
             predicate: predicate,
             options: options,

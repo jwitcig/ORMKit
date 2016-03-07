@@ -67,6 +67,21 @@ public class ORModel: NSManagedObject {
         ORAthlete.recordType: ORAthlete.Fields.LocalOnly.allValues,
     ]
     
+    class func modelType(recordType recordType: String) -> ORModel.Type {
+        switch recordType {
+        case ORModel.recordType:
+            return ORModel.self
+        case RecordType.ORAthlete.rawValue:
+            return ORAthlete.self
+        case RecordType.ORLiftTemplate.rawValue:
+            return ORLiftTemplate.self
+        case RecordType.ORLiftEntry.rawValue:
+            return ORLiftEntry.self
+        default:
+            return ORModel.self
+        }
+    }
+    
     private class func defaultModel(type type: ORModel.Type, context: NSManagedObjectContext? = nil, insertIntoManagedObjectContext: Bool? = true) -> ORModel {
         
         let managedObjectContext = context != nil ? context! : ORSession.currentSession.localData.context
@@ -134,7 +149,22 @@ public class ORModel: NSManagedObject {
         self.record = record
     }
     
-    func writeValuesFromRecord(record: CKRecord) { }
+    func writeValuesFromRecord(record: CKRecord) {
+        record.allKeys().forEach {
+            
+            guard let context = self.managedObjectContext else { return }
+        
+            guard let _ = record[$0] as? CKReference else {
+                setValue(record[$0], forKey: $0)
+                return
+            }
+            
+            if let value = record.modelForName($0) {
+                setValue(context.crossContextEquivalent(object: value), forKey: $0)
+            }
+            
+        }
+    }
     
     func writeValuesToRecord(inout record: CKRecord) {
         var newDataDict = [String: AnyObject]()

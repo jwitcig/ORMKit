@@ -24,4 +24,6 @@ public class ORDataOperationOptions {
     
     public var includesPendingChanges = true
     
+    public var desiredKeys: [String]?
+    
 }

@@ -23,6 +23,43 @@ extension CKQuery {
     
 }
 
+extension CKRecord {
+
+    func propertyForName<T>(name: String, defaultValue: T) -> T {
+        guard let storedValue = self.valueForKey(name) as? T else { return defaultValue }
+        return storedValue
+    }
+    
+    func modelForName(name: String) -> ORModel? {
+        guard let reference = self.valueForKey(name) as? CKReference else { return nil }
+        return self.modelFromReference(reference)
+    }
+    
+    func modelListForName(name: String) -> [ORModel]? {
+        guard let references = self.valueForKey(name) as? [CKReference] else { return nil }
+        return self.modelListFromReferences(references)
+    }
+    
+    func modelFromReference(reference: CKReference) -> ORModel? {
+        return ORSession.currentSession.localData.fetchObject(id: reference.recordID.recordName, model: ORModel.self)
+    }
+    
+    func modelListFromReferences(references: [CKReference]) -> [ORModel]? {
+        let recordNames = references.recordIDs.recordNames
+        return ORSession.currentSession.localData.fetchObjects(ids: recordNames, model: ORModel.self, context: NSManagedObjectContext.contextForCurrentThread())
+    }
+   
+    func referenceForName(name: String) -> CKReference? {
+        return self[name] as? CKReference
+    }
+ 
+    func referencesForName(name: String) -> Set<CKReference> {
+        let references = self[name] as? [CKReference]
+        return references != nil ? Set(references!) : Set()
+    }
+   
+   }
+
 extension String {
     
     var range: Range<String.Index> {
@@ -205,22 +242,23 @@ public extension CollectionType where Generator.Element : ORModel {
 
 extension CollectionType where Generator.Element : CKRecord {
     
-    var recordIDs: [CKRecordID] { return self.map { $0.recordID } }
+    var recordIDs: [CKRecordID] { return map { $0.recordID } }
 }
 
 extension CollectionType where Generator.Element : CKReference {
     
-    var recordIDs: [CKRecordID] { return self.map { $0.recordID } }
+    var recordIDs: [CKRecordID] { return map { $0.recordID } }
 }
 
 extension CollectionType where Generator.Element : CKRecordID {
     
-    var recordNames: [String] { return self.map { $0.recordName } }
+    var recordNames: [String] { return map { $0.recordName } }
+    var references: [CKReference] { return map { CKReference(recordID: $0, action: .None) } }
 }
 
 extension CollectionType where Generator.Element : ORModel {
     
-    var recordNames: [String] { return self.map { $0.recordName } }
+    var recordNames: [String] { return map { $0.recordName } }
 }
 
 extension Set {

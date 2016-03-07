@@ -14,11 +14,19 @@
 import CloudKit
 import CoreData
 
+public protocol ORUserDataChangeDelegate {
+    
+    func dataWasChanged()
+    
+}
+
 public class ORSession {
     
     public static var currentSession = ORSession()
     
     public var currentViewController: UIViewController!
+    
+    private var userDataChangeDelegates = [ORUserDataChangeDelegate]()
 
     public var currentAthlete: ORAthlete? {
         get {
@@ -66,8 +74,6 @@ public class ORSession {
     
     public static let managedObjectModel = NSManagedObjectModel.mergedModelFromBundles(NSBundle.allBundles())
     public static let persistentStoreCooridnator = NSPersistentStoreCoordinator(managedObjectModel: ORSession.managedObjectModel!)
-
-    public var managedObjectContext: NSManagedObjectContext!
     
     public init() { }
         
@@ -82,10 +88,8 @@ public class ORSession {
     }
  
     public func initDefaultData() {
-        
-        
-        
         let predicate = NSPredicate(key: ORLiftTemplate.Fields.defaultLift.rawValue, comparator: .Equals, value: true)
+        
         let (templates, _) = localData.fetchObjects(model: ORLiftTemplate.self, predicates: [predicate])
         
         guard templates.count == 0 else {
@@ -93,6 +97,11 @@ public class ORSession {
             return
         }
         
+        let _ = generateDefaultLiftTemplates()
+        localData.save()
+    }
+    
+    func generateDefaultLiftTemplates() -> [ORLiftTemplate] {
         let hangCleanTemplate = ORLiftTemplate.template()
         hangCleanTemplate.liftName = "Hang Clean"
         hangCleanTemplate.defaultLift = true
@@ -113,7 +122,15 @@ public class ORSession {
         deadLiftTemplate.defaultLift = true
         deadLiftTemplate.liftDescription = "Bend at the knees"
         
-        localData.save()
+        return [hangCleanTemplate, squatTemplate, benchPressTemplate, deadLiftTemplate]
+    }
+    
+    public func addUserDataChangeDelegate(delegate: ORUserDataChangeDelegate) {
+        userDataChangeDelegates.append(delegate)
+    }
+    
+    internal func messageUserDataChangeDelegates() {
+        userDataChangeDelegates.forEach { $0.dataWasChanged() }
     }
     
 }

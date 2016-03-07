@@ -73,4 +73,8 @@ public class ORAthlete: ORModel, ModelSubclassing {
         }
     }
     
+    override func writeValuesFromRecord(record: CKRecord) {
+        super.writeValuesFromRecord(record)
+    }
+    
 }
