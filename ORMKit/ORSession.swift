@@ -11,7 +11,7 @@
 #elseif os(OSX)
     import Cocoa
 #endif
-import CloudKit
+
 import CoreData
 
 public protocol ORUserDataChangeDelegate {
@@ -45,32 +45,32 @@ public class ORSession {
     
     private var currentAthleteID: NSManagedObjectID?
     
-    private var _localData: ORLocalData!
-    public var localData: ORLocalData! {
-        get { return _localData }
-        set {
-            self._localData = newValue
-            self._localData.session = self
-        }
-    }
+//    private var _localData: ORLocalData!
+//    public var localData: ORLocalData! {
+//        get { return _localData }
+//        set {
+//            self._localData = newValue
+//            self._localData.session = self
+//        }
+//    }
     
-    private var _cloudData: ORCloudData!
-    public var cloudData: ORCloudData! {
-        get { return _cloudData }
-        set {
-            self._cloudData = newValue
-            self._cloudData.session = self
-        }
-    }
-        
-    private var _soloStats: ORSoloStats!
-    public var soloStats: ORSoloStats {
-        get { return _soloStats }
-        set {
-            _soloStats = newValue
-            _soloStats.session = self
-        }
-    }
+//    private var _cloudData: ORCloudData!
+//    public var cloudData: ORCloudData! {
+//        get { return _cloudData }
+//        set {
+//            self._cloudData = newValue
+//            self._cloudData.session = self
+//        }
+//    }
+    
+//    private var _soloStats: ORSoloStats!
+//    public var soloStats: ORSoloStats {
+//        get { return _soloStats }
+//        set {
+//            _soloStats = newValue
+//            _soloStats.session = self
+//        }
+//    }
     
     public static let managedObjectModel = NSManagedObjectModel.mergedModelFromBundles(NSBundle.allBundles())
     public static let persistentStoreCooridnator = NSPersistentStoreCoordinator(managedObjectModel: ORSession.managedObjectModel!)
@@ -102,22 +102,22 @@ public class ORSession {
     }
     
     func generateDefaultLiftTemplates() -> [ORLiftTemplate] {
-        let hangCleanTemplate = ORLiftTemplate.template()
+        let hangCleanTemplate = ORLiftTemplate()
         hangCleanTemplate.liftName = "Hang Clean"
         hangCleanTemplate.defaultLift = true
         hangCleanTemplate.liftDescription = "Pull up"
         
-        let squatTemplate = ORLiftTemplate.template()
+        let squatTemplate = ORLiftTemplate()
         squatTemplate.liftName = "Squat"
         squatTemplate.defaultLift = true
         squatTemplate.liftDescription = "Squat down"
         
-        let benchPressTemplate = ORLiftTemplate.template()
+        let benchPressTemplate = ORLiftTemplate()
         benchPressTemplate.liftName = "Bench Press"
         benchPressTemplate.defaultLift = true
         benchPressTemplate.liftDescription = "Push up"
         
-        let deadLiftTemplate = ORLiftTemplate.template()
+        let deadLiftTemplate = ORLiftTemplate()
         deadLiftTemplate.liftName = "Dead Lift"
         deadLiftTemplate.defaultLift = true
         deadLiftTemplate.liftDescription = "Bend at the knees"
@@ -133,11 +133,4 @@ public class ORSession {
         userDataChangeDelegates.forEach { $0.dataWasChanged() }
     }
     
-}
-
-internal protocol DataConvenience {
-    init(session: ORSession, dataManager: ORDataManager)
-    var dataManager: ORDataManager { get set }
-    
-    var session: ORSession { get set }
 }

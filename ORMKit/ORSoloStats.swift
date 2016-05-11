@@ -34,21 +34,21 @@ public class ORSoloStats: ORStats {
     public var defaultTemplate: ORLiftTemplate?
     
     public var currentEntry: ORLiftEntry? {
-        return entries().sortedByReverseDate.first
+        return entries().sort { $0.0.date.isBefore(date: $0.1.date) } .first
     }
     
     public var daysSinceLastEntry: Int? {
         return currentEntry?.date.daysBeforeToday()
     }
     
-    public func entries(template liftTemplate: ORLiftTemplate? = nil, order: Sort? = nil) -> [ORLiftEntry] {
+    public func entries(template liftTemplate: ORLiftTemplate? = nil, sort: Sort? = nil) -> [ORLiftEntry] {
         var desiredEntries = self.allEntries
         if let template = liftTemplate ?? defaultTemplate {
             desiredEntries = desiredEntries.filter { $0.liftTemplate == template }
         }
         
-        if let sort = order {
-            let descriptor = NSSortDescriptor(key: "date", order: sort)
+        if sort != nil {
+            let descriptor = NSSortDescriptor(key: "date", order: sort!)
             desiredEntries = NSArray(array: desiredEntries).sortedArrayUsingDescriptors([descriptor]) as! [ORLiftEntry]
         }
         return desiredEntries
@@ -66,7 +66,7 @@ public class ORSoloStats: ORStats {
     }
     
     public func dateRangeOfEntries(liftTemplate liftTemplate: ORLiftTemplate? = nil) -> (NSDate, NSDate)? {
-        let sortedEntries = entries(template: liftTemplate, order: .Chronological)
+        let sortedEntries = entries(template: liftTemplate, sort: .Chronological)
         if let firstEntryDate = sortedEntries.first?.date,
             let lastEntryDate = sortedEntries.last?.date {
                 
@@ -78,7 +78,7 @@ public class ORSoloStats: ORStats {
     public func averageProgress(dateRange customDateRange: (NSDate, NSDate)? = nil, dayInterval: Int? = nil, liftTemplate: ORLiftTemplate? = nil) -> (Float, (NSDate, NSDate))? {
         guard let template = liftTemplate ?? defaultTemplate else { return nil }
         
-        let sortedEntries = entries().sortedByDate
+        let sortedEntries = entries().sort { $0.0.date.isBefore(date: $0.1.date) }
         guard let dateRange = customDateRange ?? (sortedEntries.first?.date, sortedEntries.last?.date) as? (NSDate, NSDate) else {
             return nil
         }
@@ -109,7 +109,7 @@ public class ORSoloStats: ORStats {
     public func estimatedMax(targetDate targetDate: NSDate, liftTemplate: ORLiftTemplate? = nil) -> Int? {
         guard let template = liftTemplate ?? defaultTemplate else { return nil }
         
-        let entries = self.entries(template: template, order: .Chronological)
+        let entries = self.entries(template: template, sort: .Chronological)
         
         if let firstEntry = entries.first {
             if targetDate.isBefore(date: firstEntry.date) && abs(targetDate.daysBetween(endDate: firstEntry.date)) <= 3 {

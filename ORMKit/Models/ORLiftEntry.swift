@@ -11,10 +11,9 @@
 #elseif os(OSX)
     import Cocoa
 #endif
-import CloudKit
 import CoreData
 
-public class ORLiftEntry: ORModel, ModelSubclassing {
+public class ORLiftEntry: ORModel {
 
     public enum Fields: String {
         case date
@@ -38,28 +37,23 @@ public class ORLiftEntry: ORModel, ModelSubclassing {
         }
     }
     
-    override public class var recordType: String { return RecordType.ORLiftEntry.rawValue }
-    
-    public class func entry(record: CKRecord? = nil, context: NSManagedObjectContext? = nil) -> ORLiftEntry {
-        return super.model(type: ORLiftEntry.self, context: context)
-    }
-    
-    @NSManaged public var date: NSDate
-    @NSManaged public var maxOut: Bool
-    @NSManaged public var reps: NSNumber
-    @NSManaged public var weightLifted: NSNumber
-    public var max: NSNumber {
-        return ORLiftEntry.oneRepMax(weightLifted: weightLifted.floatValue, reps: reps.floatValue)
-    }
-    
-    public class func oneRepMax(weightLifted weightLifted: Float, reps: Float) -> NSNumber {
-        guard reps != 1 else { return NSNumber(float: weightLifted) }
+    override public class var entityName: String { return RecordType.ORLiftEntry.rawValue }
         
-        let rounded = round( weightLifted + (weightLifted * reps * 0.033 ) )
-        return NSNumber(float: rounded)
+    public var date: NSDate = NSDate()
+    public var maxOut: Bool = true
+    public var reps: Int!
+    public var weightLifted: Int!
+    public var max: Int {
+        return ORLiftEntry.oneRepMax(weightLifted: weightLifted, reps: reps)
     }
-    @NSManaged public var liftTemplate: ORLiftTemplate
-    @NSManaged public var athlete: ORAthlete
     
+    public class func oneRepMax(weightLifted weightLifted: Int, reps: Int) -> Int {
+        guard reps != 1 else { return weightLifted }
+        
+        let rounded = round( Float(weightLifted) + (Float(weightLifted * reps) * 0.033 ) )
+        return Int(rounded)
+    }
+    public var liftTemplate: ORLiftTemplate!
+    public var athlete: ORAthlete!
     
 }

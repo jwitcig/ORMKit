@@ -14,6 +14,8 @@
 import CloudKit
 import CoreData
 
+import SwiftTools
+
 public class ORDataResponse {
     
     var request: ORDataRequest

@@ -11,10 +11,9 @@
 #elseif os(OSX)
     import Cocoa
 #endif
-import CloudKit
 import CoreData
 
-public class ORAthlete: ORModel, ModelSubclassing {
+public class ORAthlete: ORModel {
   
     enum Fields: String {
         case firstName
@@ -34,28 +33,24 @@ public class ORAthlete: ORModel, ModelSubclassing {
         }
     }
     
-    override public class var recordType: String { return RecordType.ORAthlete.rawValue }
-        
-    @NSManaged public var firstName: String
-    @NSManaged public var lastName: String
+    override public class var entityName: String { return RecordType.ORAthlete.rawValue }
     
-    @NSManaged public var username: String
+    public var firstName: String!
+    public var lastName: String!
+    
+    public var identityID: String { return id }
     
     public var fullName: String {
-        return "\(self.firstName) \(self.lastName)"
+        return "\(firstName) \(lastName)"
     }
-    
-    public class func athlete(context: NSManagedObjectContext? = nil) -> ORAthlete {
-        return super.model(type: ORAthlete.self, context: context)
-    }
-    
+
     public static func getLastAthlete() -> ORAthlete? {
         
-        guard let recordName = NSUserDefaults.standardUserDefaults().valueForKey("currentAthleteRecordName") else {
+        guard let identityID = NSUserDefaults.standardUserDefaults().valueForKey("currentAthleteIdentityID") as? String else {
             return nil
         }
         
-        let predicate = NSPredicate(key: "cloudRecord.recordName", comparator: .Equals, value: recordName)
+        let predicate = NSPredicate(key: "identityID", comparator: .Equals, value: identityID)
         let (athletes, response) = ORSession.currentSession.localData.fetchObjects(model: ORAthlete.self, predicates: [predicate])
         
         guard response.success else { print("Error fetching athlete(s)"); return nil }
@@ -64,17 +59,13 @@ public class ORAthlete: ORModel, ModelSubclassing {
     
     public static func setCurrentAthlete(athlete: ORAthlete) {
         
-        NSUserDefaults.standardUserDefaults().setValue(athlete.recordName, forKey: "currentAthleteRecordName")
+        NSUserDefaults.standardUserDefaults().setValue(athlete.identityID, forKey: "currentAthleteIdentityID")
         
         let result = NSUserDefaults.standardUserDefaults().synchronize()
         
         if result {
             ORSession.currentSession.currentAthlete = athlete
         }
-    }
-    
-    override func writeValuesFromRecord(record: CKRecord) {
-        super.writeValuesFromRecord(record)
     }
     
 }

@@ -7,11 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8B2AD4CB1B334128003B917F /* ORLocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2AD4CA1B334128003B917F /* ORLocalData.swift */; };
-		8B2AD4CD1B334F00003B917F /* ORDataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2AD4CC1B334F00003B917F /* ORDataCoordinator.swift */; };
 		8B3039631B2BFED000E5C95A /* ORSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3039621B2BFED000E5C95A /* ORSession.swift */; };
 		8B45F9AE1B67DB6600AA8E79 /* TheOneRepMax.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8B45F9AA1B67DB6600AA8E79 /* TheOneRepMax.xcdatamodeld */; };
-		8B6047741B4A193C001A2A68 /* ORSoloStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6047731B4A193C001A2A68 /* ORSoloStats.swift */; };
 		8B6047761B4A194B001A2A68 /* ORGroupStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6047751B4A194B001A2A68 /* ORGroupStats.swift */; };
 		8B6047781B4A195F001A2A68 /* ORStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6047771B4A195F001A2A68 /* ORStats.swift */; };
 		8B650CA31B2BA75400F0EA52 /* ORMKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B650CA21B2BA75400F0EA52 /* ORMKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -26,12 +23,8 @@
 		8B72B3BE1C15E4B30079EE34 /* ORMKitiOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B72B3BD1C15E4B30079EE34 /* ORMKitiOSTests.swift */; };
 		8B72B3D11C15E4F50079EE34 /* ORMKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B650CA21B2BA75400F0EA52 /* ORMKit.h */; };
 		8B72B3D21C15E4F50079EE34 /* ORSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3039621B2BFED000E5C95A /* ORSession.swift */; };
-		8B72B3D31C15E4F50079EE34 /* ORLocalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2AD4CA1B334128003B917F /* ORLocalData.swift */; };
-		8B72B3D41C15E4F50079EE34 /* ORDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9E271A1B323890008AE331 /* ORDataManager.swift */; };
 		8B72B3D51C15E4F50079EE34 /* ORDataTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B76DF5D1B3447DF00DB95ED /* ORDataTools.swift */; };
 		8B72B3D61C15E4F50079EE34 /* ORDataOperationOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9FC4FE1B73ECF7007E4B92 /* ORDataOperationOptions.swift */; };
-		8B72B3D71C15E4F50079EE34 /* ORDataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2AD4CC1B334F00003B917F /* ORDataCoordinator.swift */; };
-		8B72B3D81C15E4F50079EE34 /* ORLocalDataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1B21B310CF600F96C96 /* ORLocalDataCoordinator.swift */; };
 		8B72B3D91C15E4F50079EE34 /* ORDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1AC1B3091B300F96C96 /* ORDataResponse.swift */; };
 		8B72B3DA1C15E4F50079EE34 /* ORCloudDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1B41B31208700F96C96 /* ORCloudDataResponse.swift */; };
 		8B72B3DB1C15E4F50079EE34 /* ORLocalDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9FC5021B7466C9007E4B92 /* ORLocalDataResponse.swift */; };
@@ -42,7 +35,6 @@
 		8B72B3E01C15E4F50079EE34 /* ORLiftTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CBC1B2BA77100F0EA52 /* ORLiftTemplate.swift */; };
 		8B72B3E11C15E4F50079EE34 /* ORLiftEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CBB1B2BA77100F0EA52 /* ORLiftEntry.swift */; };
 		8B72B3E21C15E4F50079EE34 /* ORAthlete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B650CC21B2BA8DD00F0EA52 /* ORAthlete.swift */; };
-		8B72B3E31C15E4F50079EE34 /* ORSoloStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6047731B4A193C001A2A68 /* ORSoloStats.swift */; };
 		8B72B3E41C15E4F50079EE34 /* ORGroupStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6047751B4A194B001A2A68 /* ORGroupStats.swift */; };
 		8B72B3E51C15E4F50079EE34 /* ORStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6047771B4A195F001A2A68 /* ORStats.swift */; };
 		8B72B3E61C15E4F50079EE34 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D6E4E1B50CB9A0046C1D2 /* Extensions.swift */; };
@@ -52,18 +44,13 @@
 		8B76DF561B34466C00DB95ED /* ORCloudDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B76DF551B34466C00DB95ED /* ORCloudDataRequest.swift */; };
 		8B76DF5E1B3447DF00DB95ED /* ORDataTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B76DF5D1B3447DF00DB95ED /* ORDataTools.swift */; };
 		8B8D6E4F1B50CB9A0046C1D2 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D6E4E1B50CB9A0046C1D2 /* Extensions.swift */; };
-		8B9E271B1B323890008AE331 /* ORDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9E271A1B323890008AE331 /* ORDataManager.swift */; };
 		8B9FC4FF1B73ECF7007E4B92 /* ORDataOperationOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9FC4FE1B73ECF7007E4B92 /* ORDataOperationOptions.swift */; };
 		8B9FC5031B7466C9007E4B92 /* ORLocalDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9FC5021B7466C9007E4B92 /* ORLocalDataResponse.swift */; };
-		8BC15EC81C879B3100EB6041 /* ORCloudData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC15EC71C879B3100EB6041 /* ORCloudData.swift */; };
-		8BC15ECA1C87A18600EB6041 /* ORCloudData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC15EC71C879B3100EB6041 /* ORCloudData.swift */; };
-		8BC15ECC1C87A67400EB6041 /* ORCloudDataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC15ECB1C87A67400EB6041 /* ORCloudDataCoordinator.swift */; };
-		8BC15ECD1C87A68E00EB6041 /* ORCloudDataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC15ECB1C87A67400EB6041 /* ORCloudDataCoordinator.swift */; };
 		8BC15ECF1C87A7D500EB6041 /* CloudRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC15ECE1C87A7D500EB6041 /* CloudRecord.swift */; };
 		8BC15ED01C87A7E000EB6041 /* CloudRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC15ECE1C87A7D500EB6041 /* CloudRecord.swift */; };
 		8BD0F1AD1B3091B300F96C96 /* ORDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1AC1B3091B300F96C96 /* ORDataResponse.swift */; };
-		8BD0F1B31B310CF600F96C96 /* ORLocalDataCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1B21B310CF600F96C96 /* ORLocalDataCoordinator.swift */; };
 		8BD0F1B51B31208700F96C96 /* ORCloudDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD0F1B41B31208700F96C96 /* ORCloudDataResponse.swift */; };
+		8BE9D0C11C8FDB9A00550054 /* SwiftTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BE9D0C01C8FDB9A00550054 /* SwiftTools.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,8 +75,6 @@
 		8B29E25D1C87FA1900DF8665 /* TheOneRepMax_v8.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v8.xcdatamodel; sourceTree = "<group>"; };
 		8B29E25E1C87FA9600DF8665 /* TheOneRepMax_v9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v9.xcdatamodel; sourceTree = "<group>"; };
 		8B29E25F1C87FB9D00DF8665 /* TheOneRepMax_v10.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v10.xcdatamodel; sourceTree = "<group>"; };
-		8B2AD4CA1B334128003B917F /* ORLocalData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLocalData.swift; sourceTree = "<group>"; };
-		8B2AD4CC1B334F00003B917F /* ORDataCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataCoordinator.swift; sourceTree = "<group>"; };
 		8B3039621B2BFED000E5C95A /* ORSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORSession.swift; sourceTree = "<group>"; };
 		8B45F9AB1B67DB6600AA8E79 /* TheOneRepMax.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax.xcdatamodel; sourceTree = "<group>"; };
 		8B45F9AC1B67DB6600AA8E79 /* TheOneRepMax_v38.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v38.xcdatamodel; sourceTree = "<group>"; };
@@ -123,20 +108,17 @@
 		8B76DF551B34466C00DB95ED /* ORCloudDataRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudDataRequest.swift; sourceTree = "<group>"; };
 		8B76DF5D1B3447DF00DB95ED /* ORDataTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataTools.swift; sourceTree = "<group>"; };
 		8B8D6E4E1B50CB9A0046C1D2 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		8B9E271A1B323890008AE331 /* ORDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataManager.swift; sourceTree = "<group>"; };
 		8B9FC4FE1B73ECF7007E4B92 /* ORDataOperationOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataOperationOptions.swift; sourceTree = "<group>"; };
 		8B9FC5021B7466C9007E4B92 /* ORLocalDataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLocalDataResponse.swift; sourceTree = "<group>"; };
-		8BC15EC71C879B3100EB6041 /* ORCloudData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudData.swift; sourceTree = "<group>"; };
 		8BC15EC91C879D8600EB6041 /* TheOneRepMax_v7.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v7.xcdatamodel; sourceTree = "<group>"; };
-		8BC15ECB1C87A67400EB6041 /* ORCloudDataCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudDataCoordinator.swift; sourceTree = "<group>"; };
 		8BC15ECE1C87A7D500EB6041 /* CloudRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloudRecord.swift; sourceTree = "<group>"; };
 		8BD0F1AC1B3091B300F96C96 /* ORDataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORDataResponse.swift; sourceTree = "<group>"; };
-		8BD0F1B21B310CF600F96C96 /* ORLocalDataCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORLocalDataCoordinator.swift; sourceTree = "<group>"; };
 		8BD0F1B41B31208700F96C96 /* ORCloudDataResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ORCloudDataResponse.swift; sourceTree = "<group>"; };
 		8BD126981C1788990048C4BD /* TheOneRepMax_v5.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v5.xcdatamodel; sourceTree = "<group>"; };
 		8BDF968B1B804AF500B2D23E /* TheOneRepMax_v41.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v41.xcdatamodel; sourceTree = "<group>"; };
 		8BDF968C1B80E8D200B2D23E /* TheOneRepMax_v42.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v42.xcdatamodel; sourceTree = "<group>"; };
 		8BE1E19B1B99F2A40005AEFD /* TheOneRepMax_v3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v3.xcdatamodel; sourceTree = "<group>"; };
+		8BE9D0C01C8FDB9A00550054 /* SwiftTools.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftTools.framework; path = "../TheOneRepMax-CK/Carthage/Build/iOS/SwiftTools.framework"; sourceTree = "<group>"; };
 		8BF1C2401C13830D007CE275 /* TheOneRepMax_v4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TheOneRepMax_v4.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -160,6 +142,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BE9D0C11C8FDB9A00550054 /* SwiftTools.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -188,6 +171,7 @@
 		8B650C931B2BA75400F0EA52 = {
 			isa = PBXGroup;
 			children = (
+				8BE9D0C01C8FDB9A00550054 /* SwiftTools.framework */,
 				8B650C9F1B2BA75400F0EA52 /* ORMKit */,
 				8B650CAC1B2BA75400F0EA52 /* ORMKitTests */,
 				8B6A563A1BA9EF4900965E4B /* ORMKitiOS */,
@@ -316,25 +300,6 @@
 			name = "Data Response";
 			sourceTree = "<group>";
 		};
-		8B76DF591B3446CB00DB95ED /* Data Coordinators */ = {
-			isa = PBXGroup;
-			children = (
-				8B2AD4CC1B334F00003B917F /* ORDataCoordinator.swift */,
-				8BD0F1B21B310CF600F96C96 /* ORLocalDataCoordinator.swift */,
-				8BC15ECB1C87A67400EB6041 /* ORCloudDataCoordinator.swift */,
-			);
-			name = "Data Coordinators";
-			sourceTree = "<group>";
-		};
-		8B76DF5A1B3446E300DB95ED /* Data Stores */ = {
-			isa = PBXGroup;
-			children = (
-				8B2AD4CA1B334128003B917F /* ORLocalData.swift */,
-				8BC15EC71C879B3100EB6041 /* ORCloudData.swift */,
-			);
-			name = "Data Stores";
-			sourceTree = "<group>";
-		};
 		8B76DF5B1B3446F300DB95ED /* General */ = {
 			isa = PBXGroup;
 			children = (
@@ -346,11 +311,8 @@
 		8B76DF5C1B34470900DB95ED /* Data Stack */ = {
 			isa = PBXGroup;
 			children = (
-				8B76DF5A1B3446E300DB95ED /* Data Stores */,
-				8B9E271A1B323890008AE331 /* ORDataManager.swift */,
 				8B76DF5D1B3447DF00DB95ED /* ORDataTools.swift */,
 				8B9FC4FE1B73ECF7007E4B92 /* ORDataOperationOptions.swift */,
-				8B76DF591B3446CB00DB95ED /* Data Coordinators */,
 				8B76DF581B3446BA00DB95ED /* Data Response */,
 				8B76DF571B3446A900DB95ED /* Data Request */,
 			);
@@ -465,7 +427,7 @@
 				TargetAttributes = {
 					8B650C9C1B2BA75400F0EA52 = {
 						CreatedOnToolsVersion = 6.3.2;
-						DevelopmentTeam = 7R899BEBGC;
+						DevelopmentTeam = 349WFX4WJR;
 					};
 					8B650CA71B2BA75400F0EA52 = {
 						CreatedOnToolsVersion = 6.3.2;
@@ -538,21 +500,14 @@
 				8B76DF5E1B3447DF00DB95ED /* ORDataTools.swift in Sources */,
 				8B6047761B4A194B001A2A68 /* ORGroupStats.swift in Sources */,
 				8B650CC31B2BA8DD00F0EA52 /* ORAthlete.swift in Sources */,
-				8B2AD4CD1B334F00003B917F /* ORDataCoordinator.swift in Sources */,
-				8BC15ECC1C87A67400EB6041 /* ORCloudDataCoordinator.swift in Sources */,
-				8BD0F1B31B310CF600F96C96 /* ORLocalDataCoordinator.swift in Sources */,
 				8B650CBE1B2BA77100F0EA52 /* ORModel.swift in Sources */,
 				8B9FC4FF1B73ECF7007E4B92 /* ORDataOperationOptions.swift in Sources */,
 				8B76DF541B34465700DB95ED /* ORLocalDataRequest.swift in Sources */,
-				8BC15EC81C879B3100EB6041 /* ORCloudData.swift in Sources */,
 				8B3039631B2BFED000E5C95A /* ORSession.swift in Sources */,
-				8B2AD4CB1B334128003B917F /* ORLocalData.swift in Sources */,
 				8B650CC01B2BA77100F0EA52 /* ORLiftTemplate.swift in Sources */,
 				8B650CBF1B2BA77100F0EA52 /* ORLiftEntry.swift in Sources */,
 				8B9FC5031B7466C9007E4B92 /* ORLocalDataResponse.swift in Sources */,
-				8B9E271B1B323890008AE331 /* ORDataManager.swift in Sources */,
 				8B6047781B4A195F001A2A68 /* ORStats.swift in Sources */,
-				8B6047741B4A193C001A2A68 /* ORSoloStats.swift in Sources */,
 				8B76DF521B34464600DB95ED /* ORDataRequest.swift in Sources */,
 				8B45F9AE1B67DB6600AA8E79 /* TheOneRepMax.xcdatamodeld in Sources */,
 				8BC15ECF1C87A7D500EB6041 /* CloudRecord.swift in Sources */,
@@ -580,21 +535,14 @@
 				8B72B3DB1C15E4F50079EE34 /* ORLocalDataResponse.swift in Sources */,
 				8B72B3D91C15E4F50079EE34 /* ORDataResponse.swift in Sources */,
 				8B72B3D61C15E4F50079EE34 /* ORDataOperationOptions.swift in Sources */,
-				8BC15ECD1C87A68E00EB6041 /* ORCloudDataCoordinator.swift in Sources */,
-				8B72B3E31C15E4F50079EE34 /* ORSoloStats.swift in Sources */,
 				8B72B3E21C15E4F50079EE34 /* ORAthlete.swift in Sources */,
-				8B72B3D41C15E4F50079EE34 /* ORDataManager.swift in Sources */,
-				8BC15ECA1C87A18600EB6041 /* ORCloudData.swift in Sources */,
 				8B72B3E51C15E4F50079EE34 /* ORStats.swift in Sources */,
-				8B72B3D81C15E4F50079EE34 /* ORLocalDataCoordinator.swift in Sources */,
 				8B72B3DD1C15E4F50079EE34 /* ORLocalDataRequest.swift in Sources */,
 				8B72B3E41C15E4F50079EE34 /* ORGroupStats.swift in Sources */,
 				8B72B3DC1C15E4F50079EE34 /* ORDataRequest.swift in Sources */,
 				8B72B3E61C15E4F50079EE34 /* Extensions.swift in Sources */,
-				8B72B3D71C15E4F50079EE34 /* ORDataCoordinator.swift in Sources */,
 				8B72B3E71C15E4F90079EE34 /* TheOneRepMax.xcdatamodeld in Sources */,
 				8B72B3DA1C15E4F50079EE34 /* ORCloudDataResponse.swift in Sources */,
-				8B72B3D31C15E4F50079EE34 /* ORLocalData.swift in Sources */,
 				8BC15ED01C87A7E000EB6041 /* CloudRecord.swift in Sources */,
 				8B72B3E01C15E4F50079EE34 /* ORLiftTemplate.swift in Sources */,
 				8B72B3DF1C15E4F50079EE34 /* ORModel.swift in Sources */,

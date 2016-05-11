@@ -11,10 +11,8 @@
 #elseif os(OSX)
     import Cocoa
 #endif
-import CloudKit
-import CoreData
 
-public class ORLiftTemplate: ORModel, ModelSubclassing {
+public class ORLiftTemplate: ORModel {
     
     public enum Fields: String {
         case defaultLift
@@ -37,22 +35,12 @@ public class ORLiftTemplate: ORModel, ModelSubclassing {
         }
     }
     
-    override public class var recordType: String { return RecordType.ORLiftTemplate.rawValue }
+    override public class var entityName: String { return RecordType.ORLiftTemplate.rawValue }
+        
+    public var defaultLift: Bool = false
+    public var liftDescription: String = ""
+    public var liftName: String!
     
-    public class func template(record: CKRecord? = nil, context: NSManagedObjectContext? = nil) -> ORLiftTemplate {
-        return super.model(type: ORLiftTemplate.self, context: context)
-    }
-    
-    @NSManaged public var defaultLift: NSNumber
-    @NSManaged public var liftDescription: String
-    @NSManaged public var liftName: String
-    
-    @NSManaged public var solo: NSNumber
-    
-    @NSManaged public var creator: ORAthlete
-
-//    public func updatedRecently(athlete athlete: ORAthlete, maxNumberOfDays: Int = 14) -> Bool? {
-//        ORSession.currentSession.localData.fetchLiftEntries(athlete: <#T##ORAthlete#>, organization: <#T##OROrganization#>, template: <#T##ORLiftTemplate?#>, order: <#T##Sort?#>)
-//    }
+    public var creator: ORAthlete!
     
 }
